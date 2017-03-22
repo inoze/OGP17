@@ -846,7 +846,7 @@ public  class Ship {
      *        | if debug == true
      *        |     then nothing
      */
-    private void log(String errorMessage){
+    public void log(String errorMessage){
         if(debug) System.out.println(errorMessage);
     }
 }

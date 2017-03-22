@@ -280,7 +280,9 @@ public class Facade implements IFacade {
 	 * <code>height</code>.
 	 */
 	public World createWorld(double width, double height) throws ModelException {
-		return null;
+		World world = new World();
+		world.createWorld(width , height);
+		return world;
 	}
 
 	/**
@@ -300,7 +302,7 @@ public class Facade implements IFacade {
 	 * followed by the height.
 	 */
 	public double[] getWorldSize(World world) throws ModelException {
-		return null;
+		return world.getWorldSize();
 	}
 
 	/**

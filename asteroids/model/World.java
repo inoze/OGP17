@@ -52,6 +52,8 @@ public class World {
 		double[] size = new double[2];
 		size[0] = this.width;
 		size[1] = this.height;
+		Ship ship = new Ship();
+		ship.log("w: " + size[0] + "; h: " + size[1]);
 		return size;
 	}
 
