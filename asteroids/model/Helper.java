@@ -35,7 +35,7 @@ public class Helper {
      */
     @Model
     public static boolean isValidDouble(double number){
-        if(Double.isNaN(number) || Double.isInfinite(number) || number < Double.MAX_VALUE)
+        if(Double.isNaN(number) || Double.isInfinite(number) || !(number < Double.MAX_VALUE))
             return false;
         return true;
     }

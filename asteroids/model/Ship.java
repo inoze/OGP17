@@ -36,35 +36,35 @@ public  class Ship {
     /**
      * Variable containing the coordinates of the ship in the form of an array with length 2.
      */
-    public double[] position = new double[2];
+    private double[] position = new double[2];
    
     /**
      * variable containing the velocity on the x and y axis as an array of length 2.
      */
-    public double[] velocity = new double[2];
+    private double[] velocity = new double[2];
    
     /**
      * Variable containing the maximum velocity of the ship in km/s.
      */
-    public double maxVelocity = 300000;
+    private double maxVelocity = 300000;
    
     /**
      * Variable registering the orientation of the ship in radients with right being 0 and left being pi.
      */
-    public double orientation;
+    private double orientation;
    
     /**
      * Variable registering the radius of the ship as a radius of a circle.
      */
-    public double radius;
+    private double radius;
     
-    public double direction;
+    private double direction;
     
-    public double mass;
+    private double mass;
     
-    public double acceleration;
+    private double acceleration;
    
-    public boolean isTerminated;
+    private boolean isTerminated;
     
    
     //Initializers
@@ -563,7 +563,7 @@ public  class Ship {
                 return null;
             }
             else{
-                if(debug) System.out.println("Calculating collision position");
+                Helper.log("Calculating collision position");
                
                 double[] pos = new double[2];
                 double[] cp1 = this.getDistanceTraveled(this.getTimeToCollision(ship));

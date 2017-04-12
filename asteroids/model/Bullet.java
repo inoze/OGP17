@@ -12,6 +12,8 @@ public class Bullet {
 	
 	private double mass;
 	
+	private double maxVelocity = 300000;
+	
 	private boolean isTerminated;
 
 	/**
@@ -23,7 +25,7 @@ public class Bullet {
 	public Bullet(){} 
 	
 	public void createBullet(double x, double y, double xVelocity, double yVelocity, double radius) throws IllegalArgumentException {
-		if(isValidPosition(x) && isValidPosition(y)){
+		if(isValidPosition(x) && isValidPosition(y) && isValidVelocity(xVelocity) && isValidVelocity(yVelocity) ){
 			this.Position[0] = x;
 			this.Position[1] = y;
 			this.Velocity[0] = xVelocity;
@@ -33,16 +35,9 @@ public class Bullet {
 	}
 
 	/**
-	 * Terminate <code>bullet</code>.
-	 */
-	public void terminateBullet(Bullet bullet) throws ModelException {
-		
-	}
-
-	/**
 	 * Check whether <code>bullet</code> is terminated.
 	 */
-	public boolean isTerminatedBullet(Bullet bullet) throws ModelException {
+	public boolean isTerminatedBullet() {
 		return this.isTerminated;
 	}
 
@@ -50,7 +45,7 @@ public class Bullet {
 	 * Return the position of <code>ship</code> as an array containing the
 	 * x-coordinate, followed by the y-coordinate.
 	 */
-	public double[] getBulletPosition(Bullet bullet) throws ModelException {
+	public double[] getBulletPosition() {
 		return this.Position;
 	}
 
@@ -58,31 +53,36 @@ public class Bullet {
 	 * Return the velocity of <code>ship</code> as an array containing the
 	 * velocity along the X-axis, followed by the velocity along the Y-axis.
 	 */
-	public double[] getBulletVelocity(Bullet bullet) throws ModelException {
+	public double[] getBulletVelocity() {
 		return this.Velocity;
 	}
 
 	/**
 	 * Return the radius of <code>bullet</code>.
 	 */
-	public double getBulletRadius(Bullet bullet) throws ModelException {
+	public double getBulletRadius() {
 		return this.radius;
 	}
 
 	/**
 	 * Return the mass of <code>bullet</code>.
 	 */
-	public double getBulletMass(Bullet bullet) throws ModelException {
+	public double getBulletMass() {
 		return this.mass;
 	}
 
+	public double getMaxVelocity(){
+		return this.maxVelocity;
+	}
+	
 	/**
 	 * Return the world in which <code>bullet</code> is positioned.
 	 * 
 	 * This method must return null if a bullet is not positioned in a world, or
 	 * if it is positioned on a ship.
 	 */
-	public World getBulletWorld(Bullet bullet) throws ModelException {
+	
+	public World getBulletWorld() throws ModelException {
 		return null;
 	}
 
@@ -91,22 +91,32 @@ public class Bullet {
 	 * 
 	 * This method must return null if a bullet is not positioned on a ship.
 	 */
-	public Ship getBulletShip(Bullet bullet) throws ModelException {
+	public Ship getBulletShip() throws ModelException {
 		return null;
 	}
 
 	/**
 	 * Return the ship that fired <code>bullet</code>.
 	 */
-	public Ship getBulletSource(Bullet bullet) throws ModelException {
+	public Ship getBulletSource() throws ModelException {
 		return null;
 	}
+	
+	/**
+	 * Terminate <code>bullet</code>.
+	 */
+	public void terminateBullet(Bullet bullet) throws ModelException {
+		this.isTerminated = true;
+	}
+	
 	private boolean isValidVelocity(double velocity){
-		
+		if(Helper.isValidDouble(velocity) && velocity < this.getMaxVelocity())
+			return true;
+		return false;
 	}
 
 	private boolean isValidPosition(double position){
-		if(!(Double.isNaN(position)) && Double.isFinite(position)){
+		if(Helper.isValidDouble(position)){
 			return true;
 		}
 		return false;
