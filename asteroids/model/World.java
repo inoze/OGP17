@@ -90,14 +90,18 @@ public class World {
 	 * Remove <code>ship</code> from <code>world</code>.
 	 */
 	public void removeBulletFromWorld(Bullet bullet) throws ModelException {}
-	
+	//Total
 	/**
+	 * Check whether the given angle is a valid angle.
 	 * 
-	 * @param dimension
-	 * @return
+	 * @param  dimension
+	 *         The dimension to check.
+	 * @return True if and only if dimension is smaller or equal to 0,
+	 *         dimension is smaller or equal to Double.MAX_VALUE and dimesnion is finite.
+	 *         | result == ((dimension <= 0) || (dimension >= Double.MAX_VALUE) || !(Double.isFinite(dimension)))
 	 */
 	private boolean isValidDimension(double dimension){
-		if((dimension < 0) || (dimension > Double.MAX_VALUE) || !(Double.isFinite(dimension)))
+		if((dimension <= 0) || (dimension >= Double.MAX_VALUE) || !(Double.isFinite(dimension)))
 			return false;
 		return true;
 	}
