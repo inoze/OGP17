@@ -1,7 +1,6 @@
 package asteroids.model;
  
-import java.util.Collection;
-import java.util.Set;
+import java.util.*;
 
 import asteroids.util.ModelException;
 //import asteroids.util.ModelException;
@@ -29,7 +28,7 @@ import be.kuleuven.cs.som.annotate.*;
  * @version 1.0
  * @author Brent De Bleser & Jesse Geens
  */
-public  class Ship {
+public class Ship extends Entity{
    
     //Variables
    
@@ -66,7 +65,7 @@ public  class Ship {
    
     private boolean isTerminated;
     
-   
+    private Set<Bullet> bullets = new HashSet<Bullet>();
     //Initializers
    
     //Defensive
@@ -772,7 +771,7 @@ public  class Ship {
      * @return  True if and only if the given velocity is a double isn't negative and isn't faster then maxVelocity.
      *         | result == ((velocity >= -1*this.maxVelocity) && (velocity <= this.maxVelocity) && Helper.isValidDouble(velocity))
      */
-    public boolean isValidVelocity(double velocity){
+    private boolean isValidVelocity(double velocity){
         return ((velocity >= -1*this.maxVelocity) && (velocity <= this.maxVelocity) && Helper.isValidDouble(velocity));
     }
    
@@ -786,7 +785,7 @@ public  class Ship {
      * @return  True if and only if the given position is a double.
      *          | result == Helper.isValidDouble(position)
      */
-    public boolean isValidPosition(double position){
+    private boolean isValidPosition(double position){
         return Helper.isValidDouble(position);
     }
    
@@ -799,7 +798,7 @@ public  class Ship {
      * @return  True if and only if the given angle is a double.
      *          | result == Helper.isValidDouble(double number)
      */
-    public boolean isValidAngle(double angle){
+    private boolean isValidAngle(double angle){
         return Helper.isValidDouble(angle);
     }
    
@@ -813,7 +812,7 @@ public  class Ship {
      * @return  True if and only if the given radius is a double and is bigger or equal to 10.
      *          | result == ( radius >= 10 && Helper.isValidDouble(radius))
      */
-    public boolean isValidRadius(double radius){
+    private boolean isValidRadius(double radius){
         return ( radius >= 10 && Helper.isValidDouble(radius));
     }
 }

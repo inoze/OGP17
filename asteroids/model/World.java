@@ -63,26 +63,33 @@ public class World {
 	/**
 	 * Return all ships located within <code>world</code>.
 	 */
-	public Set<? extends Ship> getWorldShips(World world) throws ModelException {
+	public Set<? extends Ship> getWorldShips() throws ModelException {
 		return null;
 	}
 
 	/**
 	 * Return all bullets located in <code>world</code>.
 	 */
-	public Set<? extends Bullet> getWorldBullets(World world) throws ModelException {
+	public Set<? extends Bullet> getWorldBullets() throws ModelException {
 		return null;
 	}
 
 	/**
 	 * Add <code>ship</code> to <code>world</code>.
 	 */
-	public void addShipToWorld(Ship ship) throws ModelException {}
+	public void addShipToWorld(Ship ship) throws IllegalArgumentException {
+		if(isValidShip(ship))
+			ships.add(ship);
+		else
+			throw new IllegalArgumentException();
+	}
 
 	/**
 	 * Remove <code>ship</code> from <code>world</code>.
 	 */
-	public void removeShipFromWorld(Ship ship) throws ModelException {}
+	public void removeShipFromWorld(Ship ship) throws ModelException {
+		
+	}
 
 	/**
 	 * Add <code>bullet</code> to <code>world</code>.
@@ -110,4 +117,10 @@ public class World {
 		return true;
 	}
 
+	private boolean isValidShip(Ship ship){
+		if(ship.isTerminatedShip()){
+			return false;
+		}
+		return true;
+	}
 }
