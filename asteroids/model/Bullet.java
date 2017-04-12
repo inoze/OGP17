@@ -2,9 +2,19 @@ package asteroids.model;
 
 import asteroids.util.ModelException;
 
-public class Bullet extends Entity{
+public class Bullet {
+	
+	private double[] Position = new double[2];
+	
+	private double[] Velocity = new double[2];
+	
+	private double radius;
 	
 	private double mass;
+	
+	private double maxVelocity = 300000;
+	
+	private boolean isTerminated;
 
 	/**
 	 * Create a new non-null bullet with the given position, velocity and
@@ -12,15 +22,23 @@ public class Bullet extends Entity{
 	 * 
 	 * The bullet is not located in a world nor loaded on a ship.
 	 */
-	public Bullet(double x, double y, double xVelocity, double yVelocity, double radius) throws IllegalArgumentException {
-		super(x, y, xVelocity, yVelocity, radius);
+	public Bullet(){} 
+	
+	public void createBullet(double x, double y, double xVelocity, double yVelocity, double radius) throws IllegalArgumentException {
+		if(isValidPosition(x) && isValidPosition(y) && isValidVelocity(xVelocity) && isValidVelocity(yVelocity) ){
+			this.Position[0] = x;
+			this.Position[1] = y;
+			this.Velocity[0] = xVelocity;
+			this.Velocity[1] = yVelocity;
+			this.radius = radius;
+		}
 	}
 
 	/**
 	 * Check whether <code>bullet</code> is terminated.
 	 */
 	public boolean isTerminatedBullet() {
-		return this.isTerminated();
+		return this.isTerminated;
 	}
 
 	/**
@@ -28,7 +46,7 @@ public class Bullet extends Entity{
 	 * x-coordinate, followed by the y-coordinate.
 	 */
 	public double[] getBulletPosition() {
-		return this.getPosition();
+		return this.Position;
 	}
 
 	/**
@@ -36,14 +54,14 @@ public class Bullet extends Entity{
 	 * velocity along the X-axis, followed by the velocity along the Y-axis.
 	 */
 	public double[] getBulletVelocity() {
-		return this.getVelocity();
+		return this.Velocity;
 	}
 
 	/**
 	 * Return the radius of <code>bullet</code>.
 	 */
 	public double getBulletRadius() {
-		return this.getRadius();
+		return this.radius;
 	}
 
 	/**
@@ -54,7 +72,7 @@ public class Bullet extends Entity{
 	}
 
 	public double getMaxVelocity(){
-		return this.getMaxVelocity();
+		return this.maxVelocity;
 	}
 	
 	/**
@@ -64,7 +82,7 @@ public class Bullet extends Entity{
 	 * if it is positioned on a ship.
 	 */
 	
-	public World getBulletWorld() {
+	public World getBulletWorld() throws ModelException {
 		return null;
 	}
 
@@ -88,7 +106,19 @@ public class Bullet extends Entity{
 	 * Terminate <code>bullet</code>.
 	 */
 	public void terminateBullet() {
-		this.terminateEntity();
+		this.isTerminated = true;
 	}
 	
+	private boolean isValidVelocity(double velocity){
+		if(Helper.isValidDouble(velocity) && velocity < this.getMaxVelocity())
+			return true;
+		return false;
+	}
+
+	private boolean isValidPosition(double position){
+		if(Helper.isValidDouble(position)){
+			return true;
+		}
+		return false;
+	}
 }

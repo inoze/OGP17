@@ -67,11 +67,6 @@ public class Entity {
     	return this.isTerminated;
     }
     
-    @Basic
-    public double getRadius(){
-    	return this.radius;
-    }
-    
 
     //Defensive
     /**
@@ -92,7 +87,7 @@ public class Entity {
      *         yPosition isn't valid.
      *         | (!isValidPosition(yPosition)
      */
-    protected void setPosition(double xPosition, double yPosition) throws IllegalArgumentException {
+    public void setPosition(double xPosition, double yPosition) throws IllegalArgumentException {
         if ( (!isValidPosition(xPosition)) || (!isValidPosition(yPosition))) throw new IllegalArgumentException("Invalid position");
         else {
             this.position[0] = xPosition;
@@ -121,7 +116,7 @@ public class Entity {
      *        |           new.getShipVelocity()[1] == 0
      *
      */
-    protected void setVelocity(double xVelocity, double yVelocity){
+    public void setVelocity(double xVelocity, double yVelocity){
         if ( (!isValidVelocity(xVelocity)) || (!isValidVelocity(yVelocity))){
             this.velocity[0] = 0;
             this.velocity[1] = 0;
@@ -132,10 +127,6 @@ public class Entity {
         }
     }
     
-    
-    protected void terminateEntity(){
-    	this.isTerminated = true;
-    }
     //Total
     /**
     * Check whether the given velocity is a valid velocity for

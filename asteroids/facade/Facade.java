@@ -116,7 +116,8 @@ public class Facade implements IFacade {
 	 * located in a world.
 	 */
 	public Ship createShip(double x, double y, double xVelocity, double yVelocity, double radius, double direction, double mass) throws ModelException {
-		Ship ship = new Ship(x, y, xVelocity, yVelocity, radius, direction, mass);
+		Ship ship = new Ship();
+		ship.createShip(x, y, xVelocity, yVelocity, radius, direction, mass);
 		return ship;
 	}
 
@@ -279,7 +280,8 @@ public class Facade implements IFacade {
 	 * <code>height</code>.
 	 */
 	public World createWorld(double width, double height) throws ModelException {
-		World world = new World(width , height);
+		World world = new World();
+		world.createWorld(width , height);
 		return world;
 	}
 
