@@ -107,6 +107,20 @@ public class World {
 		bullets.remove(bullet);
 	}
 	
+	public Entity whatEntityAtPos(double[] position){
+		for(Ship ship : ships){
+			if(ship.getShipPosition() == position){
+				return ship;
+			}
+		}
+		for(Bullet bullet : bullets){
+			if(bullet.getBulletPosition() == position){
+				return bullet;
+			}
+		}
+		return null;
+	}
+	
 	//Total
 	/**
 	 * Check whether the given angle is a valid angle.
