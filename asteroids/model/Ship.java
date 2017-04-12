@@ -36,19 +36,12 @@ public class Ship extends Entity{
      * Variable registering the orientation of the ship in radients with right being 0 and left being pi.
      */
     private double orientation;
-   
-    /**
-     * Variable registering the radius of the ship as a radius of a circle.
-     */
-    private double radius;
     
     private double direction;
     
     private double mass;
     
     private double acceleration;
-   
-    private boolean isTerminated;
     
     private Set<Bullet> bullets = new HashSet<Bullet>();
     //Initializers
@@ -145,14 +138,14 @@ public class Ship extends Entity{
     @Immutable
     @Basic
     public double getShipRadius(){
-        return this.radius;
+        return this.getRadius();
     }
     
 	/**
 	 * Check whether <code>ship</code> is terminated.
 	 */
 	public boolean isTerminatedShip() {
-		return this.isTerminated;
+		return this.isTerminated();
 	}
 	/**
 	 * Return the total mass of <code>ship</code> (i.e., including bullets
@@ -266,7 +259,7 @@ public class Ship extends Entity{
 	 * Terminate ship.
 	 */
 	public void terminateShip() {
-		this.isTerminated = true;
+		this.terminateEntity();
 	}
 
 
@@ -467,7 +460,7 @@ public class Ship extends Entity{
         double b2 = ship.getShipPosition()[1] - this.getPosition()[1];
         double b = 2*((b1 * a1) + (b2 *a2));
        
-        double s = this.getShipRadius() + ship.radius;
+        double s = this.getShipRadius() + ship.getShipRadius();
         double c = square(b1) + square(b2) - square(s);
      
         //exception 2:
