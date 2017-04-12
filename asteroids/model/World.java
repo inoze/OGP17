@@ -22,9 +22,7 @@ public class World {
 	 * Create a new world with the given <code>width</code> and
 	 * <code>height</code>.
 	 */
-	public World(){} 
-	
-	public void createWorld(double width, double height) throws IllegalArgumentException {
+	public World(double width, double height) throws IllegalArgumentException {
 		if(isValidDimension(width) && isValidDimension(height)){
 			this.width = width;
 			this.height = height;
@@ -64,14 +62,14 @@ public class World {
 	 * Return all ships located within <code>world</code>.
 	 */
 	public Set<? extends Ship> getWorldShips() throws ModelException {
-		return null;
+		return ships;
 	}
 
 	/**
 	 * Return all bullets located in <code>world</code>.
 	 */
 	public Set<? extends Bullet> getWorldBullets() throws ModelException {
-		return null;
+		return bullets;
 	}
 
 	/**
@@ -88,18 +86,26 @@ public class World {
 	 * Remove <code>ship</code> from <code>world</code>.
 	 */
 	public void removeShipFromWorld(Ship ship) throws ModelException {
-		
+		ship.terminateShip();
+		ships.remove(ship);
 	}
 
 	/**
 	 * Add <code>bullet</code> to <code>world</code>.
 	 */
-	public void addBulletToWorld(Bullet bullet) throws ModelException {}
+	public void addBulletToWorld(Bullet bullet) throws ModelException {
+		if(isValidBullet(bullet)){
+			bullets.add(bullet);
+		}
+	}
 
 	/**
 	 * Remove <code>ship</code> from <code>world</code>.
 	 */
-	public void removeBulletFromWorld(Bullet bullet) throws ModelException {}
+	public void removeBulletFromWorld(Bullet bullet) throws ModelException {
+		bullet.terminateBullet();
+		bullets.remove(bullet);
+	}
 	
 	//Total
 	/**
@@ -119,6 +125,13 @@ public class World {
 
 	private boolean isValidShip(Ship ship){
 		if(ship.isTerminatedShip()){
+			return false;
+		}
+		return true;
+	}
+	
+	private boolean isValidBullet(Bullet bullet){
+		if(bullet.isTerminatedBullet()){
 			return false;
 		}
 		return true;

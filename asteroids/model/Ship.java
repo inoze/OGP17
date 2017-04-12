@@ -89,7 +89,7 @@ public class Ship extends Entity{
 
     public Ship(double xPosition, double yPosition, double xVelocity, double yVelocity, double radius, double direction, double mass) throws IllegalArgumentException, ModelException {
     	super(xPosition, yPosition, xVelocity, yVelocity, radius);
-    	if(isValidDirection(direction)){
+    	if(isValidDirection(direction) && isValidShipRadius(radius)){
             this.orientation = direction;
             this.mass = mass;
         }
@@ -99,7 +99,6 @@ public class Ship extends Entity{
             Helper.log("posy: " + isValidPosition(yPosition) + "; " + yPosition);
             Helper.log("velx: " + isValidVelocity(xPosition) + "; " + xPosition);
             Helper.log("vely: " + isValidVelocity(yPosition) + "; " + yPosition);
-            //Helper.log("ori: " + isValidOrientation(orientation) + "; " + orientation);
             Helper.log("rad: " + isValidRadius(radius) + "; " + radius);
             throw new IllegalArgumentException("Illegal argument given at CreateShip");
         }
@@ -706,38 +705,50 @@ public class Ship extends Entity{
 	 * 
 	 * For students working alone, this method may return null.
 	 */
-	public Set<? extends Bullet> getBulletsOnShip(Ship ship) throws ModelException {
-		return null;
+	public Set<? extends Bullet> getBulletsOnShip() {
+		return bullets;
 	}
 
 	/**
 	 * Return the number of bullets loaded on <code>ship</code>.
 	 */
-	public int getNbBulletsOnShip(Ship ship) throws ModelException {
-		return 0;
+	public int getNbBulletsOnShip() throws ModelException {
+		return bullets.size();
 	}
 
 	/**
 	 * Load <code>bullet</code> on <code>ship</code>.
 	 */
-	public void loadBulletOnShip(Ship ship, Bullet bullet) throws ModelException {}
+	public void loadBulletOnShip(Bullet bullet) {
+		if(isValidBullet(bullet)){
+			bullets.add(bullet);
+		}
+	}
 
 	/**
 	 * Load <code>bullet</code> on <code>ship</code>.
 	 * 
 	 * For students working alone, this method must not do anything.
 	 */
-	public void loadBulletsOnShip(Ship ship, Collection<Bullet> bullets) throws ModelException {}
+	public void loadBulletsOnShip(Collection<Bullet> bulletsCol) {
+		for(Bullet bullet : bulletsCol){
+			loadBulletOnShip(bullet);
+		}
+	}
 
 	/**
 	 * Remove <code>ship</code> from <code>ship</code>.
 	 */
-	public void removeBulletFromShip(Ship ship, Bullet bullet) throws ModelException {}
+	public void removeBulletFromShip(Bullet bullet) {
+		bullets.remove(bullet);
+	}
 
 	/**
 	 * <code>ship</code> fires a bullet.
 	 */
-	public void fireBullet(Ship ship) throws ModelException {}
+	public void fireBullet() {
+		
+	}
    
     //Total
     /**
@@ -764,6 +775,10 @@ public class Ship extends Entity{
      */
     private boolean isValidShipRadius(double radius){
         return ( radius >= 10 && Helper.isValidDouble(radius));
+    }
+    
+    private boolean isValidBullet(Bullet bullet){
+    	return true;
     }
 }
 

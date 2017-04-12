@@ -105,7 +105,7 @@ public class Bullet {
 	/**
 	 * Terminate <code>bullet</code>.
 	 */
-	public void terminateBullet(Bullet bullet) throws ModelException {
+	public void terminateBullet() {
 		this.isTerminated = true;
 	}
 	
