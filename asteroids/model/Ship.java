@@ -36,40 +36,36 @@ public  class Ship {
     /**
      * Variable containing the coordinates of the ship in the form of an array with length 2.
      */
-    public double[] position = new double[2];
+    private double[] position = new double[2];
    
     /**
      * variable containing the velocity on the x and y axis as an array of length 2.
      */
-    public double[] velocity = new double[2];
+    private double[] velocity = new double[2];
    
     /**
      * Variable containing the maximum velocity of the ship in km/s.
      */
-    public double maxVelocity = 300000;
+    private double maxVelocity = 300000;
    
     /**
      * Variable registering the orientation of the ship in radients with right being 0 and left being pi.
      */
-    public double orientation;
+    private double orientation;
    
     /**
      * Variable registering the radius of the ship as a radius of a circle.
      */
-    public double radius;
+    private double radius;
     
-    public double direction;
+    private double direction;
     
-    public double mass;
+    private double mass;
     
-    public double acceleration;
+    private double acceleration;
    
-    public boolean isTerminated;
+    private boolean isTerminated;
     
-    /**
-     * Variable that determines whether or not debug output is enabled
-     */
-    public static boolean debug = false;
    
     //Initializers
    
@@ -119,12 +115,12 @@ public  class Ship {
             this.radius = radius;
         }
         else{
-            log("posx: " + isValidPosition(xPosition) + "; " + xPosition);
-            log("posy: " + isValidPosition(yPosition) + "; " + yPosition);
-            log("velx: " + isValidVelocity(xPosition) + "; " + xPosition);
-            log("vely: " + isValidVelocity(yPosition) + "; " + yPosition);
-            //log("ori: " + isValidOrientation(orientation) + "; " + orientation);
-            log("rad: " + isValidRadius(radius) + "; " + radius);
+            Helper.log("posx: " + isValidPosition(xPosition) + "; " + xPosition);
+            Helper.log("posy: " + isValidPosition(yPosition) + "; " + yPosition);
+            Helper.log("velx: " + isValidVelocity(xPosition) + "; " + xPosition);
+            Helper.log("vely: " + isValidVelocity(yPosition) + "; " + yPosition);
+            //Helper.log("ori: " + isValidOrientation(orientation) + "; " + orientation);
+            Helper.log("rad: " + isValidRadius(radius) + "; " + radius);
             throw new IllegalArgumentException("Illegal argument given at CreateShip");
         }
     }
@@ -278,7 +274,7 @@ public  class Ship {
      * @param orientation
      *        The new orientation of the ship
      * @pre   The given orientation must be a double.
-     *        | assert isValidDouble(orientation)
+     *        | assert Helper.isValidDouble(orientation)
      * @post  The new orientation of the ship is the given orientation
      *        in radians notation with orientation equal or bigger than 0
      *        and smaller or equal to 2*Pi.
@@ -286,7 +282,7 @@ public  class Ship {
      *        | new.getShipOrientation == orientation
      */
     public void setShipDirection(double direction) {
-        assert isValidDouble(direction);
+        assert Helper.isValidDouble(direction);
         this.direction = direction;
     }
     
@@ -342,7 +338,7 @@ public  class Ship {
      * @param amount
      *        The amount of velocity added in the current orientation.
      * @post  If amount is smaller then 0 or isn't a double it is set to 0.
-     *        | if(!(amount >= 0) && (isValidDouble(amount)))
+     *        | if(!(amount >= 0) && (Helper.isValidDouble(amount)))
      *        |     then amount = 0
      * @effect te velocity of the ship is set to the sum of the new amount which is
      *         calculated upon the X- and Y-axis and the previous velocities on the X- and Y-axis.
@@ -359,7 +355,7 @@ public  class Ship {
      *        | this.setShipVelocity(vxl, vyl);
      */
     public void thrust(double amount){
-        if(!(amount >= 0) && (isValidDouble(amount)))
+        if(!(amount >= 0) && (Helper.isValidDouble(amount)))
             amount = 0;
         double alpha = orientation; //Math.atan(this.getShipVelocity()[1] / this.getShipVelocity()[0]);
         double vx = this.getShipVelocity()[0] + amount * Math.cos(alpha);
@@ -369,8 +365,8 @@ public  class Ship {
             this.setShipVelocity(vx, vy);
         else{
             double vxl, vyl; //vx limited, vy limited
-            log("velocities: " + vx + "; " + vy);
-            log("alpha: " + alpha);
+            Helper.log("velocities: " + vx + "; " + vy);
+            Helper.log("alpha: " + alpha);
             vxl = Math.cos(alpha) * this.getMaxVelocity();
             vyl = Math.sin(alpha) * this.getMaxVelocity();
             this.setShipVelocity(vxl, vyl);
@@ -558,16 +554,16 @@ public  class Ship {
      */
     public double[] getCollisionPosition(Ship ship) throws IllegalArgumentException{
         if(this.overlap(ship)){
-            log("Ships overlap");
+            Helper.log("Ships overlap");
             throw new IllegalArgumentException("Ships overlap");
         }
         else{
             if(this.getTimeToCollision(ship) == Double.POSITIVE_INFINITY){
-                log("Ships will never collide");
+                Helper.log("Ships will never collide");
                 return null;
             }
             else{
-                if(debug) System.out.println("Calculating collision position");
+                Helper.log("Calculating collision position");
                
                 double[] pos = new double[2];
                 double[] cp1 = this.getDistanceTraveled(this.getTimeToCollision(ship));
@@ -580,12 +576,12 @@ public  class Ship {
                 if(diffx != 0){
                     cosinus = (square(diffx) + square(s) - square(diffy))/(2*diffx*s);
                     sinus = Math.sin(Math.acos(cosinus));
-                    log("sinus: " + sinus + "; cosinus: " + cosinus);
+                    Helper.log("sinus: " + sinus + "; cosinus: " + cosinus);
                     pos[0] = cp1[0] + this.getShipRadius() * cosinus;
                     pos[1] = cp1[1] + this.getShipRadius() * sinus;
                 }
                 else{
-                    log("diffx is 0");
+                    Helper.log("diffx is 0");
                     pos[0] = this.getDistanceTraveled(this.getTimeToCollision(ship))[0];
                     pos[1] = this.getDistanceTraveled(this.getTimeToCollision(ship))[1] + this.getShipRadius();
                 }
@@ -649,12 +645,12 @@ public  class Ship {
      * @param  x
      *         The number to square.
      * @pre    x must be a valid double.
-     *         | isValidDouble(x)
+     *         | Helper.isValidDouble(x)
      * @return x is squared.
      *         | result == Math.pow(x, 2)
      */
     public double square(double x){
-        assert isValidDouble(x);
+        assert Helper.isValidDouble(x);
         return Math.pow(x, 2);
     }
    
@@ -665,7 +661,7 @@ public  class Ship {
      * @param  time
      *         The time over which the ship moves.
      * @pre    time must be bigger then zero and musn't be infinty.
-     *         | (time > 0) && isValidDouble(time)
+     *         | (time > 0) && Helper.isValidDouble(time)
      * @return Returns an array of length two, which contains the coordinates of the center of the ship when it
      *         has moved over time.
      *         | double pos[] = new double[2]
@@ -674,7 +670,7 @@ public  class Ship {
      *         |return == pos
      */
     public double[] getDistanceTraveled(double time){
-        assert ((time > 0) && isValidDouble(time));
+        assert ((time > 0) && Helper.isValidDouble(time));
         double pos[] = new double[2];
         pos[0] = this.position[0] + this.velocity[0] * time;
         pos[1] = this.position[1] + this.velocity[1] * time;
@@ -721,7 +717,7 @@ public  class Ship {
      */
     public boolean isValidDirection(double direction){
         //return ((direction >= 0) && (direction <= 2*Math.PI));
-    	return isValidDouble(direction);
+    	return Helper.isValidDouble(direction);
     }
     
     /**************
@@ -774,10 +770,10 @@ public  class Ship {
      * @param   velocity
      *          The velocity to check.
      * @return  True if and only if the given velocity is a double isn't negative and isn't faster then maxVelocity.
-     *         | result == ((velocity >= -1*this.maxVelocity) && (velocity <= this.maxVelocity) && isValidDouble(velocity))
+     *         | result == ((velocity >= -1*this.maxVelocity) && (velocity <= this.maxVelocity) && Helper.isValidDouble(velocity))
      */
     public boolean isValidVelocity(double velocity){
-        return ((velocity >= -1*this.maxVelocity) && (velocity <= this.maxVelocity) && isValidDouble(velocity));
+        return ((velocity >= -1*this.maxVelocity) && (velocity <= this.maxVelocity) && Helper.isValidDouble(velocity));
     }
    
      //defensive
@@ -788,10 +784,10 @@ public  class Ship {
      * @param   position
      *          The position to check.
      * @return  True if and only if the given position is a double.
-     *          | result == isValidDouble(position)
+     *          | result == Helper.isValidDouble(position)
      */
     public boolean isValidPosition(double position){
-        return isValidDouble(position);
+        return Helper.isValidDouble(position);
     }
    
     //Total
@@ -801,10 +797,10 @@ public  class Ship {
      * @param   angel
      *          The angle to check.
      * @return  True if and only if the given angle is a double.
-     *          | result == isValidDouble(double number)
+     *          | result == Helper.isValidDouble(double number)
      */
     public boolean isValidAngle(double angle){
-        return isValidDouble(angle);
+        return Helper.isValidDouble(angle);
     }
    
      //defensive
@@ -815,43 +811,10 @@ public  class Ship {
      * @param   radius
      *          The radius to check.
      * @return  True if and only if the given radius is a double and is bigger or equal to 10.
-     *          | result == ( radius >= 10 && isValidDouble(radius))
+     *          | result == ( radius >= 10 && Helper.isValidDouble(radius))
      */
     public boolean isValidRadius(double radius){
-        return ( radius >= 10 && isValidDouble(radius));
-    }
-   
-    //Total
-    /**
-     * Check whether the given number is a double.
-     *
-     * @param  number
-     *         The double to check.
-     * @return True if and only if the given double is a finite number
-     *         | result == (!(Double.isNaN(number) || (Double.isInfinite(number))))
-     */
-    @Model
-    public boolean isValidDouble(double number){
-        if(Double.isNaN(number) || Double.isInfinite(number) || number < Double.MAX_VALUE)
-            return false;
-        return true;
-    }
-   
-    //Total
-    /**
-     * A helper method to make a small errorMessage
-     *
-     * @param errorMessage
-     *        The error message that needs to be shown
-     * @post  If debug equals true the errorMessage is shown.
-     *        | if debug == true
-     *        |     then System.out.println(errorMessage)
-     * @post  If debug equals false the errorMessage isn't shown.
-     *        | if debug == true
-     *        |     then nothing
-     */
-    public void log(String errorMessage){
-        if(debug) System.out.println(errorMessage);
+        return ( radius >= 10 && Helper.isValidDouble(radius));
     }
 }
 

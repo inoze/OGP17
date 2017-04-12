@@ -1,6 +1,6 @@
 package asteroids.model;
 
-import java.util.Set;
+import java.util.*;
 
 import asteroids.util.ModelException;
 
@@ -14,13 +14,16 @@ public class World {
 	private double height;
 	
 	private boolean isTerminated;
+	
+	private Set<Ship> ships = new HashSet<Ship>();
+	
+	private Set<Bullet> bullets = new HashSet<Bullet>();
 	/**
 	 * Create a new world with the given <code>width</code> and
 	 * <code>height</code>.
 	 */
-	public World(){
-		
-	} 
+	public World(){} 
+	
 	public void createWorld(double width, double height) throws IllegalArgumentException {
 		if(isValidDimension(width) && isValidDimension(height)){
 			this.width = width;
@@ -35,8 +38,7 @@ public class World {
 	 * Terminate <code>world</code>.
 	 */
 	public void terminateWorld(){
-		if(!(this.isTerminated))
-			this.isTerminated = true;
+		this.isTerminated = true;
 	}
 
 	/**
@@ -54,8 +56,7 @@ public class World {
 		double[] size = new double[2];
 		size[0] = this.width;
 		size[1] = this.height;
-		Ship ship = new Ship();
-		ship.log("w: " + size[0] + "; h: " + size[1]);
+		Helper.log("w: " + size[0] + "; h: " + size[1]);
 		return size;
 	}
 
