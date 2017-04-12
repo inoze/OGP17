@@ -92,6 +92,7 @@ public class World {
 	 * Remove <code>ship</code> from <code>world</code>.
 	 */
 	public void removeBulletFromWorld(Bullet bullet) throws ModelException {}
+	
 	//Total
 	/**
 	 * Check whether the given angle is a valid angle.
