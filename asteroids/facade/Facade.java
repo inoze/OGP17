@@ -117,7 +117,7 @@ public class Facade implements IFacade {
 	 */
 	public Ship createShip(double x, double y, double xVelocity, double yVelocity, double radius, double direction, double mass) throws ModelException {
 		Ship ship = new Ship();
-		ship = ship.createShip(x, y, xVelocity, yVelocity, radius, direction, mass);
+		ship.createShip(x, y, xVelocity, yVelocity, radius, direction, mass);
 		return ship;
 	}
 
