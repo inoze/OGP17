@@ -18,11 +18,13 @@ public class World {
 	 * Create a new world with the given <code>width</code> and
 	 * <code>height</code>.
 	 */
-	public World createWorld(double width, double height) throws IllegalArgumentException {
+	public World(){
+		
+	} 
+	public void createWorld(double width, double height) throws IllegalArgumentException {
 		if(isValidDimension(width) && isValidDimension(height)){
 			this.width = width;
 			this.height = height;
-			return this;
 		}
 		else{
 			throw new IllegalArgumentException("Invalid dimensions given @ createWorld");

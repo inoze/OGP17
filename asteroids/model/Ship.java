@@ -74,6 +74,10 @@ public  class Ship {
     //Initializers
    
     //Defensive
+    
+    public Ship(){
+    	
+    }
    /**
     * Initialize this new ship with a given x- and y-position, x- and y-velocity, radaius and
     * a given orientation
@@ -105,14 +109,14 @@ public  class Ship {
     *         | if(!(isValidPosition(xPosition) && isValidPosition(yPosition) && isValidVelocity(xVelocity) && isValidVelocity(yVelocity) && isValidOrientation(orientation) && isValidRadius(radius)))
     *         |     then throw new IllegalArgumentException("Illegal argument given at CreateShip")
     */
-    public Ship createShip(double xPosition, double yPosition, double xVelocity, double yVelocity, double radius, double direction, double mass) throws IllegalArgumentException {
+
+    public void createShip(double xPosition, double yPosition, double xVelocity, double yVelocity, double radius, double direction, double mass) throws IllegalArgumentException {
         if(isValidPosition(xPosition) && isValidPosition(yPosition) && isValidVelocity(xVelocity) && isValidVelocity(yVelocity) && isValidDirection(direction) && isValidRadius(radius)){
             try{this.setShipPosition(xPosition, yPosition);} catch(IllegalArgumentException ex){throw new IllegalArgumentException(ex.getMessage());}
             this.setShipVelocity(xVelocity, yVelocity);
             this.setShipDirection(direction);
             this.mass = mass;
             this.radius = radius;
-            return this;
         }
         else{
             log("posx: " + isValidPosition(xPosition) + "; " + xPosition);
