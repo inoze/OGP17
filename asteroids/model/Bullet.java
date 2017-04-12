@@ -20,8 +20,16 @@ public class Bullet {
 	 * 
 	 * The bullet is not located in a world nor loaded on a ship.
 	 */
-	public Bullet createBullet(double x, double y, double xVelocity, double yVelocity, double radius) throws ModelException {
-		return null;
+	public Bullet(){} 
+	
+	public void createBullet(double x, double y, double xVelocity, double yVelocity, double radius) throws IllegalArgumentException {
+		if(isValidPosition(x) && isValidPosition(y)){
+			this.Position[0] = x;
+			this.Position[1] = y;
+			this.Velocity[0] = xVelocity;
+			this.Velocity[1] = yVelocity;
+			this.radius = radius;
+		}
 	}
 
 	/**
@@ -93,6 +101,14 @@ public class Bullet {
 	public Ship getBulletSource(Bullet bullet) throws ModelException {
 		return null;
 	}
+	private boolean isValidVelocity(double velocity){
+		
+	}
 
-
+	private boolean isValidPosition(double position){
+		if(!(Double.isNaN(position)) && Double.isFinite(position)){
+			return true;
+		}
+		return false;
+	}
 }
