@@ -33,21 +33,6 @@ public class Ship extends Entity{
     //Variables
    
     /**
-     * Variable containing the coordinates of the ship in the form of an array with length 2.
-     */
-    private double[] position = new double[2];
-   
-    /**
-     * variable containing the velocity on the x and y axis as an array of length 2.
-     */
-    private double[] velocity = new double[2];
-   
-    /**
-     * Variable containing the maximum velocity of the ship in km/s.
-     */
-    private double maxVelocity = 300000;
-   
-    /**
      * Variable registering the orientation of the ship in radients with right being 0 and left being pi.
      */
     private double orientation;
@@ -70,9 +55,6 @@ public class Ship extends Entity{
    
     //Defensive
     
-    public Ship(){
-    	
-    }
    /**
     * Initialize this new ship with a given x- and y-position, x- and y-velocity, radaius and
     * a given orientation
@@ -105,15 +87,14 @@ public class Ship extends Entity{
     *         |     then throw new IllegalArgumentException("Illegal argument given at CreateShip")
     */
 
-    public void createShip(double xPosition, double yPosition, double xVelocity, double yVelocity, double radius, double direction, double mass) throws IllegalArgumentException {
-        if(isValidPosition(xPosition) && isValidPosition(yPosition) && isValidVelocity(xVelocity) && isValidVelocity(yVelocity) && isValidDirection(direction) && isValidRadius(radius)){
-            try{this.setShipPosition(xPosition, yPosition);} catch(IllegalArgumentException ex){throw new IllegalArgumentException(ex.getMessage());}
-            this.setShipVelocity(xVelocity, yVelocity);
-            this.setShipDirection(direction);
+    public Ship(double xPosition, double yPosition, double xVelocity, double yVelocity, double radius, double direction, double mass) throws IllegalArgumentException, ModelException {
+    	super(xPosition, yPosition, xVelocity, yVelocity, radius);
+    	if(isValidDirection(direction)){
+            this.orientation = direction;
             this.mass = mass;
-            this.radius = radius;
         }
         else{
+        	this.terminateShip();
             Helper.log("posx: " + isValidPosition(xPosition) + "; " + xPosition);
             Helper.log("posy: " + isValidPosition(yPosition) + "; " + yPosition);
             Helper.log("velx: " + isValidVelocity(xPosition) + "; " + xPosition);
@@ -132,7 +113,7 @@ public class Ship extends Entity{
      */
     @Basic
     public double[] getShipPosition(){
-        return this.position;
+        return this.getPosition();
     }
    
     /**
@@ -140,7 +121,7 @@ public class Ship extends Entity{
      */
     @Basic
     public double[] getShipVelocity(){
-        return this.velocity;
+        return this.getVelocity();
     }
    
     /**
@@ -148,7 +129,7 @@ public class Ship extends Entity{
      */
     @Basic
     public double getMaxVelocity(){
-        return this.maxVelocity;
+        return this.getMaxVelocity();
     }
    
     /**
@@ -229,8 +210,7 @@ public class Ship extends Entity{
     public void setShipPosition(double xPosition, double yPosition) throws IllegalArgumentException {
         if ( (!isValidPosition(xPosition)) || (!isValidPosition(yPosition))) throw new IllegalArgumentException("Invalid position");
         else {
-            this.position[0] = xPosition;
-            this.position[1] = yPosition;
+            this.setPosition(xPosition, yPosition);
         }
     }
    
@@ -257,12 +237,10 @@ public class Ship extends Entity{
      */
     public void setShipVelocity(double xVelocity, double yVelocity){
         if ( (!isValidVelocity(xVelocity)) || (!isValidVelocity(yVelocity))){
-            this.velocity[0] = 0;
-            this.velocity[1] = 0;
+            this.setVelocity(0, 0);
         }
         else {
-            this.velocity[0] = xVelocity;
-            this.velocity[1] = yVelocity;
+            this.setVelocity(xVelocity, yVelocity);
         }
     }
    
@@ -288,8 +266,8 @@ public class Ship extends Entity{
 	/**
 	 * Terminate ship.
 	 */
-	public void terminateShip() throws ModelException {
-		
+	public void terminateShip() {
+		this.isTerminated = true;
 	}
 
 
@@ -320,7 +298,7 @@ public class Ship extends Entity{
             throw new IllegalArgumentException("Invalid time");
         else{
             try {
-                   this.setShipPosition(this.position[0] + (this.velocity[0] * dt), this.position[1] + (this.velocity[1] * dt));
+                   this.setShipPosition(this.getPosition()[0] + (this.getVelocity()[0] * dt), this.getPosition()[1] + (this.getVelocity()[1] * dt));
             }
             catch (IllegalArgumentException ex){
                 throw new IllegalArgumentException(ex);
@@ -406,8 +384,8 @@ public class Ship extends Entity{
     public double getDistanceBetween(Ship ship) throws IllegalArgumentException{
         if(this == ship) throw new IllegalArgumentException("this == ship");
         else{
-            double diffx = Math.abs(this.position[0] - ship.getShipPosition()[0]);
-            double diffy = Math.abs(this.position[1] - ship.getShipPosition()[1]);
+            double diffx = Math.abs(this.getPosition()[0] - ship.getShipPosition()[0]);
+            double diffy = Math.abs(this.getPosition()[1] - ship.getShipPosition()[1]);
             double diff = Math.sqrt(Math.abs(square(diffx) - square(diffy)));
             return diff;
         }
@@ -477,8 +455,8 @@ public class Ship extends Entity{
    
     public double getTimeToCollision(Ship ship) throws IllegalArgumentException{
            
-        double a1 = ship.getShipVelocity()[0] - this.velocity[0];
-        double a2 = ship.getShipVelocity()[1] - this.velocity[1];
+        double a1 = ship.getShipVelocity()[0] - this.getVelocity()[0];
+        double a2 = ship.getShipVelocity()[1] - this.getVelocity()[1];
         double a = square(a1) + square(a2);
         //exception 1:
         //The two ships follow an identical path so they don't collide.
@@ -486,8 +464,8 @@ public class Ship extends Entity{
             return Double.POSITIVE_INFINITY;
         }
        
-        double b1 = ship.getShipPosition()[0] - this.position[0];
-        double b2 = ship.getShipPosition()[1] - this.position[1];
+        double b1 = ship.getShipPosition()[0] - this.getPosition()[0];
+        double b2 = ship.getShipPosition()[1] - this.getPosition()[1];
         double b = 2*((b1 * a1) + (b2 *a2));
        
         double s = this.getShipRadius() + ship.radius;
@@ -671,8 +649,8 @@ public class Ship extends Entity{
     public double[] getDistanceTraveled(double time){
         assert ((time > 0) && Helper.isValidDouble(time));
         double pos[] = new double[2];
-        pos[0] = this.position[0] + this.velocity[0] * time;
-        pos[1] = this.position[1] + this.velocity[1] * time;
+        pos[0] = this.getPosition()[0] + this.getVelocity()[0] * time;
+        pos[1] = this.getPosition()[1] + this.getVelocity()[1] * time;
         return pos;
     }
    
@@ -760,34 +738,6 @@ public class Ship extends Entity{
 	 * <code>ship</code> fires a bullet.
 	 */
 	public void fireBullet(Ship ship) throws ModelException {}
-     
-     //Total
-     /**
-     * Check whether the given velocity is a valid velocity for
-     * a ship.
-     *
-     * @param   velocity
-     *          The velocity to check.
-     * @return  True if and only if the given velocity is a double isn't negative and isn't faster then maxVelocity.
-     *         | result == ((velocity >= -1*this.maxVelocity) && (velocity <= this.maxVelocity) && Helper.isValidDouble(velocity))
-     */
-    private boolean isValidVelocity(double velocity){
-        return ((velocity >= -1*this.maxVelocity) && (velocity <= this.maxVelocity) && Helper.isValidDouble(velocity));
-    }
-   
-     //defensive
-    /**
-     * Check whether the given position is a valid position for
-     * a ship.
-     *  
-     * @param   position
-     *          The position to check.
-     * @return  True if and only if the given position is a double.
-     *          | result == Helper.isValidDouble(position)
-     */
-    private boolean isValidPosition(double position){
-        return Helper.isValidDouble(position);
-    }
    
     //Total
     /**
@@ -812,7 +762,7 @@ public class Ship extends Entity{
      * @return  True if and only if the given radius is a double and is bigger or equal to 10.
      *          | result == ( radius >= 10 && Helper.isValidDouble(radius))
      */
-    private boolean isValidRadius(double radius){
+    private boolean isValidShipRadius(double radius){
         return ( radius >= 10 && Helper.isValidDouble(radius));
     }
 }
