@@ -250,7 +250,7 @@ public class Ship extends Entity{
 	 * Terminate ship.
 	 */
 	public void terminateShip() {
-		this.isTerminated = true;
+		this.terminate();
 	}
 
 
@@ -397,7 +397,7 @@ public class Ship extends Entity{
             return true;
         }
         else{
-            double radius = this.getShipRadius() + ship.getShipRadius();
+            double radius = this.getRadius() + ship.getRadius();
             if(this.getDistanceBetween(ship) >= radius)
                 return false;
             else
@@ -451,7 +451,7 @@ public class Ship extends Entity{
         double b2 = ship.getShipPosition()[1] - this.getPosition()[1];
         double b = 2*((b1 * a1) + (b2 *a2));
        
-        double s = this.getShipRadius() + ship.radius;
+        double s = this.getRadius() + ship.getRadius();
         double c = square(b1) + square(b2) - square(s);
      
         //exception 2:
@@ -528,7 +528,7 @@ public class Ship extends Entity{
                 double[] pos = new double[2];
                 double[] cp1 = this.getDistanceTraveled(this.getTimeToCollision(ship));
                 double[] cp2 = ship.getDistanceTraveled(this.getTimeToCollision(ship));
-                double s = this.getShipRadius() + ship.getShipRadius();
+                double s = this.getRadius() + ship.getRadius();
                 double diffx = Math.abs(cp2[0] - cp1[0]);
                 double diffy = Math.abs(cp2[1] - cp1[1]);
                 double cosinus, sinus;
@@ -537,13 +537,13 @@ public class Ship extends Entity{
                     cosinus = (square(diffx) + square(s) - square(diffy))/(2*diffx*s);
                     sinus = Math.sin(Math.acos(cosinus));
                     Helper.log("sinus: " + sinus + "; cosinus: " + cosinus);
-                    pos[0] = cp1[0] + this.getShipRadius() * cosinus;
-                    pos[1] = cp1[1] + this.getShipRadius() * sinus;
+                    pos[0] = cp1[0] + this.getRadius() * cosinus;
+                    pos[1] = cp1[1] + this.getRadius() * sinus;
                 }
                 else{
                     Helper.log("diffx is 0");
                     pos[0] = this.getDistanceTraveled(this.getTimeToCollision(ship))[0];
-                    pos[1] = this.getDistanceTraveled(this.getTimeToCollision(ship))[1] + this.getShipRadius();
+                    pos[1] = this.getDistanceTraveled(this.getTimeToCollision(ship))[1] + this.getRadius();
                 }
                
                 return pos;
