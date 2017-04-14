@@ -2,7 +2,7 @@ package asteroids.model;
 
 import asteroids.util.ModelException;
 
-public class Bullet {
+public class Bullet{
 	
 	private double[] Position = new double[2];
 	

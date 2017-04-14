@@ -107,6 +107,25 @@ public class World {
 		bullets.remove(bullet);
 	}
 	
+	public Entity entityAt(double[] position){
+		int counter = 0;
+		Entity entity;
+		for (Entity a : ships) {
+		    if (a.getPosition() == position){ 
+		    	counter++;
+		    	entity = a;
+		    }
+		}
+		for (Entity a : bullets){
+			if (a.getPosition() == position){ 
+		    	counter++;
+		    	entity = a;
+			}
+		}
+		if (counter > 1) Helper.log("More than one object on position " + position);
+		return entity;
+	}
+	
 	//Total
 	/**
 	 * Check whether the given angle is a valid angle.
