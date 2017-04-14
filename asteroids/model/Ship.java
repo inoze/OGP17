@@ -662,7 +662,12 @@ public class Ship extends Entity{
 	}
 
 	/**
-	 * Remove <code>ship</code> from <code>ship</code>.
+	 * Remove a bullet from the ship.
+	 * 
+	 * @param   bullet
+	 *          The bullet to be removed.
+	 * @effect  The bullet is removed from bullets.
+	 *          | bullets.remove(bullet)
 	 */
 	public void removeBulletFromShip(Bullet bullet) {
 		bullets.remove(bullet);
@@ -701,7 +706,13 @@ public class Ship extends Entity{
     private boolean isValidShipRadius(double radius){
         return ( radius >= 10 && Helper.isValidDouble(radius));
     }
-    
+    /**
+     * Checks whether a given bullet is valid.
+     * @param   bullet
+     *          The bullet to check.
+     * @return  True if and only if the bullet isn't terminated.
+     *          | result == (!(bullet.isTerminated()))
+     */
     private boolean isValidBullet(Bullet bullet){
     	if(bullet.isTerminated())
     		return false;
