@@ -477,7 +477,7 @@ public class Facade implements IFacade {
 	 * Return a set of all the entities in the given world.
 	 */
 	public Set<? extends Object> getEntities(World world) throws ModelException {
-		return null;
+		return world.getEntities();
 	}
 
 }
