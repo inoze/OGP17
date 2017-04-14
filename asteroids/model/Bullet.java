@@ -2,7 +2,11 @@ package asteroids.model;
 
 import asteroids.util.ModelException;
 
+<<<<<<< HEAD
 public class Bullet{
+=======
+public class Bullet extends Entity{
+>>>>>>> f86a645fab453f43107ee44e306243fc439c7f3d
 	
 	private double[] Position = new double[2];
 	
@@ -15,6 +19,10 @@ public class Bullet{
 	private double maxVelocity = 300000;
 	
 	private boolean isTerminated;
+	
+	private World superWorld;
+	
+	private Ship source = null;
 
 	/**
 	 * Create a new non-null bullet with the given position, velocity and
@@ -22,16 +30,8 @@ public class Bullet{
 	 * 
 	 * The bullet is not located in a world nor loaded on a ship.
 	 */
-	public Bullet(){} 
-	
-	public void createBullet(double x, double y, double xVelocity, double yVelocity, double radius) throws IllegalArgumentException {
-		if(isValidPosition(x) && isValidPosition(y) && isValidVelocity(xVelocity) && isValidVelocity(yVelocity) ){
-			this.Position[0] = x;
-			this.Position[1] = y;
-			this.Velocity[0] = xVelocity;
-			this.Velocity[1] = yVelocity;
-			this.radius = radius;
-		}
+	public Bullet(double x, double y, double xVelocity, double yVelocity, double radius) throws IllegalArgumentException {
+		super(x, y, xVelocity, yVelocity, radius);
 	}
 
 	/**
@@ -83,7 +83,7 @@ public class Bullet{
 	 */
 	
 	public World getBulletWorld() throws ModelException {
-		return null;
+			return superWorld;
 	}
 
 	/**
@@ -91,15 +91,18 @@ public class Bullet{
 	 * 
 	 * This method must return null if a bullet is not positioned on a ship.
 	 */
-	public Ship getBulletShip() throws ModelException {
-		return null;
+	public Ship getBulletShip() {
+		if(superWorld == null)
+			return source;
+		else
+			return null;
 	}
 
 	/**
 	 * Return the ship that fired <code>bullet</code>.
 	 */
-	public Ship getBulletSource() throws ModelException {
-		return null;
+	public Ship getBulletSource() {
+		return source;
 	}
 	
 	/**
@@ -109,16 +112,9 @@ public class Bullet{
 		this.isTerminated = true;
 	}
 	
-	private boolean isValidVelocity(double velocity){
-		if(Helper.isValidDouble(velocity) && velocity < this.getMaxVelocity())
-			return true;
-		return false;
+	public void setSource(Ship source){
+		if(this.getBulletSource() == null)
+			this.source = source;
 	}
-
-	private boolean isValidPosition(double position){
-		if(Helper.isValidDouble(position)){
-			return true;
-		}
-		return false;
-	}
+	
 }
