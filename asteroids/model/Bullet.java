@@ -2,6 +2,10 @@ package asteroids.model;
 
 import asteroids.util.ModelException;
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 9c75c8fa9d67e97d8c212803ec4bb6688eee1f33
 public class Bullet extends Entity{
 	
 	private double[] Position = new double[2];
