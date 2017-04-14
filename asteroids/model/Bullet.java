@@ -9,9 +9,7 @@ public class Bullet extends Entity{
 	private double[] Velocity = new double[2];
 	
 	private double radius;
-	
-	private double mass;
-	
+		
 	private double maxVelocity = 300000;
 	
 	private boolean isTerminated;
@@ -26,8 +24,8 @@ public class Bullet extends Entity{
 	 * 
 	 * The bullet is not located in a world nor loaded on a ship.
 	 */
-	public Bullet(double x, double y, double xVelocity, double yVelocity, double radius) throws IllegalArgumentException {
-		super(x, y, xVelocity, yVelocity, radius);
+	public Bullet(double x, double y, double xVelocity, double yVelocity, double radius, double mass) throws IllegalArgumentException {
+		super(x, y, xVelocity, yVelocity, radius, mass);
 	}
 
 	/**
@@ -64,7 +62,7 @@ public class Bullet extends Entity{
 	 * Return the mass of <code>bullet</code>.
 	 */
 	public double getBulletMass() {
-		return this.mass;
+		return this.getMass();
 	}
 
 	public double getMaxVelocity(){

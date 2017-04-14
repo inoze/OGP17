@@ -178,7 +178,7 @@ public class World {
 	 *         | result == (!(ship.isTerminatedShip()))
 	 */
 	private boolean isValidShip(Ship ship){
-		if(ship.isTerminatedShip()){
+		if(ship.isTerminated()){
 			return false;
 		}
 		return true;

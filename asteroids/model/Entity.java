@@ -126,7 +126,7 @@ public class Entity {
      *         yPosition isn't valid.
      *         | (!isValidPosition(yPosition)
      */
-    public void setPosition(double xPosition, double yPosition) throws IllegalArgumentException {
+    protected void setPosition(double xPosition, double yPosition) throws IllegalArgumentException {
         if ( (!isValidPosition(xPosition)) || (!isValidPosition(yPosition))) throw new IllegalArgumentException("Invalid position");
         else {
             this.position[0] = xPosition;
@@ -155,7 +155,7 @@ public class Entity {
      *        |           new.getShipVelocity()[1] == 0
      *
      */
-    public void setVelocity(double xVelocity, double yVelocity){
+    protected void setVelocity(double xVelocity, double yVelocity){
         if ( (!isValidVelocity(xVelocity)) || (!isValidVelocity(yVelocity))){
             this.velocity[0] = 0;
             this.velocity[1] = 0;
@@ -202,6 +202,10 @@ public class Entity {
 		pos[0] = this.getPosition()[0] + this.getVelocity()[0] * this.getTimeCollisionEntity(entity);
 		pos[1] = this.getPosition()[1] + this.getVelocity()[1] * this.getTimeCollisionEntity(entity);
 		return pos;
+	}
+	
+	protected void terminate(){
+		this.isTerminated = true;
 	}
     //Total
     /**
