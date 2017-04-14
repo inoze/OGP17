@@ -722,6 +722,7 @@ public class Ship extends Entity{
 	public void loadBulletOnShip(Bullet bullet) {
 		if(isValidBullet(bullet)){
 			bullets.add(bullet);
+			bullet.setSource(this);
 		}
 	}
 

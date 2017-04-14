@@ -109,7 +109,7 @@ public class World {
 	
 	public Entity entityAt(double[] position){
 		int counter = 0;
-		Entity entity;
+		Entity entity = null;
 		for (Entity a : ships) {
 		    if (a.getPosition() == position){ 
 		    	counter++;
@@ -122,6 +122,7 @@ public class World {
 		    	entity = a;
 			}
 		}
+
 		if (counter > 1) Helper.log("More than one object on position " + position);
 		return entity;
 	}

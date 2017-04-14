@@ -199,19 +199,22 @@ public class Facade implements IFacade {
 	 * The bullet is not located in a world nor loaded on a ship.
 	 */
 	public Bullet createBullet(double x, double y, double xVelocity, double yVelocity, double radius) throws ModelException {
-		return null;
+		Bullet bullet = new Bullet(x, y, xVelocity, yVelocity, radius);
+		return bullet;
 	}
 
 	/**
 	 * Terminate <code>bullet</code>.
 	 */
-	public void terminateBullet(Bullet bullet) throws ModelException {}
+	public void terminateBullet(Bullet bullet) throws ModelException {
+		bullet.terminateBullet();
+	}
 
 	/**
 	 * Check whether <code>bullet</code> is terminated.
 	 */
 	public boolean isTerminatedBullet(Bullet bullet) throws ModelException {
-		return true;
+		return bullet.isTerminatedBullet();
 	}
 
 	/**
@@ -219,7 +222,7 @@ public class Facade implements IFacade {
 	 * x-coordinate, followed by the y-coordinate.
 	 */
 	public double[] getBulletPosition(Bullet bullet) throws ModelException {
-		return null;
+		return bullet.getBulletPosition();
 	}
 
 	/**
@@ -227,21 +230,21 @@ public class Facade implements IFacade {
 	 * velocity along the X-axis, followed by the velocity along the Y-axis.
 	 */
 	public double[] getBulletVelocity(Bullet bullet) throws ModelException {
-		return null;
+		return bullet.getBulletPosition();
 	}
 
 	/**
 	 * Return the radius of <code>bullet</code>.
 	 */
 	public double getBulletRadius(Bullet bullet) throws ModelException {
-		return 0;
+		return bullet.getBulletRadius();
 	}
 
 	/**
 	 * Return the mass of <code>bullet</code>.
 	 */
 	public double getBulletMass(Bullet bullet) throws ModelException {
-		return 0;
+		return bullet.getBulletMass();
 	}
 
 	/**
@@ -251,7 +254,7 @@ public class Facade implements IFacade {
 	 * if it is positioned on a ship.
 	 */
 	public World getBulletWorld(Bullet bullet) throws ModelException {
-		return null;
+		return bullet.getBulletWorld();
 	}
 
 	/**
@@ -260,14 +263,14 @@ public class Facade implements IFacade {
 	 * This method must return null if a bullet is not positioned on a ship.
 	 */
 	public Ship getBulletShip(Bullet bullet) throws ModelException {
-		return null;
+		return bullet.getBulletShip();
 	}
 
 	/**
 	 * Return the ship that fired <code>bullet</code>.
 	 */
 	public Ship getBulletSource(Bullet bullet) throws ModelException {
-		return null;
+		return bullet.getBulletSource();
 	}
 
 	/**************
@@ -286,13 +289,15 @@ public class Facade implements IFacade {
 	/**
 	 * Terminate <code>world</code>.
 	 */
-	public void terminateWorld(World world) throws ModelException {}
+	public void terminateWorld(World world) throws ModelException {
+		world.terminateWorld();
+	}
 
 	/**
 	 * Check whether <code>world</code> is terminated.
 	 */
 	public boolean isTerminatedWorld(World world) throws ModelException {
-		return false;
+		return world.isTerminatedWorld();
 	}
 
 	/**
@@ -307,35 +312,43 @@ public class Facade implements IFacade {
 	 * Return all ships located within <code>world</code>.
 	 */
 	public Set<? extends Ship> getWorldShips(World world) throws ModelException {
-		return null;
+		return world.getWorldShips();
 	}
 
 	/**
 	 * Return all bullets located in <code>world</code>.
 	 */
 	public Set<? extends Bullet> getWorldBullets(World world) throws ModelException {
-		return null;
+		return world.getWorldBullets();
 	}
 
 	/**
 	 * Add <code>ship</code> to <code>world</code>.
 	 */
-	public void addShipToWorld(World world, Ship ship) throws ModelException {}
+	public void addShipToWorld(World world, Ship ship) throws ModelException {
+		world.addShipToWorld(ship);
+	}
 
 	/**
 	 * Remove <code>ship</code> from <code>world</code>.
 	 */
-	public void removeShipFromWorld(World world, Ship ship) throws ModelException {}
+	public void removeShipFromWorld(World world, Ship ship) throws ModelException {
+		world.removeShipFromWorld(ship);
+	}
 
 	/**
 	 * Add <code>bullet</code> to <code>world</code>.
 	 */
-	public void addBulletToWorld(World world, Bullet bullet) throws ModelException {}
+	public void addBulletToWorld(World world, Bullet bullet) throws ModelException {
+		world.addBulletToWorld(bullet);
+	}
 
 	/**
 	 * Remove <code>ship</code> from <code>world</code>.
 	 */
-	public void removeBulletFromWorld(World world, Bullet bullet) throws ModelException {}
+	public void removeBulletFromWorld(World world, Bullet bullet) throws ModelException {
+		world.removeBulletFromWorld(bullet);
+	}
 
 	/**************
 	 * SHIP: Methods related to loaded bullets
@@ -347,37 +360,45 @@ public class Facade implements IFacade {
 	 * For students working alone, this method may return null.
 	 */
 	public Set<? extends Bullet> getBulletsOnShip(Ship ship) throws ModelException {
-		return null;
+		return ship.getBulletsOnShip();
 	}
 
 	/**
 	 * Return the number of bullets loaded on <code>ship</code>.
 	 */
 	public int getNbBulletsOnShip(Ship ship) throws ModelException {
-		return 0;
+		return ship.getNbBulletsOnShip();
 	}
 
 	/**
 	 * Load <code>bullet</code> on <code>ship</code>.
 	 */
-	public void loadBulletOnShip(Ship ship, Bullet bullet) throws ModelException {}
+	public void loadBulletOnShip(Ship ship, Bullet bullet) throws ModelException {
+		ship.loadBulletOnShip(bullet);
+	}
 
 	/**
 	 * Load <code>bullet</code> on <code>ship</code>.
 	 * 
 	 * For students working alone, this method must not do anything.
 	 */
-	public void loadBulletsOnShip(Ship ship, Collection<Bullet> bullets) throws ModelException {}
+	public void loadBulletsOnShip(Ship ship, Collection<Bullet> bullets) throws ModelException {
+		ship.loadBulletsOnShip(bullets);
+	}
 
 	/**
 	 * Remove <code>ship</code> from <code>ship</code>.
 	 */
-	public void removeBulletFromShip(Ship ship, Bullet bullet) throws ModelException {}
+	public void removeBulletFromShip(Ship ship, Bullet bullet) throws ModelException {
+		ship.removeBulletFromShip(bullet);
+	}
 
 	/**
 	 * <code>ship</code> fires a bullet.
 	 */
-	public void fireBullet(Ship ship) throws ModelException {}
+	public void fireBullet(Ship ship) throws ModelException {
+		ship.fireBullet();
+	}
 
 	/******************
 	 * COLLISIONS
@@ -449,7 +470,7 @@ public class Facade implements IFacade {
 	 * <code>world</code>.
 	 */
 	public Object getEntityAt(World world, double x, double y) throws ModelException {
-		return null;
+		world.entityAt(x, y);
 	}
 
 	/**
