@@ -136,7 +136,7 @@ public class Entity {
 	 * Return the shortest time in which the given entity will collide with the
 	 * boundaries of its world.
 	 */
-	public double getTimeCollisionBoundary() throws ModelException {
+	public double getTimeCollisionBoundary() {
 		return 0;
 	}
 
@@ -144,7 +144,7 @@ public class Entity {
 	 * Return the first position at which the given entity will collide with the
 	 * boundaries of its world.
 	 */
-	public double[] getPositionCollisionBoundary() throws ModelException {
+	public double[] getPositionCollisionBoundary(){
 		double[] pos = new double[2];
 		pos[0] = this.getPosition()[0] + this.getVelocity()[0] * this.getTimeCollisionBoundary();
 		pos[1] = this.getPosition()[1] + this.getVelocity()[1] * this.getTimeCollisionBoundary();
