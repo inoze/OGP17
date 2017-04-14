@@ -370,7 +370,7 @@ public class Ship extends Entity{
         else{
             double diffx = Math.abs(this.getPosition()[0] - ship.getShipPosition()[0]);
             double diffy = Math.abs(this.getPosition()[1] - ship.getShipPosition()[1]);
-            double diff = Math.sqrt(Math.abs(square(diffx) - square(diffy)));
+            double diff = Math.sqrt(Math.abs(Helper.square(diffx) - Helper.square(diffy)));
             return diff;
         }
     }
@@ -441,7 +441,7 @@ public class Ship extends Entity{
            
         double a1 = ship.getShipVelocity()[0] - this.getVelocity()[0];
         double a2 = ship.getShipVelocity()[1] - this.getVelocity()[1];
-        double a = square(a1) + square(a2);
+        double a = Helper.square(a1) + Helper.square(a2);
         //exception 1:
         //The two ships follow an identical path so they don't collide.
         if (a == 0.0) {
@@ -453,17 +453,17 @@ public class Ship extends Entity{
         double b = 2*((b1 * a1) + (b2 *a2));
        
         double s = this.getRadius() + ship.getRadius();
-        double c = square(b1) + square(b2) - square(s);
+        double c = Helper.square(b1) + Helper.square(b2) - Helper.square(s);
      
         //exception 2:
         //If the quadratic equation doesn't give an answer the ships' paths cross but
         //don't the ships don't touch each other.
-        if (quadraticSolver(a, b, c)[2] == 1.0){
+        if (Helper.quadraticSolver(a, b, c)[2] == 1.0){
             return Double.POSITIVE_INFINITY;
         }
         else{
-            double dt1 = quadraticSolver(a, b, c)[0];
-            double dt2 = quadraticSolver(a, b, c)[1];
+            double dt1 = Helper.quadraticSolver(a, b, c)[0];
+            double dt2 = Helper.quadraticSolver(a, b, c)[1];
            
           //dt exceptions:
            
@@ -535,7 +535,7 @@ public class Ship extends Entity{
                 double cosinus, sinus;
                
                 if(diffx != 0){
-                    cosinus = (square(diffx) + square(s) - square(diffy))/(2*diffx*s);
+                    cosinus = (Helper.square(diffx) + Helper.square(s) - Helper.square(diffy))/(2*diffx*s);
                     sinus = Math.sin(Math.acos(cosinus));
                     Helper.log("sinus: " + sinus + "; cosinus: " + cosinus);
                     pos[0] = cp1[0] + this.getRadius() * cosinus;
@@ -550,69 +550,6 @@ public class Ship extends Entity{
                 return pos;
             }
         }
-    }
-   
-    //Helper methods
- 
-    //Total
-    /**
-    * A helper method to solve quadratic equations.
-    *
-    * @param a
-    *        The factor of the second power term.
-    * @param b
-    *        The factor of the first power term.
-    * @param c
-    *        The factor of the zero power term.
-    * @post  If a x^2 + b x +c doesn't have a solution
-    *        return an array of 3 elements with the first
-    *        two being 0.0 and the last being 1.0.
-    *        | if (4 * a *c > Math.pow(b, 2))
-    *        |      then x[0] = 0.0
-    *        |           x[1] = 0.0
-    *        |           x[2] = 1.0
-    *        |           result == x
-    * @post  If a x^2 + b x + c has a solution terurn
-    *        an array with the first two elemnts being the two solutions
-    *        and the last elemnt being 1.0.
-    *        | if (4 * a *c > Math.pow(b, 2))
-    *        |       then double d = Math.pow(b, 2) + (4 * a *c)
-    *        |            x[0] = (-b + Math.sqrt(d)) / (2 * a)
-    *        |            x[1] = (-b - Math.sqrt(d)) / (2 * a)
-    *        |            x[2] = 0.0
-    *        |            result == x
-    */
-    public double[] quadraticSolver(double a, double b, double c){
-        double d = square(b) - (4 * a *c);
-        double[] x = new double[3];
-        if (d < 0){
-            x[0] = 0.0;
-            x[1] = 0.0;
-            x[2] = 1.0;
-            return x;
-        }
-        else{
-            x[0] = ((-b + Math.sqrt(d)) / (2 * a));
-            x[1] = ((-b - Math.sqrt(d)) / (2 * a));
-            x[2] = 0.0;
-            return x;
-        }
-    }
-   
-    //Nominal
-    /**
-     * A helper method to replace Math.pow(x, 2) with square(x).
-     *
-     * @param  x
-     *         The number to square.
-     * @pre    x must be a valid double.
-     *         | Helper.isValidDouble(x)
-     * @return x is squared.
-     *         | result == Math.pow(x, 2)
-     */
-    public double square(double x){
-        assert Helper.isValidDouble(x);
-        return Math.pow(x, 2);
     }
    
     //Nominal
