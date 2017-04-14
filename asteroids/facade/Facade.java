@@ -147,7 +147,7 @@ public class Facade implements IFacade {
 	 */
 	public World getShipWorld(Ship ship) throws ModelException {
 		//return ship.getShipWorld();
-		return null;
+		return ship.getShipWorld();
 	}
 
 	/**
@@ -470,7 +470,7 @@ public class Facade implements IFacade {
 	 * <code>world</code>.
 	 */
 	public Object getEntityAt(World world, double x, double y) throws ModelException {
-		world.entityAt(x, y);
+		return world.entityAt(x, y);
 	}
 
 	/**

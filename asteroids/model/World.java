@@ -18,6 +18,7 @@ public class World {
 	private Set<Ship> ships = new HashSet<Ship>();
 	
 	private Set<Bullet> bullets = new HashSet<Bullet>();
+	
 	/**
 	 * Create a new world with the given <code>width</code> and
 	 * <code>height</code>.
@@ -137,18 +138,18 @@ public class World {
 		    	entity = a;
 			}
 		}
-<<<<<<< HEAD
 
-		if (counter > 1) Helper.log("More than one object on position " + position);
-=======
 		if (counter > 1){
 			Helper.log("More than one object on position " + position);
 			entity = null;
 		}
->>>>>>> 9c75c8fa9d67e97d8c212803ec4bb6688eee1f33
+
 		return entity;
 	}
 	
+	public Set<Entity> getEntities(){
+		Set<Entity> entities = new HashSet<Entity>();
+	}
 	//Total
 	/**
 	 * Check whether the given angle is a valid angle.
