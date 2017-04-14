@@ -77,10 +77,13 @@ public class World {
 	 * Add <code>ship</code> to <code>world</code>.
 	 */
 	public void addShipToWorld(Ship ship) throws IllegalArgumentException {
-		if(isValidShip(ship))
+		if(isValidShip(ship)){
 			ships.add(ship);
-		else
+			ship.setSuperWorld(this);
+		}
+		else{
 			throw new IllegalArgumentException();
+		}
 	}
 
 	/**
@@ -88,6 +91,7 @@ public class World {
 	 */
 	public void removeShipFromWorld(Ship ship) throws ModelException {
 		ship.terminateShip();
+		ship.setSuperWorld(null);
 		ships.remove(ship);
 	}
 
@@ -97,6 +101,7 @@ public class World {
 	public void addBulletToWorld(Bullet bullet) throws ModelException {
 		if(isValidBullet(bullet)){
 			bullets.add(bullet);
+			bullet.setSuperWorld(this);
 		}
 	}
 
@@ -104,6 +109,7 @@ public class World {
 	 * Remove <code>ship</code> from <code>world</code>.
 	 */
 	public void removeBulletFromWorld(Bullet bullet) throws ModelException {
+		bullet.setSuperWorld(this);
 		bullet.terminateBullet();
 		bullets.remove(bullet);
 	}

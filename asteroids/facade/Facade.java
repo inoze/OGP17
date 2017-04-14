@@ -37,7 +37,7 @@ public class Facade implements IFacade {
 	 * Return the orientation of ship (in radians).
 	 */
 	public double getShipOrientation(Ship ship) throws ModelException{
-		return ship.getShipOrientation();
+		return ship.getShipDirection();
 	}
 
 	/**
