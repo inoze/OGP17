@@ -24,8 +24,8 @@ public class Bullet extends Entity{
 	 * 
 	 * The bullet is not located in a world nor loaded on a ship.
 	 */
-	public Bullet(double x, double y, double xVelocity, double yVelocity, double radius, double mass) throws IllegalArgumentException {
-		super(x, y, xVelocity, yVelocity, radius, mass);
+	public Bullet(double x, double y, double xVelocity, double yVelocity, double radius) throws IllegalArgumentException {
+		super(x, y, xVelocity, yVelocity, radius);
 	}
 
 	/**

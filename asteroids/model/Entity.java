@@ -7,6 +7,10 @@ import be.kuleuven.cs.som.annotate.Immutable;
 public class Entity {
 
 	protected final double SPEED_OF_LIGHT =  300000;
+	
+	private final double BULLET_DENSITY = 7.8 * Math.pow(10, 12);
+	
+	private final double SHIP_DENSITY = 1.42 * Math.pow(10, 12);
 	/**
      * Variable containing the coordinates of the ship in the form of an array with length 2.
      */
@@ -38,11 +42,13 @@ public class Entity {
      */
 	private double mass;
 	
-	protected Entity (double x, double y, double xVelocity, double yVelocity, double radius, double mass) throws IllegalArgumentException {
+	protected Entity (double x, double y, double xVelocity, double yVelocity, double radius) throws IllegalArgumentException {
 		if(isValidPosition(x) && isValidPosition(y) && isValidVelocity(xVelocity) && isValidVelocity(yVelocity) && isValidRadius(radius)){
             try{this.setPosition(x, y);} catch(IllegalArgumentException ex){throw new IllegalArgumentException(ex.getMessage());}
             this.setVelocity(xVelocity, yVelocity);
             this.radius = radius;
+            if(this instanceof Bullet){this.mass = (4/3)*Math.PI*Math.pow(radius, 3)*BULLET_DENSITY;}
+            if(this instanceof Ship){this.mass = (4/3)*Math.PI*Math.pow(radius, 3)*SHIP_DENSITY;}
         } 
 		else{
 			throw new IllegalArgumentException("Illegal argument at createEntity");
@@ -166,6 +172,12 @@ public class Entity {
         }
     }
     
+    protected void setMass(double mass){
+    	if(isValidMass(mass))
+    		if(this instanceof Ship)
+    			this.mass = mass;
+    }
+    
     /**
 	 * Return the shortest time in which the given entity will collide with the
 	 * boundaries of its world.
@@ -247,5 +259,28 @@ public class Entity {
     */
    protected boolean isValidRadius(double radius){
        return Helper.isValidDouble(radius);
+   }
+   
+   protected boolean isValidMass(double mass){
+	   if(this instanceof Bullet){if(mass != (4/3)*Math.PI*Math.pow(radius, 3)*BULLET_DENSITY){
+		   Helper.log("Warning! You shouldn't change a bullet's mass");
+		   return false;
+	   }
+	   else{
+		   return true;
+	   }}
+	   if(this instanceof Ship){
+		   if(mass < (4/3)*Math.PI*Math.pow(radius, 3)*BULLET_DENSITY){
+			   return false;
+		   }
+		   else if(Helper.isValidDouble(mass)){
+			   return true;
+		   }
+		   else{
+			   return false;
+		   }}
+	   else{
+		   return false;
+	   }
    }
 }

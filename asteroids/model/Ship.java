@@ -91,10 +91,12 @@ public class Ship extends Entity{
     */
 
     public Ship(double xPosition, double yPosition, double xVelocity, double yVelocity, double radius, double direction, double mass) throws IllegalArgumentException, ModelException {
-    	super(xPosition, yPosition, xVelocity, yVelocity, radius, mass);
+    	super(xPosition, yPosition, xVelocity, yVelocity, radius);
     	if(isValidDirection(direction) && isValidShipRadius(radius)){
             this.direction = direction;
-            this.totalMass = mass;
+            if(this.getMass() > mass)
+            	throw new IllegalArgumentException("Ship is lighter than minimum density");
+            	this.setMass(mass);
         }
         else{
         	this.terminateShip();
@@ -763,6 +765,8 @@ public class Ship extends Entity{
     }
     
     private boolean isValidBullet(Bullet bullet){
+    	if(bullet.isTerminated())
+    		return false;
     	return true;
     }
 }

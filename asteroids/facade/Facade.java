@@ -30,7 +30,7 @@ public class Facade implements IFacade {
 	 * Return the radius of ship.
 	 */
 	public double getShipRadius(Ship ship) throws ModelException{
-		return ship.getShipRadius();
+		return ship.getRadius();
 	}
 
 	/**
@@ -129,7 +129,7 @@ public class Facade implements IFacade {
 	 * Check whether <code>ship</code> is terminated.
 	 */
 	public boolean isTerminatedShip(Ship ship) throws ModelException {
-		return ship.isTerminatedShip();
+		return ship.isTerminated();
 	}
 
 	/**
@@ -137,7 +137,7 @@ public class Facade implements IFacade {
 	 * loaded onto the ship).
 	 */
 	public double getShipMass(Ship ship) throws ModelException {
-		return ship.getShipMass();
+		return ship.getMass();
 	}
 
 	/**
@@ -145,7 +145,7 @@ public class Facade implements IFacade {
 	 */
 	public World getShipWorld(Ship ship) throws ModelException {
 		//return ship.getShipWorld();
-		return ship.getShipWorld();
+		return ship.getWorld();
 	}
 
 	/**
