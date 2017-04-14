@@ -19,7 +19,7 @@ import be.kuleuven.cs.som.annotate.*;
  * @invar The radius of each ship must be a valid radius for a ship
  *        | isValidRadius(getRadius())
  *
- * @invar The orientation of each ship must be a valid orientation for a ship
+ * @invar The direction of each ship must be a valid direction for a ship
  *        | isValidOrientation(getOrientation())
  *
  * @invar The maximum speed of each ship must be between 0 and 300 000
@@ -33,7 +33,7 @@ public class Ship extends Entity{
     //Variables
    
     /**
-     * Variable registering the orientation of the ship in radients with right being 0 and left being pi.
+     * Variable registering the direction of the ship in radients with right being 0 and left being pi.
      */
 	@Deprecated
     private double orientation;
@@ -60,7 +60,7 @@ public class Ship extends Entity{
     
    /**
     * Initialize this new ship with a given x- and y-position, x- and y-velocity, radaius and
-    * a given orientation
+    * a given direction
     *
     * @param  xPosition
     *         The x-position of the ship.
@@ -72,8 +72,8 @@ public class Ship extends Entity{
     *         The ship's velocity on the y-axis
     * @param  radius
     *         The radius (size) of the ship
-    * @param  orientation
-    *         The orientation of the ship in radians.
+    * @param  direction
+    *         The direction of the ship in radians.
     * @effect The given x-position is set to the new x-position and
     *         the given y-position is set to the new y-position.
     *         | this.setShipPosition(xPosition, yPosition)
@@ -82,11 +82,11 @@ public class Ship extends Entity{
     *         | this.setShipVelocity(xVelocity, yVelocity)
     * @post   The given radius is equal to the new radius.
     *         | new.getShipRadius() == radius
-    * @effect The given orientation is set to the new orientation.
-    *         | this.setShipOrientation(orientation)
+    * @effect The given direction is set to the new direction.
+    *         | this.setShipOrientation(direction)
     * @throws IllegalArgumentException
     *         Throws an IllegalArgumentException if any of the given parameters is invalid
-    *         | if(!(isValidPosition(xPosition) && isValidPosition(yPosition) && isValidVelocity(xVelocity) && isValidVelocity(yVelocity) && isValidOrientation(orientation) && isValidRadius(radius)))
+    *         | if(!(isValidPosition(xPosition) && isValidPosition(yPosition) && isValidVelocity(xVelocity) && isValidVelocity(yVelocity) && isValidOrientation(direction) && isValidRadius(radius)))
     *         |     then throw new IllegalArgumentException("Illegal argument given at CreateShip")
     */
 
@@ -137,11 +137,11 @@ public class Ship extends Entity{
     }
    
     /**
-     * Return the orientation of ship (in radians).
+     * Return the direction of ship (in radians).
      */
     @Basic
-    public double getShipOrientation(){
-        return this.orientation;
+    public double getShipDirection(){
+        return this.direction;
     }
    
        
@@ -229,22 +229,23 @@ public class Ship extends Entity{
         }
     }
    
-    //Nominaal
+    //Nominal
     /**
-     * A method to set to orientation of a ship
+     * A method to set to direction of a ship
      * to a given value.
-     * @param orientation
-     *        The new orientation of the ship
-     * @pre   The given orientation must be a double.
-     *        | assert Helper.isValidDouble(orientation)
-     * @post  The new orientation of the ship is the given orientation
-     *        in radians notation with orientation equal or bigger than 0
+     * @param direction
+     *        The new direction of the ship
+     * @pre   The given direction must be a double.
+     *        | assert Helper.isValidDouble(direction)
+     * @post  The new direction of the ship is the given direction
+     *        in radians notation with direction equal or bigger than 0
      *        and smaller or equal to 2*Pi.
-     *        | orientation = surplusRadians(orientation)
-     *        | new.getShipOrientation == orientation
+     *        | direction = surplusRadians(direction)
+     *        | new.getShipOrientation == direction
      */
     public void setShipDirection(double direction) {
         assert Helper.isValidDouble(direction);
+        direction = surplusRadians(direction);
         this.direction = direction;
     }
     
@@ -295,16 +296,16 @@ public class Ship extends Entity{
     //Total
     /**
      * A method to increase the velocity of a ship in the direction
-     *  of its orientation.
+     *  of its direction.
      *  
      * @param amount
-     *        The amount of velocity added in the current orientation.
+     *        The amount of velocity added in the current direction.
      * @post  If amount is smaller then 0 or isn't a double it is set to 0.
      *        | if(!(amount >= 0) && (Helper.isValidDouble(amount)))
      *        |     then amount = 0
      * @effect te velocity of the ship is set to the sum of the new amount which is
      *         calculated upon the X- and Y-axis and the previous velocities on the X- and Y-axis.
-     *        | double alpha = orientation
+     *        | double alpha = direction
      *        | double vx = this.getShipVelocity()[0] + amount * Math.cos(alpha)
      *        | double vy = this.getShipVelocity()[1] + amount * Math.sin(alpha)
      *        | int velocity = (int) Math.sqrt(Math.pow(vx, 2) + Math.pow(vy, 2))
@@ -319,7 +320,7 @@ public class Ship extends Entity{
     public void thrust(double amount){
         if(!(amount >= 0) && (Helper.isValidDouble(amount)))
             amount = 0;
-        double alpha = orientation; //Math.atan(this.getShipVelocity()[1] / this.getShipVelocity()[0]);
+        double alpha = direction; //Math.atan(this.getShipVelocity()[1] / this.getShipVelocity()[0]);
         double vx = this.getShipVelocity()[0] + amount * Math.cos(alpha);
         double vy = this.getShipVelocity()[1] + amount * Math.sin(alpha);
         int velocity = (int) Math.sqrt(Math.pow(vx, 2) + Math.pow(vy, 2));
@@ -341,8 +342,8 @@ public class Ship extends Entity{
      *
      * @param  angle
      *         The angle to be turned by the ship.
-     * @effect The orientation of the ship is set to the current orientation added with angle.
-     *         | new.getShipOrientation == this.orientation + angle
+     * @effect The direction of the ship is set to the current direction added with angle.
+     *         | new.getShipOrientation == this.direction + angle
      */
     public void turn(double angle){
         assert isValidAngle(angle);
@@ -371,7 +372,7 @@ public class Ship extends Entity{
         else{
             double diffx = Math.abs(this.getPosition()[0] - ship.getShipPosition()[0]);
             double diffy = Math.abs(this.getPosition()[1] - ship.getShipPosition()[1]);
-            double diff = Math.sqrt(Math.abs(square(diffx) - square(diffy)));
+            double diff = Math.sqrt(Math.abs(Helper.square(diffx) - Helper.square(diffy)));
             return diff;
         }
     }
@@ -442,7 +443,7 @@ public class Ship extends Entity{
            
         double a1 = ship.getShipVelocity()[0] - this.getVelocity()[0];
         double a2 = ship.getShipVelocity()[1] - this.getVelocity()[1];
-        double a = square(a1) + square(a2);
+        double a = Helper.square(a1) + Helper.square(a2);
         //exception 1:
         //The two ships follow an identical path so they don't collide.
         if (a == 0.0) {
@@ -454,17 +455,17 @@ public class Ship extends Entity{
         double b = 2*((b1 * a1) + (b2 *a2));
        
         double s = this.getRadius() + ship.getRadius();
-        double c = square(b1) + square(b2) - square(s);
+        double c = Helper.square(b1) + Helper.square(b2) - Helper.square(s);
      
         //exception 2:
         //If the quadratic equation doesn't give an answer the ships' paths cross but
         //don't the ships don't touch each other.
-        if (quadraticSolver(a, b, c)[2] == 1.0){
+        if (Helper.quadraticSolver(a, b, c)[2] == 1.0){
             return Double.POSITIVE_INFINITY;
         }
         else{
-            double dt1 = quadraticSolver(a, b, c)[0];
-            double dt2 = quadraticSolver(a, b, c)[1];
+            double dt1 = Helper.quadraticSolver(a, b, c)[0];
+            double dt2 = Helper.quadraticSolver(a, b, c)[1];
            
           //dt exceptions:
            
@@ -536,7 +537,7 @@ public class Ship extends Entity{
                 double cosinus, sinus;
                
                 if(diffx != 0){
-                    cosinus = (square(diffx) + square(s) - square(diffy))/(2*diffx*s);
+                    cosinus = (Helper.square(diffx) + Helper.square(s) - Helper.square(diffy))/(2*diffx*s);
                     sinus = Math.sin(Math.acos(cosinus));
                     Helper.log("sinus: " + sinus + "; cosinus: " + cosinus);
                     pos[0] = cp1[0] + this.getRadius() * cosinus;
@@ -551,69 +552,6 @@ public class Ship extends Entity{
                 return pos;
             }
         }
-    }
-   
-    //Helper methods
- 
-    //Total
-    /**
-    * A helper method to solve quadratic equations.
-    *
-    * @param a
-    *        The factor of the second power term.
-    * @param b
-    *        The factor of the first power term.
-    * @param c
-    *        The factor of the zero power term.
-    * @post  If a x^2 + b x +c doesn't have a solution
-    *        return an array of 3 elements with the first
-    *        two being 0.0 and the last being 1.0.
-    *        | if (4 * a *c > Math.pow(b, 2))
-    *        |      then x[0] = 0.0
-    *        |           x[1] = 0.0
-    *        |           x[2] = 1.0
-    *        |           result == x
-    * @post  If a x^2 + b x + c has a solution terurn
-    *        an array with the first two elemnts being the two solutions
-    *        and the last elemnt being 1.0.
-    *        | if (4 * a *c > Math.pow(b, 2))
-    *        |       then double d = Math.pow(b, 2) + (4 * a *c)
-    *        |            x[0] = (-b + Math.sqrt(d)) / (2 * a)
-    *        |            x[1] = (-b - Math.sqrt(d)) / (2 * a)
-    *        |            x[2] = 0.0
-    *        |            result == x
-    */
-    public double[] quadraticSolver(double a, double b, double c){
-        double d = square(b) - (4 * a *c);
-        double[] x = new double[3];
-        if (d < 0){
-            x[0] = 0.0;
-            x[1] = 0.0;
-            x[2] = 1.0;
-            return x;
-        }
-        else{
-            x[0] = ((-b + Math.sqrt(d)) / (2 * a));
-            x[1] = ((-b - Math.sqrt(d)) / (2 * a));
-            x[2] = 0.0;
-            return x;
-        }
-    }
-   
-    //Nominal
-    /**
-     * A helper method to replace Math.pow(x, 2) with square(x).
-     *
-     * @param  x
-     *         The number to square.
-     * @pre    x must be a valid double.
-     *         | Helper.isValidDouble(x)
-     * @return x is squared.
-     *         | result == Math.pow(x, 2)
-     */
-    public double square(double x){
-        assert Helper.isValidDouble(x);
-        return Math.pow(x, 2);
     }
    
     //Nominal
@@ -669,13 +607,13 @@ public class Ship extends Entity{
    
     //Nominal
     /**
-     * Check whether the given orientation is a valid orientation for
+     * Check whether the given direction is a valid direction for
      * a ship.
      *
-     * @param   orientation
+     * @param   direction
      *          The orienation to check.
-     * @return  True if and only if the given orientation is bigger or equal to zero and smaller or equal to 2*pi.
-     *         | result == ((orientation >= 0) && (orientation <= (2*Math.PI))
+     * @return  True if and only if the given direction is bigger or equal to zero and smaller or equal to 2*pi.
+     *         | result == ((direction >= 0) && (direction <= (2*Math.PI))
      */
     public boolean isValidDirection(double direction){
         //return ((direction >= 0) && (direction <= 2*Math.PI));
