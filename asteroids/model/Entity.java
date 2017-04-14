@@ -16,12 +16,16 @@ public class Entity {
     private double[] velocity = new double[2];
    
     /**
-     * Variable containing the maximum velocity of the ship in km/s.
+     * Variable containing the maximum velocity of the entity in km/s.
      */
     private double maxVelocity = SPEED_OF_LIGHT;
-    
+    /**
+     * Variable containing the radius of the entity.
+     */
     private double radius;
-    
+    /**
+     * Variable containing whether the entity is terminated.
+     */
     private boolean isTerminated;
 	
 	
@@ -30,7 +34,7 @@ public class Entity {
             try{this.setPosition(x, y);} catch(IllegalArgumentException ex){throw new IllegalArgumentException(ex.getMessage());}
             this.setVelocity(xVelocity, yVelocity);
             this.radius = radius;
-        }
+        } 
 		else{
 			throw new IllegalArgumentException("Illegal argument at createEntity");
 		}

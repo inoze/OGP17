@@ -122,14 +122,30 @@ public class World {
 			return false;
 		return true;
 	}
-
+	//Total
+	/**
+	 * Check whether the given angle is a valid angle.
+	 * 
+	 * @param  ship
+	 *         The ship to check.
+	 * @return True if and only if the ship isn't terminated.
+	 *         | result == (!(ship.isTerminatedShip()))
+	 */
 	private boolean isValidShip(Ship ship){
 		if(ship.isTerminatedShip()){
 			return false;
 		}
 		return true;
 	}
-	
+	//Total
+	/**
+	 * Check whether the given angle is a valid angle.
+	 * 
+	 * @param  bullet
+	 *         The bullet to check.
+	 * @return True if and only if the bullet isn't terminated.
+	 *         | result == (!(bullet.isTerminatedBullet()))
+	 */
 	private boolean isValidBullet(Bullet bullet){
 		if(bullet.isTerminatedBullet()){
 			return false;
