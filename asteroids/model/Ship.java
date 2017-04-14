@@ -51,6 +51,7 @@ public class Ship extends Entity{
     private boolean isTerminated;
     
     private Set<Bullet> bullets = new HashSet<Bullet>();
+    
     //Initializers
    
     //Defensive

@@ -1,5 +1,6 @@
 package asteroids.model;
 
+import asteroids.util.ModelException;
 import be.kuleuven.cs.som.annotate.Basic;
 
 public class Entity {
@@ -131,6 +132,43 @@ public class Entity {
         }
     }
     
+    /**
+	 * Return the shortest time in which the given entity will collide with the
+	 * boundaries of its world.
+	 */
+	public double getTimeCollisionBoundary() throws ModelException {
+		return 0;
+	}
+
+	/**
+	 * Return the first position at which the given entity will collide with the
+	 * boundaries of its world.
+	 */
+	public double[] getPositionCollisionBoundary() throws ModelException {
+		double[] pos = new double[2];
+		pos[0] = this.getPosition()[0] + this.getVelocity()[0] * this.getTimeCollisionBoundary();
+		pos[1] = this.getPosition()[1] + this.getVelocity()[1] * this.getTimeCollisionBoundary();
+		return pos;
+	}
+
+	/**
+	 * Return the shortest time in which the first entity will collide with the
+	 * second entity.
+	 */
+	public double getTimeCollisionEntity(Entity entity) throws ModelException {
+		return 0;
+	}
+
+	/**
+	 * Return the first position at which the first entity will collide with the
+	 * second entity.
+	 */
+	public double[] getPositionCollisionEntity(Entity entity) throws ModelException {
+		double[] pos = new double[2];
+		pos[0] = this.getPosition()[0] + this.getVelocity()[0] * this.getTimeCollisionEntity(entity);
+		pos[1] = this.getPosition()[1] + this.getVelocity()[1] * this.getTimeCollisionEntity(entity);
+		return pos;
+	}
     //Total
     /**
     * Check whether the given velocity is a valid velocity for

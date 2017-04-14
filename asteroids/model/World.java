@@ -149,6 +149,9 @@ public class World {
 	
 	public Set<Entity> getEntities(){
 		Set<Entity> entities = new HashSet<Entity>();
+		entities.addAll(bullets);
+		entities.addAll(ships);
+		return entities;
 	}
 	//Total
 	/**
