@@ -19,7 +19,7 @@ import be.kuleuven.cs.som.annotate.*;
  * @invar The radius of each ship must be a valid radius for a ship
  *        | isValidRadius(getRadius())
  *
- * @invar The orientation of each ship must be a valid orientation for a ship
+ * @invar The direction of each ship must be a valid direction for a ship
  *        | isValidOrientation(getOrientation())
  *
  * @invar The maximum speed of each ship must be between 0 and 300 000
@@ -33,7 +33,7 @@ public class Ship extends Entity{
     //Variables
    
     /**
-     * Variable registering the orientation of the ship in radients with right being 0 and left being pi.
+     * Variable registering the direction of the ship in radients with right being 0 and left being pi.
      */
 	@Deprecated
     private double orientation;
@@ -60,7 +60,7 @@ public class Ship extends Entity{
     
    /**
     * Initialize this new ship with a given x- and y-position, x- and y-velocity, radaius and
-    * a given orientation
+    * a given direction
     *
     * @param  xPosition
     *         The x-position of the ship.
@@ -72,8 +72,8 @@ public class Ship extends Entity{
     *         The ship's velocity on the y-axis
     * @param  radius
     *         The radius (size) of the ship
-    * @param  orientation
-    *         The orientation of the ship in radians.
+    * @param  direction
+    *         The direction of the ship in radians.
     * @effect The given x-position is set to the new x-position and
     *         the given y-position is set to the new y-position.
     *         | this.setShipPosition(xPosition, yPosition)
@@ -82,11 +82,11 @@ public class Ship extends Entity{
     *         | this.setShipVelocity(xVelocity, yVelocity)
     * @post   The given radius is equal to the new radius.
     *         | new.getShipRadius() == radius
-    * @effect The given orientation is set to the new orientation.
-    *         | this.setShipOrientation(orientation)
+    * @effect The given direction is set to the new direction.
+    *         | this.setShipOrientation(direction)
     * @throws IllegalArgumentException
     *         Throws an IllegalArgumentException if any of the given parameters is invalid
-    *         | if(!(isValidPosition(xPosition) && isValidPosition(yPosition) && isValidVelocity(xVelocity) && isValidVelocity(yVelocity) && isValidOrientation(orientation) && isValidRadius(radius)))
+    *         | if(!(isValidPosition(xPosition) && isValidPosition(yPosition) && isValidVelocity(xVelocity) && isValidVelocity(yVelocity) && isValidOrientation(direction) && isValidRadius(radius)))
     *         |     then throw new IllegalArgumentException("Illegal argument given at CreateShip")
     */
 
@@ -135,11 +135,11 @@ public class Ship extends Entity{
     }
    
     /**
-     * Return the orientation of ship (in radians).
+     * Return the direction of ship (in radians).
      */
     @Basic
-    public double getShipOrientation(){
-        return this.orientation;
+    public double getShipDirection(){
+        return this.direction;
     }
    
        
@@ -227,22 +227,23 @@ public class Ship extends Entity{
         }
     }
    
-    //Nominaal
+    //Nominal
     /**
-     * A method to set to orientation of a ship
+     * A method to set to direction of a ship
      * to a given value.
-     * @param orientation
-     *        The new orientation of the ship
-     * @pre   The given orientation must be a double.
-     *        | assert Helper.isValidDouble(orientation)
-     * @post  The new orientation of the ship is the given orientation
-     *        in radians notation with orientation equal or bigger than 0
+     * @param direction
+     *        The new direction of the ship
+     * @pre   The given direction must be a double.
+     *        | assert Helper.isValidDouble(direction)
+     * @post  The new direction of the ship is the given direction
+     *        in radians notation with direction equal or bigger than 0
      *        and smaller or equal to 2*Pi.
-     *        | orientation = surplusRadians(orientation)
-     *        | new.getShipOrientation == orientation
+     *        | direction = surplusRadians(direction)
+     *        | new.getShipOrientation == direction
      */
     public void setShipDirection(double direction) {
         assert Helper.isValidDouble(direction);
+        direction = surplusRadians(direction);
         this.direction = direction;
     }
     
@@ -293,16 +294,16 @@ public class Ship extends Entity{
     //Total
     /**
      * A method to increase the velocity of a ship in the direction
-     *  of its orientation.
+     *  of its direction.
      *  
      * @param amount
-     *        The amount of velocity added in the current orientation.
+     *        The amount of velocity added in the current direction.
      * @post  If amount is smaller then 0 or isn't a double it is set to 0.
      *        | if(!(amount >= 0) && (Helper.isValidDouble(amount)))
      *        |     then amount = 0
      * @effect te velocity of the ship is set to the sum of the new amount which is
      *         calculated upon the X- and Y-axis and the previous velocities on the X- and Y-axis.
-     *        | double alpha = orientation
+     *        | double alpha = direction
      *        | double vx = this.getShipVelocity()[0] + amount * Math.cos(alpha)
      *        | double vy = this.getShipVelocity()[1] + amount * Math.sin(alpha)
      *        | int velocity = (int) Math.sqrt(Math.pow(vx, 2) + Math.pow(vy, 2))
@@ -317,7 +318,7 @@ public class Ship extends Entity{
     public void thrust(double amount){
         if(!(amount >= 0) && (Helper.isValidDouble(amount)))
             amount = 0;
-        double alpha = orientation; //Math.atan(this.getShipVelocity()[1] / this.getShipVelocity()[0]);
+        double alpha = direction; //Math.atan(this.getShipVelocity()[1] / this.getShipVelocity()[0]);
         double vx = this.getShipVelocity()[0] + amount * Math.cos(alpha);
         double vy = this.getShipVelocity()[1] + amount * Math.sin(alpha);
         int velocity = (int) Math.sqrt(Math.pow(vx, 2) + Math.pow(vy, 2));
@@ -339,8 +340,8 @@ public class Ship extends Entity{
      *
      * @param  angle
      *         The angle to be turned by the ship.
-     * @effect The orientation of the ship is set to the current orientation added with angle.
-     *         | new.getShipOrientation == this.orientation + angle
+     * @effect The direction of the ship is set to the current direction added with angle.
+     *         | new.getShipOrientation == this.direction + angle
      */
     public void turn(double angle){
         assert isValidAngle(angle);
@@ -667,13 +668,13 @@ public class Ship extends Entity{
    
     //Nominal
     /**
-     * Check whether the given orientation is a valid orientation for
+     * Check whether the given direction is a valid direction for
      * a ship.
      *
-     * @param   orientation
+     * @param   direction
      *          The orienation to check.
-     * @return  True if and only if the given orientation is bigger or equal to zero and smaller or equal to 2*pi.
-     *         | result == ((orientation >= 0) && (orientation <= (2*Math.PI))
+     * @return  True if and only if the given direction is bigger or equal to zero and smaller or equal to 2*pi.
+     *         | result == ((direction >= 0) && (direction <= (2*Math.PI))
      */
     public boolean isValidDirection(double direction){
         //return ((direction >= 0) && (direction <= 2*Math.PI));
