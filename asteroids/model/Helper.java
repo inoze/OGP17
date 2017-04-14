@@ -106,4 +106,17 @@ public class Helper {
         assert isValidDouble(x);
         return Math.pow(x, 2);
     }
+    
+    /**
+     * Checks whether the given mass is a valid mass.
+     * 
+     * @param   mass
+     *     		The mass to check.
+     * @return  True if and only if mass is bigger than 0, isn't NaN and isn't infinite.
+     *          | result == (!(Double.isNaN(mass) || Double.isInfinite(mass) || mass <= 0))
+     */
+    public static boolean isValidMass(double mass){
+    	if(Double.isNaN(mass) || Double.isInfinite(mass) || mass <= 0) return false;
+    	return true;
+    }
 }

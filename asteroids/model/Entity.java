@@ -1,6 +1,7 @@
 package asteroids.model;
 
 import be.kuleuven.cs.som.annotate.Basic;
+import be.kuleuven.cs.som.annotate.Immutable;
 
 public class Entity {
 
@@ -24,12 +25,19 @@ public class Entity {
      */
     private double radius;
     /**
+     * Variable containing the world in which the entity is positioned.
+     */
+    private World superWorld;
+    /**
      * Variable containing whether the entity is terminated.
      */
     private boolean isTerminated;
+    /**
+     * Variable containing the individual mass of the entity.
+     */
+	private double mass;
 	
-	
-	protected Entity (double x, double y, double xVelocity, double yVelocity, double radius) throws IllegalArgumentException {
+	protected Entity (double x, double y, double xVelocity, double yVelocity, double radius, double mass) throws IllegalArgumentException {
 		if(isValidPosition(x) && isValidPosition(y) && isValidVelocity(xVelocity) && isValidVelocity(yVelocity) && isValidRadius(radius)){
             try{this.setPosition(x, y);} catch(IllegalArgumentException ex){throw new IllegalArgumentException(ex.getMessage());}
             this.setVelocity(xVelocity, yVelocity);
@@ -43,7 +51,7 @@ public class Entity {
 	//Getters
 	   
     /**
-     * Returns the position of the ship.
+     * Returns the position of the entity.
      */
     @Basic
     public double[] getPosition(){
@@ -51,7 +59,7 @@ public class Entity {
     }
    
     /**
-     *Returns the velocity of the ship.
+     *Returns the velocity of the entity.
      */
     @Basic
     public double[] getVelocity(){
@@ -59,13 +67,39 @@ public class Entity {
     }
    
     /**
-     * Returns the maximum velocity of the ship.
+     * Returns the maximum velocity of the entity.
      */
     @Basic
     public double getMaxVelocity(){
         return this.maxVelocity;
     }
-   
+    /**
+     * Returns the radius of entity.
+     */
+    @Immutable
+    @Basic
+    public double getRadius(){
+        return this.radius;
+    }
+    /**
+     * returns the mass of the entity.
+     */
+    @Immutable
+    @Basic
+    public double getMass(){
+    	return this.mass;
+    }
+	/**
+	 * Return the world of the entity.
+	 */
+    @Basic
+	public World getWorld() {
+		//return ship.getShipWorld();
+		return null;
+	}
+    /**
+     * Returns whether the entity is terminated.
+     */
     @Basic
     public boolean isTerminated(){
     	return this.isTerminated;

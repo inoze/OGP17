@@ -35,21 +35,23 @@ public class Ship extends Entity{
     /**
      * Variable registering the orientation of the ship in radients with right being 0 and left being pi.
      */
+	@Deprecated
     private double orientation;
-   
     /**
-     * Variable registering the radius of the ship as a radius of a circle.
+     *variable containg the direction of the ship.
      */
-    private double radius;
-    
     private double direction;
-    
-    private double mass;
-    
+    /**
+     * Variable containing the total mass of the ship.
+     */
+    private double totalMass;
+    /**
+     * Variable containing the acceleration value of the ship.
+     */
     private double acceleration;
-   
-    private boolean isTerminated;
-    
+    /**
+     * Variable set containing all the (references to the) bullets in the ship. 
+     */
     private Set<Bullet> bullets = new HashSet<Bullet>();
     //Initializers
    
@@ -88,10 +90,10 @@ public class Ship extends Entity{
     */
 
     public Ship(double xPosition, double yPosition, double xVelocity, double yVelocity, double radius, double direction, double mass) throws IllegalArgumentException, ModelException {
-    	super(xPosition, yPosition, xVelocity, yVelocity, radius);
+    	super(xPosition, yPosition, xVelocity, yVelocity, radius, mass);
     	if(isValidDirection(direction) && isValidShipRadius(radius)){
-            this.orientation = direction;
-            this.mass = mass;
+            this.direction = direction;
+            this.totalMass = mass;
         }
         else{
         	this.terminateShip();
@@ -139,47 +141,28 @@ public class Ship extends Entity{
         return this.orientation;
     }
    
-    /**
-     * Return the radius of ship.
-     */
-    @Immutable
-    @Basic
-    public double getShipRadius(){
-        return this.radius;
-    }
-    
+       
 	/**
-	 * Check whether <code>ship</code> is terminated.
-	 */
-	public boolean isTerminatedShip() {
-		return this.isTerminated;
-	}
-	/**
-	 * Return the total mass of <code>ship</code> (i.e., including bullets
+	 * Return the total mass of ship (i.e., including bullets
 	 * loaded onto the ship).
 	 */
-	public double getShipMass() {
-		return this.mass;
-	}
-
-	/**
-	 * Return the world of <code>ship</code>.
-	 */
-	public World getShipWorld() {
-		//return ship.getShipWorld();
-		return null;
+    @Basic
+	public double getShipTotalMass() {
+		return this.totalMass;
 	}
 	
 	/**
-	 * Return the acceleration of <code>ship</code>.
+	 * Return the acceleration of ship.
 	 */
+    @Basic
 	public double getShipAcceleration() {
 		return this.acceleration;
 	}
 	
 	/**
-	 * Return whether <code>ship</code>'s thruster is active.
+	 * Return whether ship's thruster is active.
 	 */
+    @Basic
 	public boolean isShipThrusterActive() {
 		//return ship.isShipThrusterActive();
 		return false;
