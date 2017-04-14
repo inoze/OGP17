@@ -199,7 +199,7 @@ public class World {
 	 *         | result == (!(bullet.isTerminatedBullet()))
 	 */
 	private boolean isValidBullet(Bullet bullet){
-		if(bullet.isTerminatedBullet()){
+		if(bullet.isTerminated()){
 			return false;
 		}
 		return true;

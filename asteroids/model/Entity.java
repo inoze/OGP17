@@ -5,43 +5,59 @@ import be.kuleuven.cs.som.annotate.Basic;
 import be.kuleuven.cs.som.annotate.Immutable;
 
 public class Entity {
-
+	
+	/**
+	 * Variable containing the speed of light.
+	 */
 	protected final double SPEED_OF_LIGHT =  300000;
-	
-	private final double BULLET_DENSITY = 7.8 * Math.pow(10, 12);
-	
-	private final double SHIP_DENSITY = 1.42 * Math.pow(10, 12);
+	/**
+	 * Variable containing the density of bullets.
+	 */
+	protected final double BULLET_DENSITY = 7.8 * Math.pow(10, 12);
+	/**
+	 * Variable containing the density of bullets.
+	 */
+	protected final double SHIP_DENSITY = 1.42 * Math.pow(10, 12);
 	/**
      * Variable containing the coordinates of the ship in the form of an array with length 2.
      */
-    private double[] position = new double[2];
-   
+    protected double[] position = new double[2];
     /**
      * variable containing the velocity on the x and y axis as an array of length 2.
      */
-    private double[] velocity = new double[2];
-   
+    protected double[] velocity = new double[2];
     /**
      * Variable containing the maximum velocity of the entity in km/s.
      */
-    private double maxVelocity = SPEED_OF_LIGHT;
+    protected double maxVelocity = SPEED_OF_LIGHT;
     /**
      * Variable containing the radius of the entity.
      */
-    private double radius;
+    protected double radius;
     /**
      * Variable containing the world in which the entity is positioned.
+     * 
+     * @note If the entity isn't in a world superWorld conatins null.
      */
-    private World superWorld;
+    protected World superWorld = null;
     /**
      * Variable containing whether the entity is terminated.
      */
-    private boolean isTerminated;
+    protected boolean isTerminated;
     /**
      * Variable containing the individual mass of the entity.
      */
-	private double mass;
+	protected double mass;
 	
+	/**
+	 * 
+	 * @param x
+	 * @param y
+	 * @param xVelocity
+	 * @param yVelocity
+	 * @param radius
+	 * @throws IllegalArgumentException
+	 */
 	protected Entity (double x, double y, double xVelocity, double yVelocity, double radius) throws IllegalArgumentException {
 		if(isValidPosition(x) && isValidPosition(y) && isValidVelocity(xVelocity) && isValidVelocity(yVelocity) && isValidRadius(radius)){
             try{this.setPosition(x, y);} catch(IllegalArgumentException ex){throw new IllegalArgumentException(ex.getMessage());}
@@ -55,8 +71,7 @@ public class Entity {
 		}
 	}
 	
-	//Getters
-	   
+	//Getters  
     /**
      * Returns the position of the entity.
      */
@@ -64,7 +79,6 @@ public class Entity {
     public double[] getPosition(){
         return this.position;
     }
-   
     /**
      *Returns the velocity of the entity.
      */
@@ -72,7 +86,6 @@ public class Entity {
     public double[] getVelocity(){
         return this.velocity;
     }
-   
     /**
      * Returns the maximum velocity of the entity.
      */
@@ -91,7 +104,6 @@ public class Entity {
     /**
      * returns the mass of the entity.
      */
-    @Immutable
     @Basic
     public double getMass(){
     	return this.mass;
@@ -173,9 +185,10 @@ public class Entity {
     }
     
     protected void setMass(double mass){
-    	if(isValidMass(mass))
-    		if(this instanceof Ship)
-    			this.mass = mass;
+    	if(isValidMass(mass)){
+    		if(this instanceof Ship) this.mass = mass;
+    	}
+    		
     }
     
     protected void setSuperWorld(World world){
@@ -221,6 +234,7 @@ public class Entity {
 		return pos;
 	}
 	
+	@Basic
 	protected void terminate(){
 		this.isTerminated = true;
 	}

@@ -110,32 +110,7 @@ public class Ship extends Entity{
     }
  
    
-    //Getters
-   
-    /**
-     * Returns the position of the ship.
-     */
-    @Basic
-    public double[] getShipPosition(){
-        return this.getPosition();
-    }
-   
-    /**
-     *Returns the velocity of the ship.
-     */
-    @Basic
-    public double[] getShipVelocity(){
-        return this.getVelocity();
-    }
-   
-    /**
-     * Returns the maximum velocity of the ship.
-     */
-    @Basic
-    public double getMaxVelocity(){
-        return this.getMaxVelocity();
-    }
-   
+    //Getters   
     /**
      * Return the direction of ship (in radians).
      */
@@ -252,6 +227,7 @@ public class Ship extends Entity{
 	/**
 	 * Terminate ship.
 	 */
+    @Basic
 	public void terminateShip() {
 		this.terminate();
 	}
@@ -321,8 +297,8 @@ public class Ship extends Entity{
         if(!(amount >= 0) && (Helper.isValidDouble(amount)))
             amount = 0;
         double alpha = direction; //Math.atan(this.getShipVelocity()[1] / this.getShipVelocity()[0]);
-        double vx = this.getShipVelocity()[0] + amount * Math.cos(alpha);
-        double vy = this.getShipVelocity()[1] + amount * Math.sin(alpha);
+        double vx = this.getVelocity()[0] + amount * Math.cos(alpha);
+        double vy = this.getVelocity()[1] + amount * Math.sin(alpha);
         int velocity = (int) Math.sqrt(Math.pow(vx, 2) + Math.pow(vy, 2));
         if(!(velocity > this.getMaxVelocity()))
             this.setShipVelocity(vx, vy);
@@ -370,8 +346,8 @@ public class Ship extends Entity{
     public double getDistanceBetween(Ship ship) throws IllegalArgumentException{
         if(this == ship) throw new IllegalArgumentException("this == ship");
         else{
-            double diffx = Math.abs(this.getPosition()[0] - ship.getShipPosition()[0]);
-            double diffy = Math.abs(this.getPosition()[1] - ship.getShipPosition()[1]);
+            double diffx = Math.abs(this.getPosition()[0] - ship.getPosition()[0]);
+            double diffy = Math.abs(this.getPosition()[1] - ship.getPosition()[1]);
             double diff = Math.sqrt(Math.abs(Helper.square(diffx) - Helper.square(diffy)));
             return diff;
         }
@@ -441,8 +417,8 @@ public class Ship extends Entity{
    
     public double getTimeToCollision(Ship ship) throws IllegalArgumentException{
            
-        double a1 = ship.getShipVelocity()[0] - this.getVelocity()[0];
-        double a2 = ship.getShipVelocity()[1] - this.getVelocity()[1];
+        double a1 = ship.getVelocity()[0] - this.getVelocity()[0];
+        double a2 = ship.getVelocity()[1] - this.getVelocity()[1];
         double a = Helper.square(a1) + Helper.square(a2);
         //exception 1:
         //The two ships follow an identical path so they don't collide.
@@ -450,8 +426,8 @@ public class Ship extends Entity{
             return Double.POSITIVE_INFINITY;
         }
        
-        double b1 = ship.getShipPosition()[0] - this.getPosition()[0];
-        double b2 = ship.getShipPosition()[1] - this.getPosition()[1];
+        double b1 = ship.getPosition()[0] - this.getPosition()[0];
+        double b2 = ship.getPosition()[1] - this.getPosition()[1];
         double b = 2*((b1 * a1) + (b2 *a2));
        
         double s = this.getRadius() + ship.getRadius();
@@ -619,10 +595,6 @@ public class Ship extends Entity{
         //return ((direction >= 0) && (direction <= 2*Math.PI));
     	return Helper.isValidDouble(direction);
     }
-    
-    /**************
-	 * SHIP: Methods related to loaded bullets
-	 *************/
 
 	/**
 	 * Return the set of all bullets loaded on <code>ship</code>.
@@ -636,6 +608,7 @@ public class Ship extends Entity{
 	/**
 	 * Return the number of bullets loaded on <code>ship</code>.
 	 */
+	@Basic
 	public int getNbBulletsOnShip() throws ModelException {
 		return bullets.size();
 	}

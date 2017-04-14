@@ -15,7 +15,7 @@ public class Facade implements IFacade {
 	 */
 	
 	public double[] getShipPosition(Ship ship) throws ModelException{
-		return ship.getShipPosition();
+		return ship.getPosition();
 	}
 
 	/**
@@ -23,7 +23,7 @@ public class Facade implements IFacade {
 	 * along the X-axis at index 0 and the velocity along the Y-axis at index 1.
 	 */
 	public double[] getShipVelocity(Ship ship) throws ModelException{
-		return ship.getShipVelocity();
+		return ship.getVelocity();
 	}
 
 	/**
@@ -212,7 +212,7 @@ public class Facade implements IFacade {
 	 * Check whether <code>bullet</code> is terminated.
 	 */
 	public boolean isTerminatedBullet(Bullet bullet) throws ModelException {
-		return bullet.isTerminatedBullet();
+		return bullet.isTerminated();
 	}
 
 	/**
@@ -220,7 +220,7 @@ public class Facade implements IFacade {
 	 * x-coordinate, followed by the y-coordinate.
 	 */
 	public double[] getBulletPosition(Bullet bullet) throws ModelException {
-		return bullet.getBulletPosition();
+		return bullet.getPosition();
 	}
 
 	/**
@@ -228,21 +228,21 @@ public class Facade implements IFacade {
 	 * velocity along the X-axis, followed by the velocity along the Y-axis.
 	 */
 	public double[] getBulletVelocity(Bullet bullet) throws ModelException {
-		return bullet.getBulletPosition();
+		return bullet.getPosition();
 	}
 
 	/**
 	 * Return the radius of <code>bullet</code>.
 	 */
 	public double getBulletRadius(Bullet bullet) throws ModelException {
-		return bullet.getBulletRadius();
+		return bullet.getRadius();
 	}
 
 	/**
 	 * Return the mass of <code>bullet</code>.
 	 */
 	public double getBulletMass(Bullet bullet) throws ModelException {
-		return bullet.getBulletMass();
+		return bullet.getMass();
 	}
 
 	/**
