@@ -106,10 +106,25 @@ public class World {
 		bullet.terminateBullet();
 		bullets.remove(bullet);
 	}
-	
-	public Entity entityAt(double[] position){
+	//Total
+	/**
+	 * A method that gives an entity back  if any for a given x and y coordinate.
+	 * 
+	 * @param   x
+	 *          The x coordinate to check.
+	 * @param   y 
+	 * 			The y coordinate to check
+	 * @post	If there is an entity at the given x and y return that entity.
+	 * 			| 
+	 * @post	If there isn't an etity at the given x and y return null.
+	 * 			|
+	 * @post 	If there are multiple entities at a x and y position return null.
+	 * 			| 
+	 */
+	public Entity entityAt(double x, double y){
+		double[] position = {x,y};
 		int counter = 0;
-		Entity entity;
+		Entity entity = null;
 		for (Entity a : ships) {
 		    if (a.getPosition() == position){ 
 		    	counter++;
@@ -122,7 +137,10 @@ public class World {
 		    	entity = a;
 			}
 		}
-		if (counter > 1) Helper.log("More than one object on position " + position);
+		if (counter > 1){
+			Helper.log("More than one object on position " + position);
+			entity = null;
+		}
 		return entity;
 	}
 	
