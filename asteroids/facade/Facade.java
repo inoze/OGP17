@@ -2,9 +2,7 @@ package asteroids.facade;
 import java.util.Collection;
 import java.util.Set;
 
-import asteroids.model.Bullet;
-import asteroids.model.Ship;
-import asteroids.model.World;
+import asteroids.model.*;
 import asteroids.part2.facade.IFacade;
 import asteroids.part2.CollisionListener;
 import asteroids.util.ModelException;
@@ -147,7 +145,7 @@ public class Facade implements IFacade {
 	 */
 	public World getShipWorld(Ship ship) throws ModelException {
 		//return ship.getShipWorld();
-		return null;
+		return ship.getShipWorld();
 	}
 
 	/**
@@ -409,7 +407,10 @@ public class Facade implements IFacade {
 	 * boundaries of its world.
 	 */
 	public double getTimeCollisionBoundary(Object object) throws ModelException {
-		return 0;
+		if(object instanceof Entity)
+			return ((Entity)object).getTimeCollisionBoundary();
+		else
+			throw new ModelException("Object is not an entity");
 	}
 
 	/**
@@ -417,7 +418,10 @@ public class Facade implements IFacade {
 	 * boundaries of its world.
 	 */
 	public double[] getPositionCollisionBoundary(Object object) throws ModelException {
-		return null;
+		if(object instanceof Entity)
+			return ((Entity)object).getPositionCollisionBoundary();
+		else
+			throw new ModelException("Object is not an entity");
 	}
 
 	/**
@@ -470,14 +474,14 @@ public class Facade implements IFacade {
 	 * <code>world</code>.
 	 */
 	public Object getEntityAt(World world, double x, double y) throws ModelException {
-		world.entityAt(x, y);
+		return world.entityAt(x, y);
 	}
 
 	/**
 	 * Return a set of all the entities in the given world.
 	 */
 	public Set<? extends Object> getEntities(World world) throws ModelException {
-		return null;
+		return world.getEntities();
 	}
 
 }

@@ -53,6 +53,7 @@ public class Ship extends Entity{
      * Variable set containing all the (references to the) bullets in the ship. 
      */
     private Set<Bullet> bullets = new HashSet<Bullet>();
+    
     //Initializers
    
     //Defensive
