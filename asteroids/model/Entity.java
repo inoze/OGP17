@@ -178,6 +178,11 @@ public class Entity {
     			this.mass = mass;
     }
     
+    protected void setSuperWorld(World world){
+    	if(isValidWorld(world))
+    		this.superWorld = world;
+    }
+    
     /**
 	 * Return the shortest time in which the given entity will collide with the
 	 * boundaries of its world.
@@ -282,5 +287,9 @@ public class Entity {
 	   else{
 		   return false;
 	   }
+   }
+   
+   protected boolean isValidWorld(World world){
+	   return true;
    }
 }
