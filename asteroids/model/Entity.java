@@ -4,6 +4,27 @@ import asteroids.util.ModelException;
 import be.kuleuven.cs.som.annotate.Basic;
 import be.kuleuven.cs.som.annotate.Immutable;
 
+/**
+ * 
+ * @invar The velocity of each entity must be a valid velocity for a entity.
+ *        | isValidVelocity(getVelocity()[0]) && isValidVelocity(getVelocity()[1])
+ *
+ * @invar The position of each entity must be a valid position for a entity.
+ *        | isValidPosition(getPosition()[0]) && isValidPosition(getPosition()[1])
+ *
+ * @invar The radius of each entity must be a valid radius for a entity
+ *        | isValidRadius(getRadius())
+ *
+ * @invar The direction of each entity must be a valid direction for a entity
+ *        | isValidOrientation(getOrientation())
+ *
+ * @invar The maximum speed of each entity must be between 0 and 300 000
+ *        | getMaxVelocity > 0 && getMaxVelocity < 300000
+ *
+ *
+ * @author Brent De Bleser & Jesse Geens
+ * @version 1.0
+ */
 public class Entity {
 	
 	/**

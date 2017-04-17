@@ -250,7 +250,7 @@ public class Ship extends Entity{
      * @param   dt
      *          The time over which the ship is moving.
      * @throws  IllegalArgumentException
-     *          Throws an IllegalArgumentException if dt is infinity or is smaller then zero..
+     *          Throws an IllegalArgumentException if dt is infinity or is smaller then zero.
      *         |  ((dt < 0.0) && ( Double.isInfinite(dt)))
      * @effect  Sets the ship position with the current position and velocity times dt.
      *         | this.setShipPosition(this.position[0] + (this.velocity[0] * dt), this.position[1] + (this.velocity[1] * dt))

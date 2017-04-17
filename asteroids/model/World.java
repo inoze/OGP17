@@ -74,7 +74,15 @@ public class World {
 	}
 
 	/**
-	 * Add <code>ship</code> to <code>world</code>.
+	 * Add a ship to the world
+	 * 
+	 * @param  Ship
+	 *         The ship to be added to the world.
+	 * @throws  IllegalArgumentException
+	 *          Throws an IllegalArgumentException if the ship isn't a valid ship.
+	 *          (isValidShip(ship))
+	 *
+	 *
 	 */
 	public void addShipToWorld(Ship ship) throws IllegalArgumentException {
 		if(isValidShip(ship)){

@@ -40,26 +40,24 @@ public class Bullet extends Entity{
 	 * Return the world in which bullet is positioned.
 	 * 
 	 * @return  At return the method will give the value of superWorld.
-	 *          | result == superWorld
+	 *          | result == this.superWorld
 	 * @note    SuperWorld contains the world in which the entity is in.
 	 *          if the superWorld isn't in any world it is per definition null. 
 	 */
 	@Basic
 	public World getBulletWorld() {
-			return superWorld;
+			return this.superWorld;
 	}
 	
 	/**
-	 * Return the ship in which <code>bullet</code> is positioned.
+	 * Return the ship in which bullet is positioned.
 	 * 
 	 * This method must return null if a bullet is not positioned on a ship.
 	 */
 	@Basic
 	public Ship getBulletShip() {
-		if(superWorld == null)
-			return source;
-		else
-			return null;
+		if(this.superWorld instanceof Ship) return this.superworld;
+		
 	}
 	
 	//Total
@@ -68,7 +66,7 @@ public class Bullet extends Entity{
 	 * 
 	 * @return  Returns source of the bullet.
 	 *          | resutl == source
-	 * @note    If the bullet isn't fired source contains null.
+	 * @note    If the bullet isn't fired source contains null by default.
 	 */
 	@Basic
 	public Ship getBulletSource() {
