@@ -2,6 +2,7 @@ package asteroids.model;
 
 import java.util.*;
 
+import asteroids.part2.CollisionListener;
 import asteroids.util.ModelException;
 
 public class World {
@@ -152,13 +153,21 @@ public class World {
 
 		return entity;
 	}
-	
+	/**
+	 * 
+	 * @return
+	 */
 	public Set<Entity> getEntities(){
 		Set<Entity> entities = new HashSet<Entity>();
 		entities.addAll(bullets);
 		entities.addAll(ships);
 		return entities;
 	}
+	
+	public void evolve(double dt, CollisionListener collisionListener){
+		
+	}
+	
 	//Total
 	/**
 	 * Check whether the given angle is a valid angle.

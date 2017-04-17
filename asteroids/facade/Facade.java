@@ -467,7 +467,9 @@ public class Facade implements IFacade {
 	 * <code>collisionListener</code> is <code>null</code>, do not call its
 	 * notify methods.
 	 */
-	public void evolve(World world, double dt, CollisionListener collisionListener) throws ModelException {}
+	public void evolve(World world, double dt, CollisionListener collisionListener) throws ModelException {
+		world.evolve(dt, collisionListener);
+	}
 
 	/**
 	 * Return the entity at the given <code>position</code> in the given
