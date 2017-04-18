@@ -1,6 +1,6 @@
 package asteroids.model;
 import be.kuleuven.cs.som.annotate.*;
-import asteroids.util.ModelException;
+//import asteroids.util.ModelException;
 
 public class Bullet extends Entity{
 	
@@ -56,7 +56,10 @@ public class Bullet extends Entity{
 	 */
 	@Basic
 	public Ship getBulletShip() {
-		if(this.superWorld instanceof Ship) return this.superworld;
+		if(this.superWorld == null)
+			return this.getBulletSource();
+		else
+			return null;
 		
 	}
 	

@@ -107,7 +107,7 @@ public class World {
 	/**
 	 * Add <code>bullet</code> to <code>world</code>.
 	 */
-	public void addBulletToWorld(Bullet bullet) throws ModelException {
+	public void addBulletToWorld(Bullet bullet){
 		if(isValidBullet(bullet)){
 			bullets.add(bullet);
 			bullet.setSuperWorld(this);

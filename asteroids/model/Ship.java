@@ -650,7 +650,20 @@ public class Ship extends Entity{
 	 * <code>ship</code> fires a bullet.
 	 */
 	public void fireBullet() {
-		
+		if(bullets.size() > 0){
+			Bullet bullet = bullets.iterator().next();
+			if(isValidBullet(bullet)){
+				this.removeBulletFromShip(bullet);
+				World world = this.superWorld;
+				world.addBulletToWorld(bullet);
+			}
+			else{
+				Helper.log("Trying to fire invalid bullet");
+			}
+		}
+		else{
+			Helper.log("Trying to fire a bullet but you've run out!");
+		}
 	}
    
     //Total
