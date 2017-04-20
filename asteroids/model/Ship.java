@@ -50,6 +50,14 @@ public class Ship extends Entity{
      */
     private double acceleration;
     /**
+     * Boolean that determines whether the thruster is active.
+     */
+    private boolean isThrusterActive;
+    /**
+     * Variable that determines the force the thruster exerts
+     */
+    private double thrusterForce = 1.1E21;
+    /**
      * Variable set containing all the (references to the) bullets in the ship. 
      */
     private Set<Bullet> bullets = new HashSet<Bullet>();
@@ -142,8 +150,7 @@ public class Ship extends Entity{
 	 */
     @Basic
 	public boolean isShipThrusterActive() {
-		//return ship.isShipThrusterActive();
-		return false;
+		return this.isThrusterActive;
 	}
    
     ///Setters
@@ -233,12 +240,12 @@ public class Ship extends Entity{
 	}
 
 
-	/**
-	 * Enables or disables <code>ship</code>'s thruster depending on the value
-	 * of the parameter <code>active</code>.
-	 */
-	public void setThrusterActive(boolean active) throws ModelException {
-		//Ship.setThrusterActive(active);
+	public void thrustOn(){
+		this.isThrusterActive = true;
+	}
+	
+	public void thrustOff(){
+		this.isThrusterActive = false;
 	}
 
     //Methods
@@ -578,23 +585,7 @@ public class Ship extends Entity{
             }
         return radians;
     }
-   
-    //Validity checkers
-   
-    //Nominal
-    /**
-     * Check whether the given direction is a valid direction for
-     * a ship.
-     *
-     * @param   direction
-     *          The orienation to check.
-     * @return  True if and only if the given direction is bigger or equal to zero and smaller or equal to 2*pi.
-     *         | result == ((direction >= 0) && (direction <= (2*Math.PI))
-     */
-    public boolean isValidDirection(double direction){
-        //return ((direction >= 0) && (direction <= 2*Math.PI));
-    	return Helper.isValidDouble(direction);
-    }
+
 
 	/**
 	 * Return the set of all bullets loaded on <code>ship</code>.
@@ -647,7 +638,9 @@ public class Ship extends Entity{
 	}
 
 	/**
-	 * <code>ship</code> fires a bullet.
+	 * Fire a bullet from the ship
+	 * 
+	 * @effect
 	 */
 	public void fireBullet() {
 		if(bullets.size() > 0){
@@ -656,6 +649,7 @@ public class Ship extends Entity{
 				this.removeBulletFromShip(bullet);
 				World world = this.superWorld;
 				world.addBulletToWorld(bullet);
+				bullet.setPosition(this.getPosition()[0] + this.getRadius() * Math.cos(this.direction), this.getPosition()[1] + this.getRadius() * Math.sin(this.direction));
 			}
 			else{
 				Helper.log("Trying to fire invalid bullet");
@@ -665,6 +659,24 @@ public class Ship extends Entity{
 			Helper.log("Trying to fire a bullet but you've run out!");
 		}
 	}
+	
+	   
+    //Validity checkers
+   
+    //Nominal
+    /**
+     * Check whether the given direction is a valid direction for
+     * a ship.
+     *
+     * @param   direction
+     *          The orienation to check.
+     * @return  True if and only if the given direction is bigger or equal to zero and smaller or equal to 2*pi.
+     *         | result == ((direction >= 0) && (direction <= (2*Math.PI))
+     */
+    public boolean isValidDirection(double direction){
+        //return ((direction >= 0) && (direction <= 2*Math.PI));
+    	return Helper.isValidDouble(direction);
+    }
    
     //Total
     /**

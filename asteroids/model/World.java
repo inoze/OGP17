@@ -2,6 +2,7 @@ package asteroids.model;
 
 import java.util.*;
 import be.kuleuven.cs.som.annotate.*;
+import asteroids.part2.CollisionListener;
 import asteroids.util.ModelException;
 
 /**
@@ -81,7 +82,7 @@ public class World {
 	/**
 	 * Terminate the world.
 	 * 
-	 * @post The ships and bullets are removed from the the hashsets bullets and ships.
+	 * @post The ships and bullets are removed from the the hashsets bullets and ships, the boolean isTerminated is set to true.
 	 *       | implementation
 	 */
 	@Basic
@@ -94,6 +95,7 @@ public class World {
 	            this.removeBulletFromWorld(bullet);
 	        }
 	        bullets.clear();
+	        this.isTerminated = true;
 	}
 	
 	/**
@@ -176,7 +178,7 @@ public class World {
 	 * @post    The ship is removed from the hashset ships
 	 *          | implementation
 	 */
-	public void removeShipFromWorld(Ship ship) throws ModelException {
+	public void removeShipFromWorld(Ship ship) throws IllegalArgumentException {
 		if (ships.contains(ship)){
 			ship.terminateShip();
 			ship.setSuperWorld(null);
@@ -222,7 +224,7 @@ public class World {
 	 * @post    The bullet is removed from the hashset bullets
 	 *          | implementation
 	 */
-	public void removeBulletFromWorld(Bullet bullet) throws ModelException {
+	public void removeBulletFromWorld(Bullet bullet) throws IllegalArgumentException {
 		if (bullets.contains(bullet)){
 			bullet.setSuperWorld(this);
 			bullet.terminateBullet();
