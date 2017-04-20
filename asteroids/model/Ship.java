@@ -649,7 +649,9 @@ public class Ship extends Entity{
 				this.removeBulletFromShip(bullet);
 				World world = this.superWorld;
 				world.addBulletToWorld(bullet);
-				bullet.setPosition(this.getPosition()[0] + this.getRadius() * Math.cos(this.direction), this.getPosition()[1] + this.getRadius() * Math.sin(this.direction));
+				bullet.setSuperWorld(world);
+				bullet.setPosition(this.getPosition()[0] + ((this.getRadius() + bullet.getRadius()) * Math.cos(this.direction)), this.getPosition()[1] + ((this.getRadius() + bullet.getRadius()) * Math.sin(this.direction)));
+				bullet.setVelocity(250 * Math.cos(this.getShipDirection()), 250 * Math.sin(this.getShipDirection()));
 			}
 			else{
 				Helper.log("Trying to fire invalid bullet");
