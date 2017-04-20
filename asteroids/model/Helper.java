@@ -115,6 +115,7 @@ public class Helper {
      * @return  True if and only if mass is bigger than 0, isn't NaN and isn't infinite.
      *          | result == (!(Double.isNaN(mass) || Double.isInfinite(mass) || mass <= 0))
      */
+    @Model
     public static boolean isValidMass(double mass){
     	if(Double.isNaN(mass) || Double.isInfinite(mass) || mass <= 0) return false;
     	return true;

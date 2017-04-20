@@ -1,8 +1,7 @@
 package asteroids.model;
 
 import asteroids.util.ModelException;
-import be.kuleuven.cs.som.annotate.Basic;
-import be.kuleuven.cs.som.annotate.Immutable;
+import be.kuleuven.cs.som.annotate.*;
 
 /**
  * 
@@ -140,7 +139,7 @@ public class Entity {
     /**
      * Returns whether the entity is terminated.
      */
-    @Basic
+    @Basic @Raw
     public boolean isTerminated(){
     	return this.isTerminated;
     }
