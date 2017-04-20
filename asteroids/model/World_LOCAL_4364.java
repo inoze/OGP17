@@ -199,7 +199,7 @@ public class World {
 	 *          | bullets.add(bullet)
 	 *		    | bullet.setSuperWorld(this)
 	 */
-	public void addBulletToWorld(Bullet bullet){
+	public void addBulletToWorld(Bullet bullet) throws ModelException {
 		if(isValidBullet(bullet)){
 			bullets.add(bullet);
 			bullet.setSuperWorld(this);
@@ -288,10 +288,6 @@ public class World {
 		return entities;
 	}
 	
-	public void evolve(double dt, CollisionListener collisionListener){
-		
-	}
-
 	//Total
 	/**
 	 * Check whether the given angle is a valid angle.

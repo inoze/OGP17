@@ -1,7 +1,12 @@
 package asteroids.model;
 
 import java.util.*;
+<<<<<<< HEAD
 import be.kuleuven.cs.som.annotate.*;
+=======
+
+import asteroids.part2.CollisionListener;
+>>>>>>> 10ddf26c70d7417fb93d2fb9186ab93707c3bf40
 import asteroids.util.ModelException;
 
 /**
@@ -270,6 +275,7 @@ public class World {
 
 		return entity;
 	}
+<<<<<<< HEAD
 	
 	/**
 	 * A method which retunrs all the entities in the world.
@@ -281,6 +287,12 @@ public class World {
 	 *	        | result ==  entities 
 	 */
 	@Basic
+=======
+	/**
+	 * 
+	 * @return
+	 */
+>>>>>>> 10ddf26c70d7417fb93d2fb9186ab93707c3bf40
 	public Set<Entity> getEntities(){
 		Set<Entity> entities = new HashSet<Entity>();
 		entities.addAll(bullets);
@@ -288,10 +300,13 @@ public class World {
 		return entities;
 	}
 	
+<<<<<<< HEAD
+=======
 	public void evolve(double dt, CollisionListener collisionListener){
 		
 	}
-
+	
+>>>>>>> 10ddf26c70d7417fb93d2fb9186ab93707c3bf40
 	//Total
 	/**
 	 * Check whether the given angle is a valid angle.
