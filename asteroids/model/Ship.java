@@ -47,10 +47,6 @@ public class Ship extends Entity{
      */
     private double totalMass;
     /**
-     * Variable containing the acceleration value of the ship.
-     */
-    private double acceleration;
-    /**
      * Boolean that determines whether the thruster is active.
      */
     private boolean isThrusterActive;
@@ -158,60 +154,6 @@ public class Ship extends Entity{
    
     ///Setters
    
-    //Defensive
-    /**
-     * Set the position on the X-axis to xPosition.
-     * Set the position on the Y-axis to yPosition.
-     *
-     * @param  xPosition
-     *         The x coordinate of the new position.
-     * @param  yPosition
-     *         The y coordinate of the new position;
-     * @effect  The arguments xPosition and yPosition become the X- and Y-coordinates respectively.
-     *         | this.setPosition(xPosition, yPosition)
-     * @throws IllegalArgumentException
-     *         xPosition isn't valid.
-     *         | (!isValidPosition(xPosition))
-     * @throws IllegalArgumentException
-     *         yPosition isn't valid.
-     *         | (!isValidPosition(yPosition)
-     */
-    public void setShipPosition(double xPosition, double yPosition) throws IllegalArgumentException {
-        if ( (!isValidPosition(xPosition)) || (!isValidPosition(yPosition))) throw new IllegalArgumentException("Invalid position");
-        else {
-            this.setPosition(xPosition, yPosition);
-        }
-    }
-   
-  //Total
-    /**
-     * Set the velocity on the X-axis to xVelocity and
-     * set the velocity on the Y_axis to yVelocity.
-     *
-     * @param xVelocity
-     *        The new velocity on the X-axis.
-     * @param yVelocity
-     *        The new velocity on the Y-axis.
-     * @post  If the given velocities for the X- and Y-axis are of type double and aren't infinite
-     *        the new velocities on the X- and Y-axis are equal the given ones.
-     *        | if (!(isValidVelocity(yVelocity)) || (isValidVelocity(xVelocity))
-     *        |      then this.setVelocity(0, 0)
-     * @post  If the given velocity on the X- or Y-axis isn't a double or is infinity
-     *        the new velocities on the X- and Y-axis will be equal to 0.
-     *        | if ((isValidVelocity(yVelocity)) || (isValidVelocity(xVelocity))
-     *        |      then this.setVelocity(xVelocity, yVelocity)
-     *
-     */
-    public void setShipVelocity(double xVelocity, double yVelocity){
-        if ( (!isValidVelocity(xVelocity)) || (!isValidVelocity(yVelocity))){
-            this.setVelocity(0, 0);
-        }
-        else {
-            this.setVelocity(xVelocity, yVelocity);
-        }
-    }
-   
-   
     //Nominal
     /**
      * A method to set to direction of a ship
@@ -250,32 +192,6 @@ public class Ship extends Entity{
 	}
 
     //Methods
-	
-    //defensive
-    /**
-     * Moves the ship to a new position during a timespan of dt.
-     *
-     * @param   dt
-     *          The time over which the ship is moving.
-     * @throws  IllegalArgumentException
-     *          Throws an IllegalArgumentException if dt is infinity or is smaller then zero.
-     *         |  ((dt < 0.0) && ( Double.isInfinite(dt)))
-     * @effect  Sets the ship position with the current position and velocity times dt.
-     *         | this.setShipPosition(this.position[0] + (this.velocity[0] * dt), this.position[1] + (this.velocity[1] * dt))
-     */
-    public void move(double dt) throws IllegalArgumentException{
-        if ((dt < 0.0) && ( Double.isInfinite(dt)))
-            throw new IllegalArgumentException("Invalid time");
-        else{
-            try {
-                   this.setShipPosition(this.getPosition()[0] + (this.getVelocity()[0] * dt), this.getPosition()[1] + (this.getVelocity()[1] * dt));
-            }
-            catch (IllegalArgumentException ex){
-                throw new IllegalArgumentException(ex);
-                }
-            }    
-    }
-   
  
     //Total
     /**
@@ -309,14 +225,14 @@ public class Ship extends Entity{
         double vy = this.getVelocity()[1] + amount * Math.sin(alpha);
         int velocity = (int) Math.sqrt(Math.pow(vx, 2) + Math.pow(vy, 2));
         if(!(velocity > this.getMaxVelocity()))
-            this.setShipVelocity(vx, vy);
+            this.setVelocity(vx, vy);
         else{
             double vxl, vyl; //vx limited, vy limited
             Helper.log("velocities: " + vx + "; " + vy);
             Helper.log("alpha: " + alpha);
             vxl = Math.cos(alpha) * this.getMaxVelocity();
             vyl = Math.sin(alpha) * this.getMaxVelocity();
-            this.setShipVelocity(vxl, vyl);
+            this.setVelocity(vxl, vyl);
             }
     }
    

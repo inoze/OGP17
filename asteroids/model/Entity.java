@@ -280,6 +280,31 @@ public class Entity {
 		this.isTerminated = true;
 	}
 	
+	//defensive
+    /**
+     * Moves the ship to a new position during a timespan of dt.
+     *
+     * @param   dt
+     *          The time over which the ship is moving.
+     * @throws  IllegalArgumentException
+     *          Throws an IllegalArgumentException if dt is infinity or is smaller then zero.
+     *         |  ((dt < 0.0) && ( Double.isInfinite(dt)))
+     * @effect  Sets the ship position with the current position and velocity times dt.
+     *         | this.setShipPosition(this.position[0] + (this.velocity[0] * dt), this.position[1] + (this.velocity[1] * dt))
+     */
+    public void move(double dt) throws IllegalArgumentException{
+        if ((dt < 0.0) && ( Double.isInfinite(dt)))
+            throw new IllegalArgumentException("Invalid time");
+        else{
+            try {
+                   this.setPosition(this.getPosition()[0] + (this.getVelocity()[0] * dt), this.getPosition()[1] + (this.getVelocity()[1] * dt));
+            }
+            catch (IllegalArgumentException ex){
+                throw new IllegalArgumentException(ex);
+                }
+            }    
+    }
+   
     /**
 	 * Return the shortest time in which the given entity will collide with the
 	 * boundaries of its world.

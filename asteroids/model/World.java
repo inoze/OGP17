@@ -291,9 +291,80 @@ public class World {
 	}
 	
 	public void evolve(double dt, CollisionListener collisionListener){
+		if(dt < 0 || !(Helper.isValidDouble(dt)))
+			throw new IllegalArgumentException("Time given at evolve is invalid");
+		double tC = getTimeToNextCollision();
+		double[] pos = getNextCollisionPos();
+		Entity[] entities = getNextCollidingEntities();
+		while (tC <= dt){
+			for(Entity entity: getEntities()) entity.move(tC);
+			if(entities[1] == null){
+				if(collisionListener != null) collisionListener.boundaryCollision(entities[0], pos[0], pos[1]);
+				entities[0].collideBoundary();
+			}
+			else {
+				if(collisionListener != null) collisionListener.objectCollision(entities[0], entities[1], pos[0], pos[1]);
+				entities[0].collide(entities[1]);
+			}
+			
+			dt = dt - tC;
+			tC = getTimeToNextCollision();
+			pos = getNextCollisionPos();
+			entities = getNextCollidingEntities();
+		}
+		for(Entity entity: getEntities()) entity.move(dt);
+		
 		
 	}
 
+	public double getTimeToNextCollision(){
+		double time = Double.POSITIVE_INFINITY;
+		for (Entity entity1 : getEntities()){
+			time = Math.min(time, entity1.getTimeCollisionBoundary());
+			for (Entity entity2 : getEntities()){
+				if (entity1 != entity2) {
+					if (entity1.overlap(entity2)) return 0;
+					time = Math.min(time, entity1.getTimeToCollision(entity2));
+				}
+			}
+		}
+		return time;
+	}
+	
+	public double[] getNextCollisionPos(){
+		Entity[] nextCollidingEntities = getNextCollidingEntities();
+		if(nextCollidingEntities[0] == null) 
+			return new double[]{Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY};
+		if (nextCollidingEntities[1] == null) 
+			return nextCollidingEntities[0].getPositionCollisionBoundary();
+		else 
+			return nextCollidingEntities[0].getCollisionPosition(nextCollidingEntities[1]);	
+	}
+	
+	public Entity[] getNextCollidingEntities(){
+		Entity[] entities = new Entity[]{null,null};
+		double timeNextCollision = Double.POSITIVE_INFINITY;
+		for (Entity entity1 : getEntities()){
+			if (timeNextCollision > entity1.getTimeCollisionBoundary()){
+				timeNextCollision = entity1.getTimeCollisionBoundary();
+				entities = new Entity[]{entity1,null};
+			}
+			for (Entity entity2 : getEntities()){
+				if (entity1 != entity2) {
+					if (entity1.overlap(entity2)) return new Entity[]{entity1,entity2};
+					
+					if (timeNextCollision > entity1.getTimeToCollision(entity2)){
+						timeNextCollision = entity1.getTimeToCollision(entity2);
+						entities = new Entity[]{entity1,entity2};
+					}
+				}
+				
+			}
+		}
+		return entities;
+	}
+	
+	
 	//Total
 	/**
 	 * Check whether the given angle is a valid angle.
