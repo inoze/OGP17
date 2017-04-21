@@ -92,8 +92,8 @@ public class Bullet extends Entity{
 	 */
 	@Basic
 	public void terminateBullet() {
-		this.source = null;
 		this.terminate();
+		this.source = null;
 	}
 	
 	 /**

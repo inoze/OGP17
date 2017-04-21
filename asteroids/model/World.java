@@ -159,8 +159,12 @@ public class World {
 	 */
 	public void addShipToWorld(Ship ship) throws IllegalArgumentException {
 		if(isValidShip(ship)){
-			ships.add(ship);
-			ship.setSuperWorld(this);
+			if(ship.getWorld() == null){
+				ships.add(ship);
+				ship.setSuperWorld(this);
+			}
+			else
+				throw new IllegalArgumentException("Ship is already in a world");
 		}
 		else	throw new IllegalArgumentException("ship isn't a valid Ship.");
 	}
@@ -220,8 +224,8 @@ public class World {
 	 */
 	public void removeBulletFromWorld(Bullet bullet) throws IllegalArgumentException {
 		if (bullets.contains(bullet)){
-			bullet.setSuperWorld(null);
-			bullet.terminate();
+			//bullet.setSuperWorld(null);
+			//bullet.terminate();
 			bullets.remove(bullet);
 		}
 		else	throw new IllegalArgumentException("bullet isn't in the world.");

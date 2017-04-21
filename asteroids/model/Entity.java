@@ -288,10 +288,12 @@ public class Entity {
 	@Basic
 	public void terminate(){
 		if (this instanceof Ship){
-			this.superWorld.removeShipFromWorld((Ship) this);
+			if(superWorld != null)
+				this.superWorld.removeShipFromWorld((Ship) this);
 		}
 		if (this instanceof Bullet){
-			this.superWorld.removeBulletFromWorld((Bullet) this);
+			if(superWorld != null)
+				this.superWorld.removeBulletFromWorld((Bullet) this);
 		}
 		this.superWorld = null;
 		this.isTerminated = true;
