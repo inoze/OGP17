@@ -79,23 +79,48 @@ public class Entity {
 	
 	/**
 	 * 
-	 * @param x
-	 * @param y
-	 * @param xVelocity
-	 * @param yVelocity
-	 * @param radius
-	 * @throws IllegalArgumentException
+	 * @param   x
+	 *          The x coordinate of the new entity
+	 * @param   y
+	 * 		    The y coordinate of the new entity
+	 * @param   xVelocity
+	 *          The x velocity of the new entity
+	 * @param   yVelocity
+	 *          The y velocity of the new entity
+	 * @param   radius
+	 *          The radius of the new entity
+	 * @throws  IllegalArgumentException
+	 *          Throws an IllegalArgumentException if the radius is invalid.
+	 *          | !(isValidRadius(radius))
+	 * @effect  x and y are used to set the position of the entity.
+	 *          | this.setPosition(x, y)       
+	 * @effect  xVelocity and yVelocity are used to set the velocity of the entity.
+	 *          | this.setVelocity(xVelocity, yVelocity)
+	 * @post    radius is set as the radius of the entity.
+	 *          | this.radius = radius
+	 * @post    If the Entity is an instance of Bullet the mass is calculated with BULLET_DENSITY.
+	 *          | if 	this instanceof Bullet
+	 *          |	then	this.mass = (4/3)*Math.PI*Math.pow(radius, 3)*BULLET_DENSITY
+	 * @post	If the Entity is an instance of Ship the mass is calculated with SHIP_DENSITY.
+	 *          | if 	this instanceof Ship
+	 *          |	then	this.mass = (4/3)*Math.PI*Math.pow(radius, 3)*SHIP_DENSITY
 	 */
 	protected Entity (double x, double y, double xVelocity, double yVelocity, double radius) throws IllegalArgumentException {
-		if(isValidPosition(x) && isValidPosition(y) && isValidVelocity(xVelocity) && isValidVelocity(yVelocity) && isValidRadius(radius)){
+		//Control if the radius is valid.
+		if(isValidRadius(radius)){
+			// Set position of entity (setter itself is defensive.
             try{this.setPosition(x, y);} catch(IllegalArgumentException ex){throw new IllegalArgumentException(ex.getMessage());}
+            //Set velocity of the entity (setter itself is total).
             this.setVelocity(xVelocity, yVelocity);
+            //Set radius of entity.
             this.radius = radius;
+            //Set the mass of the entity.
             if(this instanceof Bullet){this.mass = (4/3)*Math.PI*Math.pow(radius, 3)*BULLET_DENSITY;}
             if(this instanceof Ship){this.mass = (4/3)*Math.PI*Math.pow(radius, 3)*SHIP_DENSITY;}
         } 
 		else{
-			throw new IllegalArgumentException("Illegal argument at createEntity");
+			//Defensive throw for invalid radius.
+			throw new IllegalArgumentException("Invalid radius for entity.");
 		}
 	}
 	
@@ -183,7 +208,7 @@ public class Entity {
     //Total
     /**
      * Set the velocity on the X-axis to xVelocity and
-     * set the velocity on the Y_axis to yVelocity..
+     * set the velocity on the Y_axis to yVelocity.
      *
      * @param xVelocity
      *        The new velocity on the X-axis.
@@ -191,12 +216,12 @@ public class Entity {
      *        The new velocity on the Y-axis.
      * @post  If the given velocities for the X- and Y-axis are of type double and aren't infinite
      *        the new velocities on the X- and Y-axis are equal the given ones.
-     *        | if (!(isValidVelocity(yVelocity)) || (isValidVelocity(xVelocity))
+     *        | if !(isValidVelocity(yVelocity)) || (isValidVelocity(xVelocity))
      *        |      then new.getShipVelocity()[0] == xVelocity
      *        |           new.getShipVelocity()[1] == yVelocity
      * @post  If the given velocity on the X- or Y-axis isn't a double or is infinity
      *        the new velocities on the X- and Y-axis will be equal to 0.
-     *        | if ((isValidVelocity(yVelocity)) || (isValidVelocity(xVelocity))
+     *        | if (isValidVelocity(yVelocity)) || (isValidVelocity(xVelocity))
      *        |      then new.getShipvelocity()[0] == 0
      *        |           new.getShipVelocity()[1] == 0
      *
@@ -212,16 +237,42 @@ public class Entity {
         }
     }
     
+    /**
+     * Set the mass of a entity to a given mass.
+     * 
+     * @param mass
+     *        The new mass of the entity.
+     * @post  If the mass is a valid mass and the entity is an instance of ship
+     *        the new mass of the ship will be mass.
+     *        | If 	isValidMass(mass) && this instanceof Ship
+     *        | 	then new.mass = mass
+     * @post  If the mass isn't valid and the entity is an instance of ship the new 
+     *        mass of the ship will be the mass according to it's radius.
+     *        | If !(isValidMass(mass) && this instanceof Ship) 
+     *        | 	then 	this.mass = (4/3)*Math.PI*Math.pow(radius, 3)*SHIP_DENSITY
+     * @post  If the entity isn't an instance of ship the method does nothing.
+     */
     protected void setMass(double mass){
-    	if(isValidMass(mass)){
-    		if(this instanceof Ship) this.mass = mass;
-    	}
-    		
+    	if(isValidMass(mass) && (this instanceof Ship))		 this.mass = mass;
+    	else if  (this instanceof Ship) 	 this.mass = (4/3)*Math.PI*Math.pow(radius, 3)*SHIP_DENSITY;
     }
     
-    protected void setSuperWorld(World world){
-    	if(isValidWorld(world))
-    		this.superWorld = world;
+    //Defensive
+    /**
+     * Set the superWorld of an entity to the given world.
+     * 
+     * @param  world
+     *         The world to be set as the new superWorld.
+     * @post   If the world is a valid world the world will be set as the new superWorld.
+     *         | if 		isValidWorld(world)
+     *         | 	then 	new.superWorld = world
+     * @throws IllegalArgumentException
+     *         An IllegalArgumentException is thown if the world isn't a valid one.
+     *         | !(isValidWorld(world))
+     */
+    protected void setSuperWorld(World world) throws IllegalArgumentException{
+    	if(isValidWorld(world))		this.superWorld = world;
+    	else throw new IllegalArgumentException("Isn't a valid world");
     }
     
 	@Basic
@@ -533,7 +584,7 @@ public class Entity {
     //Total
     /**
     * Check whether the given velocity is a valid velocity for
-    * a ship.
+    * a entity.
     *
     * @param   velocity
     *          The velocity to check.
@@ -547,7 +598,7 @@ public class Entity {
     //defensive
    /**
     * Check whether the given position is a valid position for
-    * a ship.
+    * a entity.
     *  
     * @param   position
     *          The position to check.
@@ -561,7 +612,7 @@ public class Entity {
    //defensive
    /**
     * Check whether the given radius is a valid radius for
-    * a ship.
+    * a entity.
     *  
     * @param   radius
     *          The radius to check.
@@ -588,6 +639,25 @@ public class Entity {
        return false;
    }
    
+   /**
+    * Check whether the given mass is a valid mass for
+    * a entity.
+    * 
+    * @param   mass
+    *          The mass to be checked.
+    * @return  If the entity is an instance of Bullet and the mass doesn't equal (4/3)*Math.PI*Math.pow(radius, 3)*BULLET_DENSITY
+    *          the result is fasle else it's true.
+    *          | if 	this instanceof Bullet 
+    *          |	if 		 mass != (4/3)*Math.PI*Math.pow(radius, 3)*BULLET_DENSITY 
+    *          |		then result == false
+    *          |	else	result == true
+    * @return  If the entity is an instance of Shiop and the mass is smaller than (4/3)*Math.PI*Math.pow(radius, 3)*BULLET_DENSITY
+    *          or not a valid double the result is fasle else it's true.
+    *          | if		this instanceof Ship
+    *          | 	if		mass < (4/3)*Math.PI*Math.pow(radius, 3)*BULLET_DENSITY || Helper.isValidDouble(mass) != true
+    *          | 		then 	result == flase
+    *          |	else	result == true
+    */
    protected boolean isValidMass(double mass){
 	   if(this instanceof Bullet){if(mass != (4/3)*Math.PI*Math.pow(radius, 3)*BULLET_DENSITY){
 		   Helper.log("Warning! You shouldn't change a bullet's mass");
@@ -611,7 +681,16 @@ public class Entity {
 	   }
    }
    
+   /**
+    * Check whether the given world is a valid world for
+    * a entity.
+    * 
+    * @param   world
+    *          The world to be checked.
+    * @return  The method returns whether or not the world is terminated.
+    *          |  result ==  world.isTerminatedWorld()
+    */ 
    protected boolean isValidWorld(World world){
-	   return true;
+	    return world.isTerminatedWorld();
    }
 }
