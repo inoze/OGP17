@@ -49,10 +49,11 @@ public class Bullet extends Entity{
 			return this.superWorld;
 	}
 	
+	//Total
 	/**
 	 * Return the ship in which bullet is positioned.
 	 * 
-	 * This method must return null if a bullet is not positioned on a ship.
+	 * @return If the 
 	 */
 	@Basic
 	public Ship getBulletShip() {
@@ -76,16 +77,43 @@ public class Bullet extends Entity{
 		return source;
 	}
 	
+	
 	/**
-	 * Terminate <code>bullet</code>.
+	 * Terminate this bullet.
+	 * 
+	 * @post	If this bullet was located in a world, it will be removed from that world.
+	 * 			| if old.getWorld()!=null
+
+	 * 			| 	new.getWorld() == null
+	 * @post	If this bullet was associated with a ship, it is not anymore.
+	 * 			| if old.getShip != null
+	 * 			| 	if old.getShip().getBullets().contains(old)
+	 * 			| 		! new.getShip().getBullets().contains(old)
+	 * 			| 	new.getShip() == null
 	 */
 	@Basic
-	public void terminateBullet() {
-		this.isTerminated = true;
+	public void terminate() {
+		if (this.isTerminated != true){
+			this.isTerminated = true;
+			if (this.getBulletWorld()!=null) {
+				this.getBulletWorld().removeBulletFromWorld(this);
+			}
+			if (this.getBulletShip()!=null) {
+				this.getBulletShip().getBulletsOnShip().remove(this);
+			}
+			setSource(null);
+		}
 	}
 	
+	 /**
+	  * A method to set the source of bullet.
+	  * 
+	  * @param source
+	  * 	   The source to be set.
+	  * @post  The source of the bullet is set to the given source.
+	  *        | new.source == source
+	  */
 	public void setSource(Ship source){
-		if(this.getBulletSource() == null)
 			this.source = source;
 	}
 	

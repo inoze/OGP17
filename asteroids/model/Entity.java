@@ -27,17 +27,25 @@ import be.kuleuven.cs.som.annotate.*;
 public class Entity {
 	
 	/**
-	 * Variable containing the speed of light.
+	 * Cnstant containing the speed of light.
 	 */
 	protected final double SPEED_OF_LIGHT =  300000;
 	/**
-	 * Variable containing the density of bullets.
+	 * Cnstant containing the density of bullets.
 	 */
 	protected final double BULLET_DENSITY = 7.8 * Math.pow(10, 12);
 	/**
-	 * Variable containing the density of bullets.
+	 * Constant containing the density of bullets.
 	 */
 	protected final double SHIP_DENSITY = 1.42 * Math.pow(10, 12);
+	/**
+	 * Constant containing the minimal radien of a bullet.
+	 */
+	protected final double MINIMAL_BULLET_RAD = 1;
+	/**
+	 * constant containing the minimal radien of a ship.
+	 */
+	protected final double MINIMAL_SHIP_RAD = 10;
 	/**
      * Variable containing the coordinates of the ship in the form of an array with length 2.
      */
@@ -293,11 +301,25 @@ public class Entity {
     *  
     * @param   radius
     *          The radius to check.
-    * @return  True if and only if the given radius is a double and is bigger or equal to 10.
-    *          | result == ( radius >= 10 && Helper.isValidDouble(radius))
+    * @return  True if and only if the given radius is a double and is bigger or equal to MINIMAL_SHIP_RAD
+    *          if the entity is an instance of ship.
+    *          | if this instanceof Ship
+    *          | 	then result == ( radius >= MINIMAL_SHIP_RAD && Helper.isValidDouble(radius))
+    * @return  True if and only if the given radius is a double and is bigger or equal to MINIMAL_BULLET_RAD
+    *          if the entity is an instance of bullet.
+    *          |  if this instanceof Bullet
+    *          | 	then result == ( radius >= MINIMAL_BULLET_RAD && Helper.isValidDouble(radius))
+    * @throws  IllegalArgumentException
+    *          Throws an IllegalArgumentException if the method is invoced to a non ship, non bullet entity
+    *          | !((this instanceof Bullet) && (this instanceof Ship))
     */
-   protected boolean isValidRadius(double radius){
-       return Helper.isValidDouble(radius);
+   protected boolean isValidRadius(double radius) throws IllegalArgumentException{
+	   if  (Helper.isValidDouble(radius)){
+    	   if(this instanceof Bullet)	return radius >= MINIMAL_BULLET_RAD;
+    	   if(this instanceof Ship) 	return radius >= MINIMAL_SHIP_RAD;
+       }
+       else return false;
+       throw new IllegalArgumentException("isValidRadius is invoced to a non ship, non bullet entity.");
    }
    
    protected boolean isValidMass(double mass){

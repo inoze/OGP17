@@ -3,7 +3,6 @@ package asteroids.model;
 import java.util.*;
 
 import asteroids.util.ModelException;
-//import asteroids.util.ModelException;
 import be.kuleuven.cs.som.annotate.*;
  
 /**
@@ -25,18 +24,20 @@ import be.kuleuven.cs.som.annotate.*;
  * @invar The maximum speed of each ship must be between 0 and 300 000
  *        | getMaxVelocity > 0 && getMaxVelocity < 300000
  *
- * @version 1.0
+ * @invar The total mass of a ship is the mass of the ship added with the mass of all the bullets in the ship.
+ *        | Double bMass = 0
+ *        | for(Bullet bullet : bullets){ bMass += bullet.mass} 
+ *        | totalMass == mass + bMass
+ *
+ * @invar All bullets in the ship aren't in the world.
+ *        | for(Bullet bullet : bullets){ bullet.superWorld == null}
+ *        
+ * @version 2.0
  * @author Brent De Bleser & Jesse Geens
  */
 public class Ship extends Entity{
    
     //Variables
-   
-    /**
-     * Variable registering the direction of the ship in radients with right being 0 and left being pi.
-     */
-	@Deprecated
-    private double orientation;
     /**
      *variable containg the direction of the ship.
      */
@@ -92,7 +93,7 @@ public class Ship extends Entity{
 
     public Ship(double xPosition, double yPosition, double xVelocity, double yVelocity, double radius, double direction, double mass) throws IllegalArgumentException, ModelException {
     	super(xPosition, yPosition, xVelocity, yVelocity, radius);
-    	if(isValidDirection(direction) && isValidShipRadius(radius)){
+    	if(isValidDirection(direction) && isValidRadius(radius)){
             this.direction = direction;
             if(this.getMass() > mass)
             	throw new IllegalArgumentException("Ship is lighter than minimum density");
@@ -157,9 +158,8 @@ public class Ship extends Entity{
      *         The x coordinate of the new position.
      * @param  yPosition
      *         The y coordinate of the new position;
-     * @post   The arguments xPosition and yPosition become the X- and Y-coordinates respectively.
-     *         | new.position[0] = xPosition;
-     *         | new.position[1] = yPosition;
+     * @effect  The arguments xPosition and yPosition become the X- and Y-coordinates respectively.
+     *         | this.setPosition(xPosition, yPosition)
      * @throws IllegalArgumentException
      *         xPosition isn't valid.
      *         | (!isValidPosition(xPosition))
@@ -174,10 +174,10 @@ public class Ship extends Entity{
         }
     }
    
-    //Total
+  //Total
     /**
      * Set the velocity on the X-axis to xVelocity and
-     * set the velocity on the Y_axis to yVelocity..
+     * set the velocity on the Y_axis to yVelocity.
      *
      * @param xVelocity
      *        The new velocity on the X-axis.
@@ -186,13 +186,11 @@ public class Ship extends Entity{
      * @post  If the given velocities for the X- and Y-axis are of type double and aren't infinite
      *        the new velocities on the X- and Y-axis are equal the given ones.
      *        | if (!(isValidVelocity(yVelocity)) || (isValidVelocity(xVelocity))
-     *        |      then new.getShipVelocity()[0] == xVelocity
-     *        |           new.getShipVelocity()[1] == yVelocity
+     *        |      then this.setVelocity(0, 0)
      * @post  If the given velocity on the X- or Y-axis isn't a double or is infinity
      *        the new velocities on the X- and Y-axis will be equal to 0.
      *        | if ((isValidVelocity(yVelocity)) || (isValidVelocity(xVelocity))
-     *        |      then new.getShipvelocity()[0] == 0
-     *        |           new.getShipVelocity()[1] == 0
+     *        |      then this.setVelocity(xVelocity, yVelocity)
      *
      */
     public void setShipVelocity(double xVelocity, double yVelocity){
@@ -203,6 +201,7 @@ public class Ship extends Entity{
             this.setVelocity(xVelocity, yVelocity);
         }
     }
+   
    
     //Nominal
     /**
@@ -616,10 +615,12 @@ public class Ship extends Entity{
 	/**
 	 * Load <code>bullet</code> on <code>ship</code>.
 	 */
+	@Raw
 	public void loadBulletOnShip(Bullet bullet) {
 		if(isValidBullet(bullet)){
 			bullets.add(bullet);
 			bullet.setSource(this);
+			totalMass += bullet.mass;
 		}
 	}
 
@@ -628,9 +629,11 @@ public class Ship extends Entity{
 	 * 
 	 * For students working alone, this method must not do anything.
 	 */
+	@Raw
 	public void loadBulletsOnShip(Collection<Bullet> bulletsCol) {
 		for(Bullet bullet : bulletsCol){
 			loadBulletOnShip(bullet);
+			totalMass += bullet.mass;
 		}
 	}
 
@@ -644,11 +647,13 @@ public class Ship extends Entity{
 	 */
 	public void removeBulletFromShip(Bullet bullet) {
 		bullets.remove(bullet);
+		totalMass -= bullet.mass;
 	}
 
 	/**
 	 * <code>ship</code> fires a bullet.
 	 */
+	@Raw
 	public void fireBullet() {
 		if(bullets.size() > 0){
 			Bullet bullet = bullets.iterator().next();
@@ -679,19 +684,6 @@ public class Ship extends Entity{
         return Helper.isValidDouble(angle);
     }
    
-     //defensive
-    /**
-     * Check whether the given radius is a valid radius for
-     * a ship.
-     *  
-     * @param   radius
-     *          The radius to check.
-     * @return  True if and only if the given radius is a double and is bigger or equal to 10.
-     *          | result == ( radius >= 10 && Helper.isValidDouble(radius))
-     */
-    private boolean isValidShipRadius(double radius){
-        return ( radius >= 10 && Helper.isValidDouble(radius));
-    }
     /**
      * Checks whether a given bullet is valid.
      * @param   bullet
