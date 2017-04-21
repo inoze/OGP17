@@ -176,9 +176,15 @@ public class Ship extends Entity{
     
 	/**
 	 * Terminate ship.
+	 * 
+	 * @post    The set of all bullets is set to null.
+	 *          | bullets = null
+	 * @effect  The ship is terminated on entity level.µ
+	 *          | this.terminate()
 	 */
     @Basic
 	public void terminateShip() {
+    	bullets = null;
 		this.terminate();
 	}
 

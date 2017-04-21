@@ -65,7 +65,7 @@ public class World {
 			this.height = height;
 		}
 		else{
-			throw new IllegalArgumentException("Invalid dimensions given @ createWorld");
+			throw new IllegalArgumentException("Invalid dimensions given @ World");
 		}
 	}
 	
@@ -173,15 +173,12 @@ public class World {
 	 * @throws  IllegalArgumentException
 	 *          Throws an IllegalArgumentException if the ship isn't in the world.
 	 *          | !(ships.contains(ship))
-	 * @post    The ship's superWorld is set to null.
-	 *          | implementation
 	 * @post    The ship is removed from the hashset ships
-	 *          | implementation
+	 *          | for each ship in ships
+	 *          |		ships.remove(ship)
 	 */
 	public void removeShipFromWorld(Ship ship) throws IllegalArgumentException {
 		if (ships.contains(ship)){
-			ship.terminateShip();
-			ship.setSuperWorld(null);
 			ships.remove(ship);
 		}
 		else	throw new IllegalArgumentException("Ship isn't in the world.");
@@ -217,17 +214,12 @@ public class World {
 	 * @throws  IllegalArgumentException
 	 *          Throws an IllegalArgumentException if the bullet isn't in the world.
 	 *          | !(bullets.contains(bullet))
-	 * @post    The ship's superWorld is set to null.
-	 *          | implementation
-	 * @post    The bullet is terminated.
-	 *          | implementation
 	 * @post    The bullet is removed from the hashset bullets
-	 *          | implementation
+	 *          | for each bullet in bullets
+	 *          |		bullets.remove(bullet)
 	 */
 	public void removeBulletFromWorld(Bullet bullet) throws IllegalArgumentException {
 		if (bullets.contains(bullet)){
-			bullet.setSuperWorld(this);
-			bullet.terminate();
 			bullets.remove(bullet);
 		}
 		else	throw new IllegalArgumentException("bullet isn't in the world.");

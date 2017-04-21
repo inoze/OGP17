@@ -10,6 +10,10 @@ public class Bullet extends Entity{
 	 * @note  If the bullet isn't fired source contains null.
 	 */
 	private Ship source = null;
+	/**
+	 * Variable containing the amount of bounces the bullet has done.
+	 */
+	private int bounces = 0;
 
 	/**
 	 * Create a new non-null bullet with the given position, velocity and
@@ -80,29 +84,16 @@ public class Bullet extends Entity{
 	
 	/**
 	 * Terminate this bullet.
-	 * 
-	 * @post	If this bullet was located in a world, it will be removed from that world.
-	 * 			| if old.getWorld()!=null
-
-	 * 			| 	new.getWorld() == null
-	 * @post	If this bullet was associated with a ship, it is not anymore.
-	 * 			| if old.getShip != null
-	 * 			| 	if old.getShip().getBullets().contains(old)
-	 * 			| 		! new.getShip().getBullets().contains(old)
-	 * 			| 	new.getShip() == null
+     *
+     * @post   The source of this bullet is set to null.
+     *         | new.source = null
+     * @effect The bullet is terminated at entity level
+     *         | this.terminate()
 	 */
 	@Basic
-	public void terminate() {
-		if (this.isTerminated != true){
-			this.isTerminated = true;
-			if (this.getBulletWorld()!=null) {
-				this.getBulletWorld().removeBulletFromWorld(this);
-			}
-			if (this.getBulletShip()!=null) {
-				this.getBulletShip().getBulletsOnShip().remove(this);
-			}
-			setSource(null);
-		}
+	public void terminateBullet() {
+		this.source = null;
+		this.terminate();
 	}
 	
 	 /**
