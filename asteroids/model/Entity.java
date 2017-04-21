@@ -288,21 +288,12 @@ public class Entity {
 	@Basic
 	public void terminate(){
 		if (this instanceof Ship){
-<<<<<<< HEAD
 			if (superWorld != null)
 			this.superWorld.removeShipFromWorld((Ship) this);
 		}
 		if (this instanceof Bullet){
-			if ()
-			this.superWorld.removeBulletFromWorld((Bullet) this);
-=======
-			if(superWorld != null)
-				this.superWorld.removeShipFromWorld((Ship) this);
-		}
-		if (this instanceof Bullet){
 			if(superWorld != null)
 				this.superWorld.removeBulletFromWorld((Bullet) this);
->>>>>>> e47354d4a3e374a0e779bd831d39d482ac207574
 		}
 		this.superWorld = null;
 		this.isTerminated = true;
@@ -360,6 +351,12 @@ public class Entity {
 			mY = this.superWorld.getWorldSize()[1];
 		}
 		else edgeY = position[1] - radius;
+		
+		double tX = (mX-edgeX)/velocity[0];
+		double tY = (mY-edgeY)/velocity[1];
+		
+		if (tX <= tY) return tX;
+		else return tY;
 		
 	}
 
