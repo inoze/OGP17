@@ -269,23 +269,23 @@ public class Entity {
 	
 	//Defensive
     /**
-     * A method to get the distance between two ships.
+     * A method to get the distance between two entities.
      *
-     * @param ship
-     *         The ship between which and the ship to which the method is invoked
+     * @param entity
+     *         The entity between which and the entity to which the method is invoked
      *         the distance is measured.
-     * @return Returns the distance between ship and the ship on which the method is invoced.
-     *         | double diffx = Math.abs(this.position[0] - ship.getShipPosition()[0])
-     *         | double diffy = Math.abs(this.position[1] - ship.getShipPosition()[1])
-     *         | double diff = Math.sqrt(Math.abs(square(diffx) - square(diffy)))
+     * @return Returns the distance between entity and the entity on which the method is invoced.
+     *         | double diffx = Math.abs(this.position[0] - entity.getPosition()[0])
+     *         | double diffy = Math.abs(this.position[1] - entity.getPosition()[1])
+     *         | double diff = Math.sqrt(Math.abs(Helper.square(diffx) - Helper.square(diffy)))
      *         | return == diff
      * @throws IllegalArgumentException
-     *         Throws an IllegalArgumentException if the given ship is the same ship
+     *         Throws an IllegalArgumentException if the given entity is the same entity
      *         to which the method is invoced.
-     *         | this == ship
+     *         | this == entity
      */
     public double getDistanceBetween(Entity entity) throws IllegalArgumentException{
-        if(this == entity) throw new IllegalArgumentException("this == ship");
+        if(this == entity) throw new IllegalArgumentException("this == entity");
         else{
             double diffx = Math.abs(this.getPosition()[0] - entity.getPosition()[0]);
             double diffy = Math.abs(this.getPosition()[1] - entity.getPosition()[1]);
@@ -296,20 +296,20 @@ public class Entity {
    
     //Defensive
     /**
-     * A method to check whether two ships overlap.
+     * A method to check whether two entity overlap.
      *
-     * @param  ship
-     *         The ship to check whether it and the ship on which the method is invoced
+     * @param  entity
+     *         The entity to check whether it and the ship on which the method is invoced
      *         are overlapping.
-     * @return Returns true if the ship on which the method is invoced is the
-     *         the same ship as ship.
-     *         | if(this == ship)
+     * @return Returns true if the entity on which the method is invoced is the
+     *         the same entity as entity.
+     *         | if(this == entity)
      *         |    then return == true
-     * @return Returns false if the ships don't overlap.
-     *         |if(this.getDistanceBetween(ship) >= this.getShipRadius() + ship.getShipRadius())
+     * @return Returns false if the entity don't overlap.
+     *         |if(this.getDistanceBetween(entity) >= this.getRadius() + entity.getRadius())
      *         |    then return == false
-     * @return Returns true if the ships overlap.
-     *         |if(this.getDistanceBetween(ship) < this.getShipRadius() + ship.getShipRadius())
+     * @return Returns true if the entities overlap.
+     *         |if(this.getDistanceBetween(entity) < this.getRadius() + entity.getRadius())
      *         |    then return == true
      */
     public boolean overlap(Entity entity){
@@ -327,33 +327,33 @@ public class Entity {
    
     //Defensive
     /**
-     * A method to get the time it wil take to get two ships colliding
+     * A method to get the time it wil take to get two entities colliding
      * if they wil collide.
-     * @param  ship
-     *         The ship to get the time of collision from with itself and
-     *         the ship on which the method is invoced.
-     * @post   If the ships keep moving in the same way without an one of them getting changed
+     * @param  entity
+     *         The entity to get the time of collision from with itself and
+     *         the entity on which the method is invoced.
+     * @post   If the entities keep moving in the same way without an one of them getting changed
      *         in any way (velocity, position and radius must remain the same)
      *         The ships will collide with each other after the returned amount of time.
-     *         The ships won't collide before the given amount of time given if not changed in anyway
+     *         The entites won't collide before the given amount of time given if not changed in anyway
      *         (velocity, position and radius must remain the same)
-     *         | this.overlap(ship) == true
+     *         | this.overlap(entity) == true
      *         |    This is true after the following code:
-     *         |        this.move(this.getTimeToCollision(ship));
-     *         |        ship.move(this.getTimeToCollision(ship));
-     * @post   The ships will collide with each other after the returned amount of time.
-     *         The ships won't collide before the given amount of time given if not changed in anyway
+     *         |        this.move(this.getTimeToCollision(entity));
+     *         |        entity.move(this.getTimeToCollision(entity));
+     * @post   The entity will collide with each other after the returned amount of time.
+     *         The entity won't collide before the given amount of time given if not changed in anyway
      *         (velocity, position and radius must remain the same)
      *         | this.overlap(ship) == False
      *         |    This is true after the following code:
-     *         |        If (duration < this.getTimeToCollision(ship)){
+     *         |        If (duration < this.getTimeToCollision(entity)){
      *         |            this.move(duration);
-     *         |            ship.move(duration);
+     *         |            entity.move(duration);
      *         |        }
      * @throws IllegalArgumentException
-     *         Throws an IllegalArgumentException if the given ship is already overlapping
-     *         with the ship to which the method is invoced.
-     *         | this.overlap(ship)
+     *         Throws an IllegalArgumentException if the given entity is already overlapping
+     *         with the entity to which the method is invoced.
+     *         | this.overlap(entity)
      */
    
     public double getTimeToCollision(Entity entity) throws IllegalArgumentException{
@@ -362,7 +362,7 @@ public class Entity {
         double a2 = entity.getVelocity()[1] - this.getVelocity()[1];
         double a = Helper.square(a1) + Helper.square(a2);
         //exception 1:
-        //The two ships follow an identical path so they don't collide.
+        //The two entities follow an identical path so they don't collide.
         if (a == 0.0) {
             return Double.POSITIVE_INFINITY;
         }
@@ -375,8 +375,8 @@ public class Entity {
         double c = Helper.square(b1) + Helper.square(b2) - Helper.square(s);
      
         //exception 2:
-        //If the quadratic equation doesn't give an answer the ships' paths cross but
-        //don't the ships don't touch each other.
+        //If the quadratic equation doesn't give an answer the entites' paths cross but
+        //don't the entities don't touch each other.
         if (Helper.quadraticSolver(a, b, c)[2] == 1.0){
             return Double.POSITIVE_INFINITY;
         }
@@ -387,7 +387,7 @@ public class Entity {
           //dt exceptions:
            
             //  exception 3:
-            //  if both answers are negative the ships are moving away from each other.
+            //  if both answers are negative the entities are moving away from each other.
             if (dt1 < 0 && dt2 <0){
                 return Double.POSITIVE_INFINITY;
             }
@@ -402,19 +402,19 @@ public class Entity {
  
     //Defensive
     /**
-     *A method to get the position where two ships collide.
+     *A method to get the position where two entities collide.
      *
-     * @param ship
-     *        The ship between which and the ship to which the method invoced
+     * @param entity
+     *        The entity between which and the entity to which the method invoced
      *        the collision position is searched.
-     * @return Returns null if the ships don't collide.
-     *         | if(this.getTimeToCollision(ship) == Double.POSITIVE_INFINITY)
+     * @return Returns null if the entities don't collide.
+     *         | if(this.getTimeToCollision(entity) == Double.POSITIVE_INFINITY)
      *         |    then return == null
      * @return Returns the collision position
      *         | double[] pos = new double[2]
-     *         | double[] cp1 = this.getDistanceTraveled(this.getTimeToCollision(ship))
-     *         | double[] cp2 = ship.getDistanceTraveled(this.getTimeToCollision(ship))
-     *         | double s = this.getShipRadius() + ship.getShipRadius()
+     *         | double[] cp1 = this.getDistanceTraveled(this.getTimeToCollision(entity))
+     *         | double[] cp2 = entity.getDistanceTraveled(this.getTimeToCollision(entity))
+     *         | double s = this.getRadius() + ship.getRadius()
      *         | double diffx = Math.abs(cp2[0] - cp1[0])
      *         | double diffy = Math.abs(cp2[1] - cp1[1])
      *         | double cosinus, sinus
@@ -422,15 +422,15 @@ public class Entity {
      *         |if(diffx != 0)
      *         |     then cosinus = (square(diffx) + square(s) - square(diffy))/(2*diffx*s)
      *         |          sinus = Math.sin(Math.acos(cosinus))
-     *         |          pos[0] = cp1[0] + this.getShipRadius() * cosinus
-     *         |          pos[1] = cp1[1] + this.getShipRadius() * sinus
+     *         |          pos[0] = cp1[0] + this.getRadius() * cosinus
+     *         |          pos[1] = cp1[1] + this.getRadius() * sinus
      *         | else
-     *         |     then pos[0] = this.getDistanceTraveled(this.getTimeToCollision(ship))[0]
-     *         |          pos[1] = this.getDistanceTraveled(this.getTimeToCollision(ship))[1] + this.getShipRadius()
+     *         |     then pos[0] = this.getDistanceTraveled(this.getTimeToCollision(entity))[0]
+     *         |          pos[1] = this.getDistanceTraveled(this.getTimeToCollision(entity))[1] + this.getRadius()
      *         | return == pos
      * @throws IllegalArgumentException
-     *         Throws IllegalArgumentException if the ships already overlap.
-     *         | this.overlap(ship)
+     *         Throws IllegalArgumentException if the entities already overlap.
+     *         | this.overlap(entity)
      */
     public double[] getCollisionPosition(Entity entity) throws IllegalArgumentException{
         if(this.overlap(entity)){
@@ -473,10 +473,10 @@ public class Entity {
    
   //Nominal
     /**
-     * A helper method to get the centre of a ship when it traveled over a time.
+     * A helper method to get the centre of a entity when it traveled over a time.
      *
      * @param  time
-     *         The time over which the ship moves.
+     *         The time over which the entity moves.
      * @pre    time must be bigger then zero and musn't be infinty.
      *         | (time > 0) && Helper.isValidDouble(time)
      * @return Returns an array of length two, which contains the coordinates of the center of the ship when it
@@ -546,8 +546,10 @@ public class Entity {
     	   if(this instanceof Bullet)	return radius >= MINIMAL_BULLET_RAD;
     	   if(this instanceof Ship) 	return radius >= MINIMAL_SHIP_RAD;
        }
-       else return false;
-       throw new IllegalArgumentException("isValidRadius is invoced to a non ship, non bullet entity.");
+	   else { 
+		   throw new IllegalArgumentException("isValidRadius is invoced to a non ship, non bullet entity.");
+	   }
+       return false;
    }
    
    protected boolean isValidMass(double mass){
