@@ -293,6 +293,26 @@ public class World {
 	public void evolve(double dt, CollisionListener collisionListener){
 		if(dt < 0 || !(Helper.isValidDouble(dt)))
 			throw new IllegalArgumentException("Time given at evolve is invalid");
+		double tC = getTimeToNextCollision();
+		double[] pos = getNextCollisionPos();
+		Entity[] entities = getNextCollidingEntities();
+		while (tC <= dt){
+			for(Entity entity: getEntities()) entity.move(tC);
+			if(entities[1] == null){
+				if(collisionListener != null) collisionListener.boundaryCollision(entities[0], pos[0], pos[1]);
+				entities[0].collideBoundary();
+			}
+			else {
+				if(collisionListener != null) collisionListener.objectCollision(entities[0], entities[1], pos[0], pos[1]);
+				entities[0].collide(entities[1]);
+			}
+			
+			dt = dt - tC;
+			tC = getTimeToNextCollision();
+			pos = getNextCollisionPos();
+			entities = getNextCollidingEntities();
+		}
+		for(Entity entity: getEntities()) entity.move(dt);
 		
 		
 	}
