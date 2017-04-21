@@ -114,8 +114,12 @@ public class Facade implements IFacade {
 	 * located in a world.
 	 */
 	public Ship createShip(double x, double y, double xVelocity, double yVelocity, double radius, double direction, double mass) throws ModelException {
-		Ship ship = new Ship(x, y, xVelocity, yVelocity, radius, direction, mass);
-		return ship;
+		try{
+			Ship ship = new Ship(x, y, xVelocity, yVelocity, radius, direction, mass);
+			return ship;
+		} catch(IllegalArgumentException ex){
+			throw new ModelException(ex.getMessage());
+		}
 	}
 
 	/**
@@ -198,8 +202,12 @@ public class Facade implements IFacade {
 	 * The bullet is not located in a world nor loaded on a ship.
 	 */
 	public Bullet createBullet(double x, double y, double xVelocity, double yVelocity, double radius) throws ModelException {
-		Bullet bullet = new Bullet(x, y, xVelocity, yVelocity, radius);
-		return bullet;
+		try{
+			Bullet bullet = new Bullet(x, y, xVelocity, yVelocity, radius);
+			return bullet;
+		} catch(Exception ex){
+			throw new ModelException(ex.getMessage());
+		}
 	}
 
 	/**
@@ -281,8 +289,12 @@ public class Facade implements IFacade {
 	 * <code>height</code>.
 	 */
 	public World createWorld(double width, double height) throws ModelException {
-		World world = new World(width , height);
-		return world;
+		try{
+			World world = new World(width , height);
+			return world;
+		} catch(Exception ex){
+			throw new ModelException(ex.getMessage());
+		}
 	}
 
 	/**

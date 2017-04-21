@@ -225,7 +225,7 @@ public class Entity {
     }
     
 	@Basic
-	protected void terminate(){
+	public void terminate(){
 		this.isTerminated = true;
 	}
 	
@@ -253,7 +253,15 @@ public class Entity {
                 }
             }    
     }
+    
+    public void collide(Entity entity){
+    	
+    }
    
+    
+    public void collideBoundary(){
+    	
+    }
     /**
 	 * Return the shortest time in which the given entity will collide with the
 	 * boundaries of its world.
@@ -338,7 +346,7 @@ public class Entity {
      *         |    then return == true
      */
     public boolean overlap(Entity entity){
-        if(this == entity){
+        /*if(this == entity){
             return true;
         }
         else{
@@ -347,7 +355,10 @@ public class Entity {
                 return false;
             else
                 return true;
-        }
+        }*/
+    	if (entity == null) throw new IllegalArgumentException("The second entity does not exist.");
+		if (this == entity) return true;
+		else return (this.getDistanceBetween(entity)/(this.getRadius()+entity.getRadius()) <= -0.01);
     }
    
     //Defensive

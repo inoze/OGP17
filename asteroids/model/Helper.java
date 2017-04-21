@@ -13,7 +13,7 @@ public class Helper {
 	/**
      * Variable that determines whether or not debug output is enabled
      */
-    public static boolean debug = false;
+    public static boolean debug = true;
     
     /**
      * A helper method to make a small errorMessage
@@ -105,19 +105,5 @@ public class Helper {
     public static double square(double x){
         assert isValidDouble(x);
         return Math.pow(x, 2);
-    }
-    
-    /**
-     * Checks whether the given mass is a valid mass.
-     * 
-     * @param   mass
-     *     		The mass to check.
-     * @return  True if and only if mass is bigger than 0, isn't NaN and isn't infinite.
-     *          | result == (!(Double.isNaN(mass) || Double.isInfinite(mass) || mass <= 0))
-     */
-    @Model
-    public static boolean isValidMass(double mass){
-    	if(Double.isNaN(mass) || Double.isInfinite(mass) || mass <= 0) return false;
-    	return true;
     }
 }
