@@ -288,9 +288,11 @@ public class Entity {
 	@Basic
 	public void terminate(){
 		if (this instanceof Ship){
+			if (superWorld != null)
 			this.superWorld.removeShipFromWorld((Ship) this);
 		}
 		if (this instanceof Bullet){
+			if ()
 			this.superWorld.removeBulletFromWorld((Bullet) this);
 		}
 		this.superWorld = null;
@@ -335,7 +337,21 @@ public class Entity {
 	 * boundaries of its world.
 	 */
 	public double getTimeCollisionBoundary() {
-		return 0;
+		double edgeY;
+		double edgeX;
+		double mY = 0;
+		double mX = 0;
+		if (velocity[0] >= 0){
+			edgeX = position[0] + radius;
+			mX = this.superWorld.getWorldSize()[0];
+		}
+		else edgeX = position[0] - radius;
+		if (velocity[1] >= 0){
+			edgeY = position[1] + radius;
+			mY = this.superWorld.getWorldSize()[1];
+		}
+		else edgeY = position[1] - radius;
+		
 	}
 
 	/**
@@ -350,21 +366,13 @@ public class Entity {
 	}
 
 	/**
-	 * Return the shortest time in which the first entity will collide with the
-	 * second entity.
-	 */
-	public double getTimeCollisionEntity(Entity entity) throws ModelException {
-		return 0;
-	}
-
-	/**
 	 * Return the first position at which the first entity will collide with the
 	 * second entity.
 	 */
 	public double[] getPositionCollisionEntity(Entity entity) throws ModelException {
 		double[] pos = new double[2];
-		pos[0] = this.getPosition()[0] + this.getVelocity()[0] * this.getTimeCollisionEntity(entity);
-		pos[1] = this.getPosition()[1] + this.getVelocity()[1] * this.getTimeCollisionEntity(entity);
+		pos[0] = this.getPosition()[0] + this.getVelocity()[0] * this.getTimeToCollision(entity);
+		pos[1] = this.getPosition()[1] + this.getVelocity()[1] * this.getTimeToCollision(entity);
 		return pos;
 	}
 	
