@@ -220,11 +220,8 @@ public class World {
 	 */
 	public void removeBulletFromWorld(Bullet bullet) throws IllegalArgumentException {
 		if (bullets.contains(bullet)){
-<<<<<<< HEAD
 			bullet.setSuperWorld(null);
 			bullet.terminate();
-=======
->>>>>>> 505e54b5a8cd0efb6f78fd18257361a5e77347e2
 			bullets.remove(bullet);
 		}
 		else	throw new IllegalArgumentException("bullet isn't in the world.");
