@@ -206,7 +206,7 @@ public class Facade implements IFacade {
 	 * Terminate <code>bullet</code>.
 	 */
 	public void terminateBullet(Bullet bullet) throws ModelException {
-		bullet.terminateBullet();
+		bullet.terminate();
 	}
 
 	/**

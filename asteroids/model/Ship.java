@@ -47,10 +47,6 @@ public class Ship extends Entity{
      */
     private double totalMass;
     /**
-     * Variable containing the acceleration value of the ship.
-     */
-    private double acceleration;
-    /**
      * Boolean that determines whether the thruster is active.
      */
     private boolean isThrusterActive;
