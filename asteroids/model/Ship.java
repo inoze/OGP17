@@ -51,6 +51,14 @@ public class Ship extends Entity{
      */
     private double acceleration;
     /**
+     * Boolean that determines whether the thruster is active.
+     */
+    private boolean isThrusterActive;
+    /**
+     * Variable that determines the force the thruster exerts
+     */
+    private double thrusterForce = 1.1E21;
+    /**
      * Variable set containing all the (references to the) bullets in the ship. 
      */
     private Set<Bullet> bullets = new HashSet<Bullet>();
@@ -135,7 +143,8 @@ public class Ship extends Entity{
 	 */
     @Basic
 	public double getShipAcceleration() {
-		return this.acceleration;
+    	if (!isShipThrusterActive()) return 0;
+		return this.thrusterForce/this.getMass();
 	}
 	
 	/**
@@ -143,9 +152,9 @@ public class Ship extends Entity{
 	 */
     @Basic
 	public boolean isShipThrusterActive() {
-		//return ship.isShipThrusterActive();
-		return false;
+		return this.isThrusterActive;
 	}
+    
    
     ///Setters
    
@@ -232,12 +241,12 @@ public class Ship extends Entity{
 	}
 
 
-	/**
-	 * Enables or disables <code>ship</code>'s thruster depending on the value
-	 * of the parameter <code>active</code>.
-	 */
-	public void setThrusterActive(boolean active) throws ModelException {
-		//Ship.setThrusterActive(active);
+	public void thrustOn(){
+		this.isThrusterActive = true;
+	}
+	
+	public void thrustOff(){
+		this.isThrusterActive = false;
 	}
 
     //Methods
@@ -325,233 +334,6 @@ public class Ship extends Entity{
         this.setShipDirection(this.direction + angle);
     }
    
-    //Defensive
-    /**
-     * A method to get the distance between two ships.
-     *
-     * @param ship
-     *         The ship between which and the ship to which the method is invoked
-     *         the distance is measured.
-     * @return Returns the distance between ship and the ship on which the method is invoced.
-     *         | double diffx = Math.abs(this.position[0] - ship.getShipPosition()[0])
-     *         | double diffy = Math.abs(this.position[1] - ship.getShipPosition()[1])
-     *         | double diff = Math.sqrt(Math.abs(square(diffx) - square(diffy)))
-     *         | return == diff
-     * @throws IllegalArgumentException
-     *         Throws an IllegalArgumentException if the given ship is the same ship
-     *         to which the method is invoced.
-     *         | this == ship
-     */
-    public double getDistanceBetween(Ship ship) throws IllegalArgumentException{
-        if(this == ship) throw new IllegalArgumentException("this == ship");
-        else{
-            double diffx = Math.abs(this.getPosition()[0] - ship.getPosition()[0]);
-            double diffy = Math.abs(this.getPosition()[1] - ship.getPosition()[1]);
-            double diff = Math.sqrt(Math.abs(Helper.square(diffx) - Helper.square(diffy)));
-            return diff;
-        }
-    }
-   
-    //Defensive
-    /**
-     * A method to check whether two ships overlap.
-     *
-     * @param  ship
-     *         The ship to check whether it and the ship on which the method is invoced
-     *         are overlapping.
-     * @return Returns true if the ship on which the method is invoced is the
-     *         the same ship as ship.
-     *         | if(this == ship)
-     *         |    then return == true
-     * @return Returns false if the ships don't overlap.
-     *         |if(this.getDistanceBetween(ship) >= this.getShipRadius() + ship.getShipRadius())
-     *         |    then return == false
-     * @return Returns true if the ships overlap.
-     *         |if(this.getDistanceBetween(ship) < this.getShipRadius() + ship.getShipRadius())
-     *         |    then return == true
-     */
-    public boolean overlap(Ship ship){
-        if(this == ship){
-            return true;
-        }
-        else{
-            double radius = this.getRadius() + ship.getRadius();
-            if(this.getDistanceBetween(ship) >= radius)
-                return false;
-            else
-                return true;
-        }
-    }
-   
-    //Defensive
-    /**
-     * A method to get the time it wil take to get two ships colliding
-     * if they wil collide.
-     * @param  ship
-     *         The ship to get the time of collision from with itself and
-     *         the ship on which the method is invoced.
-     * @post   If the ships keep moving in the same way without an one of them getting changed
-     *         in any way (velocity, position and radius must remain the same)
-     *         The ships will collide with each other after the returned amount of time.
-     *         The ships won't collide before the given amount of time given if not changed in anyway
-     *         (velocity, position and radius must remain the same)
-     *         | this.overlap(ship) == true
-     *         |    This is true after the following code:
-     *         |        this.move(this.getTimeToCollision(ship));
-     *         |        ship.move(this.getTimeToCollision(ship));
-     * @post   The ships will collide with each other after the returned amount of time.
-     *         The ships won't collide before the given amount of time given if not changed in anyway
-     *         (velocity, position and radius must remain the same)
-     *         | this.overlap(ship) == False
-     *         |    This is true after the following code:
-     *         |        If (duration < this.getTimeToCollision(ship)){
-     *         |            this.move(duration);
-     *         |            ship.move(duration);
-     *         |        }
-     * @throws IllegalArgumentException
-     *         Throws an IllegalArgumentException if the given ship is already overlapping
-     *         with the ship to which the method is invoced.
-     *         | this.overlap(ship)
-     */
-   
-    public double getTimeToCollision(Ship ship) throws IllegalArgumentException{
-           
-        double a1 = ship.getVelocity()[0] - this.getVelocity()[0];
-        double a2 = ship.getVelocity()[1] - this.getVelocity()[1];
-        double a = Helper.square(a1) + Helper.square(a2);
-        //exception 1:
-        //The two ships follow an identical path so they don't collide.
-        if (a == 0.0) {
-            return Double.POSITIVE_INFINITY;
-        }
-       
-        double b1 = ship.getPosition()[0] - this.getPosition()[0];
-        double b2 = ship.getPosition()[1] - this.getPosition()[1];
-        double b = 2*((b1 * a1) + (b2 *a2));
-       
-        double s = this.getRadius() + ship.getRadius();
-        double c = Helper.square(b1) + Helper.square(b2) - Helper.square(s);
-     
-        //exception 2:
-        //If the quadratic equation doesn't give an answer the ships' paths cross but
-        //don't the ships don't touch each other.
-        if (Helper.quadraticSolver(a, b, c)[2] == 1.0){
-            return Double.POSITIVE_INFINITY;
-        }
-        else{
-            double dt1 = Helper.quadraticSolver(a, b, c)[0];
-            double dt2 = Helper.quadraticSolver(a, b, c)[1];
-           
-          //dt exceptions:
-           
-            //  exception 3:
-            //  if both answers are negative the ships are moving away from each other.
-            if (dt1 < 0 && dt2 <0){
-                return Double.POSITIVE_INFINITY;
-            }
-            if ((dt1 <= 0 && dt2 >= 0 ) || (dt1 > 0 && dt2 < 0)){
-                throw new IllegalArgumentException("Already overlaps while calling timeToCollision");
-            }
-            if (dt1 < dt2) return dt1;
-            else return dt2 ;
-        }
-       
-}
- 
-    //Defensive
-    /**
-     *A method to get the position where two ships collide.
-     *
-     * @param ship
-     *        The ship between which and the ship to which the method invoced
-     *        the collision position is searched.
-     * @return Returns null if the ships don't collide.
-     *         | if(this.getTimeToCollision(ship) == Double.POSITIVE_INFINITY)
-     *         |    then return == null
-     * @return Returns the collision position
-     *         | double[] pos = new double[2]
-     *         | double[] cp1 = this.getDistanceTraveled(this.getTimeToCollision(ship))
-     *         | double[] cp2 = ship.getDistanceTraveled(this.getTimeToCollision(ship))
-     *         | double s = this.getShipRadius() + ship.getShipRadius()
-     *         | double diffx = Math.abs(cp2[0] - cp1[0])
-     *         | double diffy = Math.abs(cp2[1] - cp1[1])
-     *         | double cosinus, sinus
-     *         |
-     *         |if(diffx != 0)
-     *         |     then cosinus = (square(diffx) + square(s) - square(diffy))/(2*diffx*s)
-     *         |          sinus = Math.sin(Math.acos(cosinus))
-     *         |          pos[0] = cp1[0] + this.getShipRadius() * cosinus
-     *         |          pos[1] = cp1[1] + this.getShipRadius() * sinus
-     *         | else
-     *         |     then pos[0] = this.getDistanceTraveled(this.getTimeToCollision(ship))[0]
-     *         |          pos[1] = this.getDistanceTraveled(this.getTimeToCollision(ship))[1] + this.getShipRadius()
-     *         | return == pos
-     * @throws IllegalArgumentException
-     *         Throws IllegalArgumentException if the ships already overlap.
-     *         | this.overlap(ship)
-     */
-    public double[] getCollisionPosition(Ship ship) throws IllegalArgumentException{
-        if(this.overlap(ship)){
-            Helper.log("Ships overlap");
-            throw new IllegalArgumentException("Ships overlap");
-        }
-        else{
-            if(this.getTimeToCollision(ship) == Double.POSITIVE_INFINITY){
-                Helper.log("Ships will never collide");
-                return null;
-            }
-            else{
-                Helper.log("Calculating collision position");
-               
-                double[] pos = new double[2];
-                double[] cp1 = this.getDistanceTraveled(this.getTimeToCollision(ship));
-                double[] cp2 = ship.getDistanceTraveled(this.getTimeToCollision(ship));
-                double s = this.getRadius() + ship.getRadius();
-                double diffx = Math.abs(cp2[0] - cp1[0]);
-                double diffy = Math.abs(cp2[1] - cp1[1]);
-                double cosinus, sinus;
-               
-                if(diffx != 0){
-                    cosinus = (Helper.square(diffx) + Helper.square(s) - Helper.square(diffy))/(2*diffx*s);
-                    sinus = Math.sin(Math.acos(cosinus));
-                    Helper.log("sinus: " + sinus + "; cosinus: " + cosinus);
-                    pos[0] = cp1[0] + this.getRadius() * cosinus;
-                    pos[1] = cp1[1] + this.getRadius() * sinus;
-                }
-                else{
-                    Helper.log("diffx is 0");
-                    pos[0] = this.getDistanceTraveled(this.getTimeToCollision(ship))[0];
-                    pos[1] = this.getDistanceTraveled(this.getTimeToCollision(ship))[1] + this.getRadius();
-                }
-               
-                return pos;
-            }
-        }
-    }
-   
-    //Nominal
-    /**
-     * A helper method to get the centre of a ship when it traveled over a time.
-     *
-     * @param  time
-     *         The time over which the ship moves.
-     * @pre    time must be bigger then zero and musn't be infinty.
-     *         | (time > 0) && Helper.isValidDouble(time)
-     * @return Returns an array of length two, which contains the coordinates of the center of the ship when it
-     *         has moved over time.
-     *         | double pos[] = new double[2]
-     *         |pos[0] = this.position[0] + this.velocity[0] * time
-     *         |pos[1] = this.position[1] + this.velocity[1] * time
-     *         |return == pos
-     */
-    public double[] getDistanceTraveled(double time){
-        assert ((time > 0) && Helper.isValidDouble(time));
-        double pos[] = new double[2];
-        pos[0] = this.getPosition()[0] + this.getVelocity()[0] * time;
-        pos[1] = this.getPosition()[1] + this.getVelocity()[1] * time;
-        return pos;
-    }
-   
     //Total
     /**
      * A helper method to convort radian notation bigger or equal to 2*Pi
@@ -577,23 +359,7 @@ public class Ship extends Entity{
             }
         return radians;
     }
-   
-    //Validity checkers
-   
-    //Nominal
-    /**
-     * Check whether the given direction is a valid direction for
-     * a ship.
-     *
-     * @param   direction
-     *          The orienation to check.
-     * @return  True if and only if the given direction is bigger or equal to zero and smaller or equal to 2*pi.
-     *         | result == ((direction >= 0) && (direction <= (2*Math.PI))
-     */
-    public boolean isValidDirection(double direction){
-        //return ((direction >= 0) && (direction <= 2*Math.PI));
-    	return Helper.isValidDouble(direction);
-    }
+
 
 	/**
 	 * Return the set of all bullets loaded on <code>ship</code>.
@@ -651,7 +417,9 @@ public class Ship extends Entity{
 	}
 
 	/**
-	 * <code>ship</code> fires a bullet.
+	 * Fire a bullet from the ship
+	 * 
+	 * @effect
 	 */
 	@Raw
 	public void fireBullet() {
@@ -661,6 +429,9 @@ public class Ship extends Entity{
 				this.removeBulletFromShip(bullet);
 				World world = this.superWorld;
 				world.addBulletToWorld(bullet);
+				bullet.setSuperWorld(world);
+				bullet.setPosition(this.getPosition()[0] + ((this.getRadius() + bullet.getRadius()) * Math.cos(this.direction)), this.getPosition()[1] + ((this.getRadius() + bullet.getRadius()) * Math.sin(this.direction)));
+				bullet.setVelocity(250 * Math.cos(this.getShipDirection()), 250 * Math.sin(this.getShipDirection()));
 			}
 			else{
 				Helper.log("Trying to fire invalid bullet");
@@ -670,6 +441,24 @@ public class Ship extends Entity{
 			Helper.log("Trying to fire a bullet but you've run out!");
 		}
 	}
+	
+	   
+    //Validity checkers
+   
+    //Nominal
+    /**
+     * Check whether the given direction is a valid direction for
+     * a ship.
+     *
+     * @param   direction
+     *          The orienation to check.
+     * @return  True if and only if the given direction is bigger or equal to zero and smaller or equal to 2*pi.
+     *         | result == ((direction >= 0) && (direction <= (2*Math.PI))
+     */
+    public boolean isValidDirection(double direction){
+        //return ((direction >= 0) && (direction <= 2*Math.PI));
+    	return Helper.isValidDouble(direction);
+    }
    
     //Total
     /**

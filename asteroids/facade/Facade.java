@@ -152,8 +152,7 @@ public class Facade implements IFacade {
 	 * Return whether <code>ship</code>'s thruster is active.
 	 */
 	public boolean isShipThrusterActive(Ship ship) throws ModelException {
-		//return ship.isShipThrusterActive();
-		return false;
+		return ship.isShipThrusterActive();
 	}
 
 	/**
@@ -161,15 +160,17 @@ public class Facade implements IFacade {
 	 * of the parameter <code>active</code>.
 	 */
 	public void setThrusterActive(Ship ship, boolean active) throws ModelException {
-		//Ship.setThrusterActive(active);
+		if(active)
+			ship.thrustOn();
+		else
+			ship.thrustOff();
 	}
 
 	/**
 	 * Return the acceleration of <code>ship</code>.
 	 */
 	public double getShipAcceleration(Ship ship) throws ModelException {
-		//return ship.getShipAcceleration();
-		return 0;
+		return ship.getShipAcceleration();
 	}
 
 	/**
