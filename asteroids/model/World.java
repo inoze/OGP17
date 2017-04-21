@@ -160,8 +160,12 @@ public class World {
 	public void addShipToWorld(Ship ship) throws IllegalArgumentException {
 		if(isValidShip(ship)){
 			if(ship.getWorld() == null){
-				ships.add(ship);
-				ship.setSuperWorld(this);
+				if(ship.getPosition()[0] > 0 && ship.getPosition()[1] > 0 && ship.getPosition()[0] + ship.getRadius() < this.getWorldSize()[0] && ship.getPosition()[1] + ship.getRadius() < this.getWorldSize()[1]){
+					ships.add(ship);
+					ship.setSuperWorld(this);
+				}
+				else
+					throw new IllegalArgumentException("Ship is out of bounds");
 			}
 			else
 				throw new IllegalArgumentException("Ship is already in a world");
