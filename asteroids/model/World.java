@@ -311,6 +311,39 @@ public class World {
 		return time;
 	}
 	
+	public double[] getNextCollisionPos(){
+		Entity[] nextCollidingEntities = getNextCollidingEntities();
+		if(nextCollidingEntities[0] == null) 
+			return new double[]{Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY};
+		if (nextCollidingEntities[1] == null) 
+			return nextCollidingEntities[0].getPositionCollisionBoundary();
+		else 
+			return nextCollidingEntities[0].getCollisionPosition(nextCollidingEntities[1]);	
+	}
+	
+	public Entity[] getNextCollidingEntities(){
+		Entity[] entities = new Entity[]{null,null};
+		double timeNextCollision = Double.POSITIVE_INFINITY;
+		for (Entity entity1 : getEntities()){
+			if (timeNextCollision > entity1.getTimeCollisionBoundary()){
+				timeNextCollision = entity1.getTimeCollisionBoundary();
+				entities = new Entity[]{entity1,null};
+			}
+			for (Entity entity2 : getEntities()){
+				if (entity1 != entity2) {
+					if (entity1.overlap(entity2)) return new Entity[]{entity1,entity2};
+					
+					if (timeNextCollision > entity1.getTimeToCollision(entity2)){
+						timeNextCollision = entity1.getTimeToCollision(entity2);
+						entities = new Entity[]{entity1,entity2};
+					}
+				}
+				
+			}
+		}
+		return entities;
+	}
+	
 	
 	//Total
 	/**
