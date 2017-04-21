@@ -33,11 +33,11 @@ public class Entity {
 	/**
 	 * Cnstant containing the density of bullets.
 	 */
-	protected final double BULLET_DENSITY = 7.8 * Math.pow(10, 12);
+	protected final double BULLET_DENSITY = 7.8E12;
 	/**
 	 * Constant containing the density of bullets.
 	 */
-	protected final double SHIP_DENSITY = 1.42 * Math.pow(10, 12);
+	protected final double SHIP_DENSITY = 1.42E12;
 	/**
 	 * Constant containing the minimal radien of a bullet.
 	 */
@@ -71,7 +71,7 @@ public class Entity {
     /**
      * Variable containing whether the entity is terminated.
      */
-    protected boolean isTerminated;
+    protected boolean isTerminated = false;
     /**
      * Variable containing the individual mass of the entity.
      */
@@ -166,8 +166,7 @@ public class Entity {
 	 */
     @Basic
 	public World getWorld() {
-		//return ship.getShipWorld();
-		return null;
+		return this.superWorld;
 	}
     /**
      * Returns whether the entity is terminated.
@@ -300,7 +299,7 @@ public class Entity {
                    this.setPosition(this.getPosition()[0] + (this.getVelocity()[0] * dt), this.getPosition()[1] + (this.getVelocity()[1] * dt));
             }
             catch (IllegalArgumentException ex){
-                throw new IllegalArgumentException(ex);
+                throw new IllegalArgumentException(ex.getMessage());
                 }
             }    
     }
@@ -691,6 +690,7 @@ public class Entity {
     *          |  result ==  world.isTerminatedWorld()
     */ 
    protected boolean isValidWorld(World world){
-	    return world.isTerminatedWorld();
+	   if(world == null) return false;
+	   return !(world.isTerminatedWorld());
    }
 }

@@ -184,7 +184,7 @@ public class World {
 			ship.setSuperWorld(null);
 			ships.remove(ship);
 		}
-		else	throw new IllegalArgumentException("Ship isn't in the world.");
+		//else	throw new IllegalArgumentException("Ship isn't in the world.");
 		
 	}
 
@@ -226,7 +226,7 @@ public class World {
 	 */
 	public void removeBulletFromWorld(Bullet bullet) throws IllegalArgumentException {
 		if (bullets.contains(bullet)){
-			bullet.setSuperWorld(this);
+			bullet.setSuperWorld(null);
 			bullet.terminate();
 			bullets.remove(bullet);
 		}
