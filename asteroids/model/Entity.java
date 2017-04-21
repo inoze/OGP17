@@ -328,13 +328,23 @@ public class Entity {
     	
     }
    
-    
     public void collideBoundary(){
-    	
+    	if ((position[0] + radius == this.superWorld.getWorldSize()[0]) || (position[0] - radius == 0)){
+    		this.velocity[0] = this.velocity[0] * -1;
+    	}
+    	if ((position[1] + radius == this.superWorld.getWorldSize()[1]) || (position[1] - radius == 0)){
+    		this.velocity[1] = this.velocity[1] * -1;
+    	} 	
+    	if (this instanceof Bullet){
+    		Bullet bullet = (Bullet) this;
+    			bullet.bouncesCounter();
+    	}
     }
+    
     /**
 	 * Return the shortest time in which the given entity will collide with the
 	 * boundaries of its world.
+	 * 
 	 */
 	public double getTimeCollisionBoundary() {
 		double edgeY;

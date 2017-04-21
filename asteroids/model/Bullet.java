@@ -108,4 +108,8 @@ public class Bullet extends Entity{
 			this.source = source;
 	}
 	
+	public void bouncesCounter(){
+		bounces++;
+		if (bounces > 2) this.terminateBullet();
+	}
 }
