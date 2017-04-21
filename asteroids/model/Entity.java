@@ -274,8 +274,26 @@ public class Entity {
     	else throw new IllegalArgumentException("Isn't a valid world");
     }
     
+    /**
+     * Terminate entity.
+     * 
+     * @post   The superWorld of the entity is set to null and is Terminayed is set to true.
+     *         | new.superWorld = null
+	 *	       | new.isTerminated = true
+	 * @effect If the entity is an instence of ship the ship is removed from it's superWorld.
+	 *         | this.superWorld.removeShipFromWorld((Ship) this)
+	 * @effect If the entity is an instance of bullet the bullet is removed from it's superWorld.
+	 *         | this.superWorld.removeBulletFromWorld((Bullet) this)
+     */
 	@Basic
 	public void terminate(){
+		if (this instanceof Ship){
+			this.superWorld.removeShipFromWorld((Ship) this);
+		}
+		if (this instanceof Bullet){
+			this.superWorld.removeBulletFromWorld((Bullet) this);
+		}
+		this.superWorld = null;
 		this.isTerminated = true;
 	}
 	
