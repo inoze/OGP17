@@ -337,7 +337,12 @@ public class Facade implements IFacade {
 	 * Add <code>ship</code> to <code>world</code>.
 	 */
 	public void addShipToWorld(World world, Ship ship) throws ModelException {
+		try{
 		world.addShipToWorld(ship);
+		}
+		catch(IllegalArgumentException ex){
+			throw new ModelException(ex.getMessage());
+		}
 	}
 
 	/**

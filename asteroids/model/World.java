@@ -159,8 +159,16 @@ public class World {
 	 */
 	public void addShipToWorld(Ship ship) throws IllegalArgumentException {
 		if(isValidShip(ship)){
-			ships.add(ship);
-			ship.setSuperWorld(this);
+			if(ship.getWorld() == null){
+				if(ship.getPosition()[0] > 0 && ship.getPosition()[1] > 0 && ship.getPosition()[0] + ship.getRadius() < this.getWorldSize()[0] && ship.getPosition()[1] + ship.getRadius() < this.getWorldSize()[1]){
+					ships.add(ship);
+					ship.setSuperWorld(this);
+				}
+				else
+					throw new IllegalArgumentException("Ship is out of bounds");
+			}
+			else
+				throw new IllegalArgumentException("Ship is already in a world");
 		}
 		else	throw new IllegalArgumentException("ship isn't a valid Ship.");
 	}
@@ -220,6 +228,11 @@ public class World {
 	 */
 	public void removeBulletFromWorld(Bullet bullet) throws IllegalArgumentException {
 		if (bullets.contains(bullet)){
+<<<<<<< HEAD
+=======
+			//bullet.setSuperWorld(null);
+			//bullet.terminate();
+>>>>>>> e47354d4a3e374a0e779bd831d39d482ac207574
 			bullets.remove(bullet);
 		}
 		else	throw new IllegalArgumentException("bullet isn't in the world.");
