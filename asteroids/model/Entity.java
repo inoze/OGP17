@@ -511,7 +511,9 @@ public class Entity {
                 return Double.POSITIVE_INFINITY;
             }
             if ((dt1 <= 0 && dt2 >= 0 ) || (dt1 > 0 && dt2 < 0)){
-                throw new IllegalArgumentException("Already overlaps while calling timeToCollision");
+                //throw new IllegalArgumentException("Already overlaps while calling timeToCollision");
+            	Helper.log("Ships already overlap when calling timeToCollision");
+            	return Double.POSITIVE_INFINITY;
             }
             if (dt1 < dt2) return dt1;
             else return dt2 ;
