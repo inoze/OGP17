@@ -294,10 +294,7 @@ public class Entity {
 		if (this instanceof Bullet){
 			if(superWorld != null)
 				this.superWorld.removeShipFromWorld((Ship) this);
-<<<<<<< HEAD
 				this.superWorld.removeBulletFromWorld((Bullet) this);
-=======
->>>>>>> b5fff61307d9760834635a3d067d33ce2b4ea3dd
 		}
 		this.superWorld = null;
 		this.isTerminated = true;
