@@ -294,7 +294,10 @@ public class Entity {
 		if (this instanceof Bullet){
 			if(superWorld != null)
 				this.superWorld.removeShipFromWorld((Ship) this);
+<<<<<<< HEAD
 				this.superWorld.removeBulletFromWorld((Bullet) this);
+=======
+>>>>>>> b5fff61307d9760834635a3d067d33ce2b4ea3dd
 		}
 		this.superWorld = null;
 		this.isTerminated = true;
@@ -424,31 +427,21 @@ public class Entity {
     /**
      * A method to check whether two entity overlap.
      *
-     * @param  entity
-     *         The entity to check whether it and the ship on which the method is invoced
-     *         are overlapping.
-     * @return Returns true if the entity on which the method is invoced is the
-     *         the same entity as entity.
-     *         | if(this == entity)
-     *         |    then return == true
-     * @return Returns false if the entity don't overlap.
-     *         |if(this.getDistanceBetween(entity) >= this.getRadius() + entity.getRadius())
-     *         |    then return == false
-     * @return Returns true if the entities overlap.
-     *         |if(this.getDistanceBetween(entity) < this.getRadius() + entity.getRadius())
-     *         |    then return == true
+     * @param   entity
+     *          The entity to check whether it and the ship on which the method is invoced
+     *          are overlapping.
+     * @return  Returns true if the entity on which the method is invoced is the
+     *          the same entity as entity.
+     *          | if(this == entity)
+     *          |    then return == true
+     * @return  Returns whether the entitiies overlap.
+     *          | return (this.getDistanceBetween(entity)/(this.getRadius()+entity.getRadius()) <= -0.01)
+     * @throws  IllegalArgumentException
+     *          Throws an IllegalArgumentException if the argument entity is null.
+     *          | entity == null
+     *          
      */
     public boolean overlap(Entity entity){
-        /*if(this == entity){
-            return true;
-        }
-        else{
-            double radius = this.getRadius() + entity.getRadius();
-            if(this.getDistanceBetween(entity) >= radius)
-                return false;
-            else
-                return true;
-        }*/
     	if (entity == null) throw new IllegalArgumentException("The second entity does not exist.");
 		if (this == entity) return true;
 		else return (this.getDistanceBetween(entity)/(this.getRadius()+entity.getRadius()) <= -0.01);
