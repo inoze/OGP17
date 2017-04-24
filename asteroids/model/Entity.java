@@ -1,6 +1,5 @@
 package asteroids.model;
 
-import asteroids.util.ModelException;
 import be.kuleuven.cs.som.annotate.*;
 
 /**
