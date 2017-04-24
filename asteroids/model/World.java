@@ -160,7 +160,7 @@ public class World {
 	public void addShipToWorld(Ship ship) throws IllegalArgumentException {
 		if(isValidShip(ship)){
 			if(ship.getWorld() == null){
-				if(this.entityAt(ship.getPosition()[0], ship.getPosition()[1]) == null && !(entityOverlap(ship))){
+				if(this.entityAt(ship.getPosition()[0], ship.getPosition()[1]) == null){
 					if(ship.getPosition()[0] > 0 && ship.getPosition()[1] > 0 && ship.getPosition()[0] + ship.getRadius() < this.getWorldSize()[0] && ship.getPosition()[1] + ship.getRadius() < this.getWorldSize()[1]){
 						ships.add(ship);
 						ship.setSuperWorld(this);

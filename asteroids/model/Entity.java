@@ -175,7 +175,7 @@ public class Entity {
     public boolean isTerminated(){
     	return this.isTerminated;
     }
-    
+   
 
     //Defensive
     /**
@@ -574,7 +574,7 @@ public class Entity {
      */
    
     public double getTimeToCollision(Entity entity) throws IllegalArgumentException{
-           
+    	
         double a1 = entity.getVelocity()[0] - this.getVelocity()[0];
         double a2 = entity.getVelocity()[1] - this.getVelocity()[1];
         double a = Helper.square(a1) + Helper.square(a2);
