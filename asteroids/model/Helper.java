@@ -106,4 +106,5 @@ public class Helper {
         assert isValidDouble(x);
         return Math.pow(x, 2);
     }
+    
 }
