@@ -396,14 +396,14 @@ public class Entity {
     *		  |					bullet.bouncesCounter()	 
     */
     public void collideBoundary(){
-    	if ((position[0] + radius == this.superWorld.getWorldSize()[0]) || (position[0] - radius == 0)){
+    	if ((position[0] + radius == this.superWorld.getWorldSize()[0]) || (0.0 == position[0] - radius)){
     		if (this instanceof Bullet){
         		Bullet bullet = (Bullet) this;
         			bullet.bouncesCounter();
         	}
     		this.velocity[0] = this.velocity[0] * -1;
     	}
-    	if ((position[1] + radius == this.superWorld.getWorldSize()[1]) || (position[1] - radius == 0)){
+    	if ((position[1] + radius == this.superWorld.getWorldSize()[1]) || (0.0 == position[1] - radius)){
     		if (this instanceof Bullet){
         		Bullet bullet = (Bullet) this;
         			bullet.bouncesCounter();
@@ -501,6 +501,7 @@ public class Entity {
 		pos[1] = this.getPosition()[1] + this.getVelocity()[1] * this.getTimeToCollision(entity);
 		return pos;
 	}
+	
 	**/
 	//Defensive
     /**
