@@ -160,17 +160,24 @@ public class World {
 	public void addShipToWorld(Ship ship) throws IllegalArgumentException {
 		if(isValidShip(ship)){
 			if(ship.getWorld() == null){
-				if(ship.getPosition()[0] > 0 && ship.getPosition()[1] > 0 && ship.getPosition()[0] + ship.getRadius() < this.getWorldSize()[0] && ship.getPosition()[1] + ship.getRadius() < this.getWorldSize()[1]){
-					ships.add(ship);
-					ship.setSuperWorld(this);
+				if(this.entityAt(ship.getPosition()[0], ship.getPosition()[1]) == null && !(entityOverlap(ship))){
+					if(ship.getPosition()[0] > 0 && ship.getPosition()[1] > 0 && ship.getPosition()[0] + ship.getRadius() < this.getWorldSize()[0] && ship.getPosition()[1] + ship.getRadius() < this.getWorldSize()[1]){
+						ships.add(ship);
+						ship.setSuperWorld(this);
+					}
+					else
+						throw new IllegalArgumentException("Ship is out of bounds");
 				}
-				else
-					throw new IllegalArgumentException("Ship is out of bounds");
+				else{
+					Helper.log("Already an entity on the position");
+				}
 			}
-			else
-				throw new IllegalArgumentException("Ship is already in a world");
-		}
-		else	throw new IllegalArgumentException("ship isn't a valid Ship.");
+			else{
+				throw new IllegalArgumentException("Ship is already in a world");}
+			}
+		else{
+			throw new IllegalArgumentException("ship isn't a valid Ship.");
+			}
 	}
 
 	/**
@@ -275,6 +282,17 @@ public class World {
 		return entity;
 	}
 	
+	private boolean entityOverlap(Entity entity){
+		for (Entity a : ships) {
+			if(a.overlap(entity) && a != entity)
+				return true;
+		}
+		for (Entity a : bullets) {
+			if(a.overlap(entity))
+				return true;
+		}
+		return false;
+	}
 	/**
 	 * A method which retunrs all the entities in the world.
 	 * 
@@ -311,8 +329,9 @@ public class World {
 			else {
 				if(collisionListener != null) collisionListener.objectCollision(entities[0], entities[1], pos[0], pos[1]);
 				entities[0].collide(entities[1]);
-				Helper.log("Found entity collision");
-				Helper.log("Collision position: " + pos[0] + "; " + pos[1]);
+				//Helper.log("Found entity collision");
+				//Helper.log("Collision position: " + pos[0] + "; " + pos[1]);
+				//Helper.log("Time to collision: " + tC);
 			}
 			
 			dt = dt - tC;
@@ -332,6 +351,7 @@ public class World {
 			for (Entity entity2 : getEntities()){
 				if (entity1 != entity2) {
 					if (entity1.overlap(entity2)) return 0;
+					Helper.log("Calculating time to next collision");
 					time = Math.min(time, entity1.getTimeToCollision(entity2));
 				}
 			}

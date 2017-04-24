@@ -325,7 +325,47 @@ public class Entity {
     }
     
     public void collide(Entity entity){
-    	
+    	//if(this.getDistanceBetween(entity) > 0.99 * (this.getRadius() + entity.getRadius()) && this.getDistanceBetween(entity) < 1.01 * (this.getRadius() + entity.getRadius())){
+	    	if(this instanceof Ship){
+	    		if(entity instanceof Ship){
+	    			this.setVelocity(this.getVelocity()[0] * -1, this.getVelocity()[1] * -1);
+	    			entity.setVelocity(entity.getVelocity()[0] * -1, entity.getVelocity()[1] * -1);
+	    		}
+	    		if(entity instanceof Bullet){
+	    			Bullet bullet = (Bullet) entity;
+		    		if(bullet.getBulletSource() != entity){
+		    			this.terminate();
+		    			entity.terminate();
+		    		}
+		    		else{
+		    			Ship ship = (Ship) this;
+		    			ship.loadBulletOnShip(bullet);
+		    		}
+	    		}
+	    	}
+	    	if(this instanceof Bullet){
+	    		Bullet bullet = (Bullet) this;
+	    		if(bullet.getBulletSource() != entity){
+	    			this.terminate();
+	    			entity.terminate();
+	    		}
+	    		else{
+	    			Ship ship = (Ship) entity;
+	    			ship.loadBulletOnShip(bullet);
+	    		}
+	    	}
+    	/*}
+    	else{
+    		if(this.overlap(entity)){
+    			Helper.log("overlap detected");
+    			this.terminate();
+    			entity.terminate();
+    		}
+    		else
+    			Helper.log("[ERROR] invalid collision called");
+    			if(this instanceof Ship)
+    				this.terminate();
+    	}*/
     }
    
     public void collideBoundary(){
