@@ -395,18 +395,18 @@ public class Entity {
     */
     public void collideBoundary(){
     	if ((position[0] + radius == this.superWorld.getWorldSize()[0]) || (position[0] - radius == 0)){
-    		this.velocity[0] = this.velocity[0] * -1;
     		if (this instanceof Bullet){
         		Bullet bullet = (Bullet) this;
         			bullet.bouncesCounter();
         	}
+    		this.velocity[0] = this.velocity[0] * -1;
     	}
     	if ((position[1] + radius == this.superWorld.getWorldSize()[1]) || (position[1] - radius == 0)){
-    		this.velocity[1] = this.velocity[1] * -1;
     		if (this instanceof Bullet){
         		Bullet bullet = (Bullet) this;
         			bullet.bouncesCounter();
         	}
+    		this.velocity[1] = this.velocity[1] * -1;
     	} 	
     }
     
@@ -493,13 +493,13 @@ public class Entity {
 	 * Return the first position at which the first entity will collide with the
 	 * second entity.
 	 */
-	public double[] getPositionCollisionEntity(Entity entity) throws ModelException {
+	/**public double[] getPositionCollisionEntity(Entity entity) throws ModelException {
 		double[] pos = new double[2];
 		pos[0] = this.getPosition()[0] + this.getVelocity()[0] * this.getTimeToCollision(entity);
 		pos[1] = this.getPosition()[1] + this.getVelocity()[1] * this.getTimeToCollision(entity);
 		return pos;
 	}
-	
+	**/
 	//Defensive
     /**
      * A method to get the distance between two entities.
@@ -581,7 +581,6 @@ public class Entity {
      *         with the entity to which the method is invoced.
      *         | this.overlap(entity)
      */
-   
     public double getTimeToCollision(Entity entity) throws IllegalArgumentException{
     	
         double a1 = entity.getVelocity()[0] - this.getVelocity()[0];
@@ -664,7 +663,9 @@ public class Entity {
      *         | this.overlap(entity)
      */
     public double[] getCollisionPosition(Entity entity) throws IllegalArgumentException{
-       /*if(this.overlap(entity)){
+         
+         if(this.overlap(entity)){
+        
             Helper.log("Entities overlap");
             throw new IllegalArgumentException("Entities overlap");
         }
@@ -699,26 +700,9 @@ public class Entity {
                
                 return pos;
             }
+        }
         } 
-        */
-    	double timeToCollision = this.getTimeToCollision(entity);
-		if (timeToCollision == Double.POSITIVE_INFINITY)
-			return null;
-		double[] collisionPositionThisShip = {this.position[0] + this.velocity[0]*timeToCollision, this.position[1] + this.velocity[1]*timeToCollision};
-		double[] collisionPositionOtherShip = {entity.position[0] + entity.velocity[0]*timeToCollision, entity.position[1] + entity.velocity[1]*timeToCollision};	
-		double gradient = Math.atan((collisionPositionOtherShip[1] - collisionPositionThisShip[1])/(collisionPositionOtherShip[0] - collisionPositionThisShip[0]));
-		double xPositionCollisionPoint;
-		double yPositionCollisionPoint;
-		if (collisionPositionOtherShip[0] > collisionPositionThisShip[0])
-			xPositionCollisionPoint = collisionPositionThisShip[0] + Math.abs(this.radius*Math.cos(gradient));
-		else
-			xPositionCollisionPoint = collisionPositionThisShip[0] - Math.abs(this.radius*Math.cos(gradient));
-		if (collisionPositionOtherShip[1] > collisionPositionThisShip[1])
-			yPositionCollisionPoint = collisionPositionThisShip[1] + Math.abs(this.radius*Math.sin(gradient));
-		else
-			yPositionCollisionPoint = collisionPositionThisShip[1] - Math.abs(this.radius*Math.sin(gradient));
-		return new double[] {xPositionCollisionPoint, yPositionCollisionPoint};
-	}
+
  
    
   //Nominal
