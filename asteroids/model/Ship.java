@@ -141,8 +141,8 @@ public class Ship extends Entity{
 	public double getShipAcceleration() {
     	if (!isShipThrusterActive()) return 0;
     	Helper.log("Thruster force = " + thrusterForce);
-    	Helper.log("Mass: " + getMass());
-		return this.thrusterForce/this.getMass();
+    	Helper.log("mass: " + this.getShipTotalMass() + "; a: " + this.thrusterForce/this.getShipTotalMass());
+		return this.thrusterForce/this.getShipTotalMass();
 	}
 	
 	/**

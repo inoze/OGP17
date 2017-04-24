@@ -333,9 +333,10 @@ public class World {
 			else {
 				if(collisionListener != null) collisionListener.objectCollision(entities[0], entities[1], pos[0], pos[1]);
 				entities[0].collide(entities[1]);
-				//Helper.log("Found entity collision");
+				Helper.log("Found entity collision");
 				//Helper.log("Collision position: " + pos[0] + "; " + pos[1]);
-				//Helper.log("Time to collision: " + tC);
+				Helper.log("Time to collision: " + tC);
+				
 			}
 			
 			dt = dt - tC;
@@ -388,6 +389,15 @@ public class World {
 					if (timeNextCollision > entity1.getTimeToCollision(entity2)){
 						timeNextCollision = entity1.getTimeToCollision(entity2);
 						entities = new Entity[]{entity1,entity2};
+						Helper.log("Colliding entities: ");
+						if(entity1 instanceof Ship)
+							Helper.log("1: ship");
+						else
+							Helper.log("1: bullet");
+						if(entity2 instanceof Bullet)
+							Helper.log("2: bullet");
+						else
+							Helper.log("2: Ship");
 					}
 				}
 				

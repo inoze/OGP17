@@ -329,6 +329,7 @@ public class Entity {
     }
     
     public void collide(Entity entity){
+    	Helper.log("Colliding entities");
     	//if(this.getDistanceBetween(entity) > 0.99 * (this.getRadius() + entity.getRadius()) && this.getDistanceBetween(entity) < 1.01 * (this.getRadius() + entity.getRadius())){
 	    	if(this instanceof Ship){
 	    		if(entity instanceof Ship){
