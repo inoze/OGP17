@@ -190,11 +190,23 @@ public class Ship extends Entity{
 		this.terminate();
 	}
 
-
+    /**
+     * A method that turns on a ship's thruster
+     * 
+     * @post The thruster is set to active
+     * 		 | this.isThrusterActive = true
+     */
+    @Basic
 	public void thrustOn(){
 		this.isThrusterActive = true;
 	}
-	
+	/**
+	 * A method that turns off a ship's thruster
+	 * 
+	 * @post The thruster is set to inactive
+	 *		 | this.isThrusterActive = false
+	 */		 
+    @Basic
 	public void thrustOff(){
 		this.isThrusterActive = false;
 	}
@@ -305,14 +317,19 @@ public class Ship extends Entity{
 	}
 
 	/**
+<<<<<<< HEAD
 	 * Load <code>bullet</code> on <code>ship</code>.
 	 * 
+=======
+	 * Loads bullets on ship
+>>>>>>> 37ecc355a7ddf604c79b91fd202612f3db20ae47
 	 */
 	@Raw
 	public void loadBulletOnShip(Bullet bullet) {
 		if(isValidBullet(bullet)){
 			bullets.add(bullet);
 			bullet.setSource(this);
+			bullet.bouncesReset();
 			totalMass += bullet.mass;
 		}
 	}
@@ -357,7 +374,7 @@ public class Ship extends Entity{
 				World world = this.superWorld;
 				world.addBulletToWorld(bullet);
 				bullet.setSuperWorld(world);
-				bullet.setPosition(this.bulletSpawnCalculator(bullet.getRadius())[0] + 20, this.bulletSpawnCalculator(bullet.getRadius())[1] + 20);
+				bullet.setPosition(this.bulletSpawnCalculator(bullet.getRadius())[0], this.bulletSpawnCalculator(bullet.getRadius())[1]);
 				bullet.setVelocity(250 * Math.cos(this.getShipDirection()), 250 * Math.sin(this.getShipDirection()));
 				Helper.log("Firing a bullet");
 			}

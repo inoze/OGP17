@@ -152,7 +152,7 @@ public class World {
 	 *          Throws an IllegalArgumentException if the ship isn't a valid Ship.
 	 *          | !(isValidShip(ship))
 	 * @post    Ship is added to the hash set ships of the world to which the method is invoked
-	 *          and the ship's superWorld is set to the world the method is invoked.
+	 *          and the ship's superWorld is set to the world the method is invoked, if there isn't already an entity on that position.
 	 *          | ships.add(ship)
 	 *		    | ship.setSuperWorld(this)
 	 */
@@ -283,7 +283,13 @@ public class World {
 
 		return entity;
 	}
-	
+	/**
+	 * 
+	 * @param entity
+	 * 		  The entity from which you want to know if it overlaps with something already in this world
+	 * @return True if there's already an entity on that position
+	 * 		   | result == a.overlap(entity)
+	 */
 	private boolean entityOverlap(Entity entity){
 		for (Entity a : ships) {
 			if(a.overlap(entity) && a != entity)
@@ -346,8 +352,6 @@ public class World {
 			entities = getNextCollidingEntities();
 		}
 		for(Entity entity: getEntities()) entity.move(dt);
-		
-		
 	}
 
 	public double getTimeToNextCollision(){
