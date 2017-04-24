@@ -400,6 +400,7 @@ public class Ship extends Entity{
    
     /**
      * Checks whether a given bullet is valid.
+     * 
      * @param   bullet
      *          The bullet to check.
      * @return  True if and only if the bullet isn't terminated.
