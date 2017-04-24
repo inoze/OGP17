@@ -123,7 +123,6 @@ public class World {
 		double[] size = new double[2];
 		size[0] = this.width;
 		size[1] = this.height;
-		//Helper.log("w: " + size[0] + "; h: " + size[1]);
 		return size;
 	}
 
@@ -160,7 +159,7 @@ public class World {
 	public void addShipToWorld(Ship ship) throws IllegalArgumentException {
 		if(isValidShip(ship)){
 			if(ship.getWorld() == null){
-				if(this.entityAt(ship.getPosition()[0], ship.getPosition()[1]) == null && !(entityOverlap(ship))){
+				if(this.entityAt(ship.getPosition()[0], ship.getPosition()[1]) == null /*&& !(entityOverlap(ship))*/){
 					if(ship.getPosition()[0] > 0 && ship.getPosition()[1] > 0 && ship.getPosition()[0] + ship.getRadius() < this.getWorldSize()[0] && ship.getPosition()[1] + ship.getRadius() < this.getWorldSize()[1]){
 						ships.add(ship);
 						ship.setSuperWorld(this);
@@ -295,6 +294,7 @@ public class World {
 				Helper.log("Bullets and ship overlap at spawn");
 				return true;
 		}
+		Helper.log("KRIJG FUCKING KANKER STEEGMANS");
 		return false;
 	}
 	/**

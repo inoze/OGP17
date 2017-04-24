@@ -317,6 +317,10 @@ public class Entity {
         else{
             try {
                    this.setPosition(this.getPosition()[0] + (this.getVelocity()[0] * dt), this.getPosition()[1] + (this.getVelocity()[1] * dt));
+                   if(this instanceof Ship){
+                	   Ship ship = (Ship) this;
+                	   ship.setVelocity(ship.getVelocity()[0] + ship.getShipAcceleration() * Math.cos(ship.getShipDirection()) * dt, ship.getVelocity()[1] + ship.getShipAcceleration() * Math.sin(ship.getShipDirection())* dt);
+                   }
             }
             catch (IllegalArgumentException ex){
                 throw new IllegalArgumentException(ex.getMessage());
