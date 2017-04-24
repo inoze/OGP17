@@ -301,7 +301,6 @@ public class World {
 				Helper.log("Bullets and ship overlap at spawn");
 				return true;
 		}
-		Helper.log("KRIJG FUCKING KANKER STEEGMANS");
 		return false;
 	}
 	/**

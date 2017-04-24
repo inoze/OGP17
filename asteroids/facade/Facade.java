@@ -1,14 +1,22 @@
 package asteroids.facade;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 import asteroids.model.*;
 import asteroids.part2.facade.IFacade;
+import asteroids.part3.facade.Asteroid;
+import asteroids.part3.facade.Planetoid;
+import asteroids.part3.facade.Program;
+import asteroids.part3.programs.IProgramFactory;
 import asteroids.part2.CollisionListener;
 import asteroids.util.ModelException;
 
 public class Facade implements IFacade {
 
+	public int getNbStudentsInTeam(){
+		return 2;
+	}
 	/**
 	 * Return the position of ship as an array of length 2, with the
 	 * x-coordinate at index 0 and the y-coordinate at index 1.
@@ -504,5 +512,190 @@ public class Facade implements IFacade {
 		return world.getEntities();
 	}
 
+	/**************
+	 * WORLD: Asteroids and planetoids
+	 *************/
+
+	/**
+	 * Return all asteroids located in <code>world</code>.
+	 */
+	public Set<? extends Asteroid> getWorldAsteroids(World world) throws ModelException{}
+
+	/**
+	 * Add <code>asteroid</code> to <code>world</code>.
+	 */
+	public void addAsteroidToWorld(World world, Asteroid asteroid) throws ModelException{}
+
+	/**
+	 * Remove <code>asteroid</code> from <code>world</code>.
+	 */
+	public void removeAsteroidFromWorld(World world, Asteroid asteroid) throws ModelException{}
+
+	/**
+	 * Return all planetoids located in <code>world</code>.
+	 */
+	public Set<? extends Planetoid> getWorldPlanetoids(World world) throws ModelException{}
+
+	/**
+	 * Add <code>planetoid</code> to <code>world</code>.
+	 */
+	public void addPlanetoidToWorld(World world, Planetoid planetoid) throws ModelException{}
+
+	/**
+	 * Remove <code>planetoid</code> from <code>world</code>.
+	 */
+	public void removePlanetoidFromWorld(World world, Planetoid planetoid) throws ModelException{}
+
+	/**************
+	 * ASTEROID: Basic methods
+	 *************/
+
+	/**
+	 * Create a new non-null asteroid with the given position, velocity and
+	 * radius.
+	 * 
+	 * The asteroid is not located in a world.
+	 */
+	public Asteroid createAsteroid(double x, double y, double xVelocity, double yVelocity, double radius) throws ModelException{
+		try{
+			Asteroid asteroid =  new Asteroid(x, y, xVelocity, yVelocity, radius);
+			return asteroid;
+		}catch(IllegalArgumentException ex){
+			throw new ModelException(ex.getMessage());
+		}
+	}
+
+	/**
+	 * Terminate <code>asteroid</code>.
+	 */
+	public void terminateAsteroid(Asteroid asteroid) throws ModelException{
+		asteroid.terminate();
+	}
+
+	/**
+	 * Check whether <code>asteroid</code> is terminated.
+	 */
+	public boolean isTerminatedAsteroid(Asteroid asteroid) throws ModelException{
+		return asteroid.isTerminated();
+	}
+
+	/**
+	 * Return the position of <code>asteroid</code> as an array containing the
+	 * x-coordinate, followed by the y-coordinate.
+	 */
+	public double[] getAsteroidPosition(Asteroid asteroid) throws ModelException{
+		return asteroid.getPosition();
+	}
+
+	/**
+	 * Return the velocity of <code>asteroid</code> as an array containing the
+	 * velocity along the X-axis, followed by the velocity along the Y-axis.
+	 */
+	public double[] getAsteroidVelocity(Asteroid asteroid) throws ModelException{
+		return asteroid.getVelocity();
+	}
+
+	/**
+	 * Return the radius of <code>asteroid</code>.
+	 */
+	public double getAsteroidRadius(Asteroid asteroid) throws ModelException{
+		return asteroid.getRadius();
+	}
+
+	/**
+	 * Return the mass of <code>asteroid</code>.
+	 */
+	public double getAsteroidMass(Asteroid asteroid) throws ModelException{
+		return asteroid.getMass();
+	}
+
+	/**
+	 * Return the world in which <code>asteroid</code> is positioned.
+	 */
+	public World getAsteroidWorld(Asteroid asteroid) throws ModelException{
+		return asteroid.getWorld();
+	}
+
+	/**************
+	 * PLANETOID: Basic methods
+	 *************/
+
+	/**
+	 * Create a new non-null planetoid with the given position, velocity,
+	 * radius, and total traveled distance.
+	 * 
+	 * The planetoid is not located in a world.
+	 */
+	public Planetoid createPlanetoid(double x, double y, double xVelocity, double yVelocity, double radius,
+			double totalTraveledDistance) throws ModelException{}
+
+	/**
+	 * Terminate <code>planetoid</code>.
+	 */
+	public void terminatePlanetoid(Planetoid planetoid) throws ModelException{}
+
+	/**
+	 * Check whether <code>planetoid</code> is terminated.
+	 */
+	public boolean isTerminatedPlanetoid(Planetoid planetoid) throws ModelException{}
+
+	/**
+	 * Return the position of <code>planetoid</code> as an array containing the
+	 * x-coordinate, followed by the y-coordinate.
+	 */
+	public double[] getPlanetoidPosition(Planetoid planetoid) throws ModelException{}
+
+	/**
+	 * Return the velocity of <code>planetoid</code> as an array containing the
+	 * velocity along the X-axis, followed by the velocity along the Y-axis.
+	 */
+	public double[] getPlanetoidVelocity(Planetoid planetoid) throws ModelExceptionç{}
+
+	/**
+	 * Return the radius of <code>planetoid</code>.
+	 */
+	public double getPlanetoidRadius(Planetoid planetoid) throws ModelException{}
+
+	/**
+	 * Return the mass of <code>planetoid</code>.
+	 */
+	public double getPlanetoidMass(Planetoid planetoid) throws ModelException{}
+
+	/**
+	 * Return the total traveled distance of <code>planetoid</code>.
+	 */
+	public double getPlanetoidTotalTraveledDistance(Planetoid planetoid) throws ModelException{}
+
+	/**
+	 * Return the world in which <code>planetoid</code> is positioned.
+	 */
+	public World getPlanetoidWorld(Planetoid planetoid) throws ModelException{}
+
+	/**********
+	 * PROGRAMS
+	 **********/
+
+	/**
+	 * Return the program loaded on the given ship.
+	 */
+	public Program getShipProgram(Ship ship) throws ModelException{}
+
+	/**
+	 * Load the given program on the given ship.
+	 */
+	public void loadProgramOnShip(Ship ship, Program program) throws ModelException{}
+
+	/**
+	 * Execute the program loaded on the given ship during the given period of
+	 * time. The ship is positioned in some world. Returns null if the program
+	 * is not completely executed. Otherwise, returns the objects that have been
+	 * printed.
+	 */
+	public List<Object> executeProgram(Ship ship, double dt) throws ModelException{}
+
+	/**
+	 * Creates a new program factory.
+	 */
+	public IProgramFactory<?, ?, ?, ? extends Program> createProgramFactory() throws ModelException{}
 }
 
