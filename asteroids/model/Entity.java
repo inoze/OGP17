@@ -659,7 +659,7 @@ public class Entity {
      *         | this.overlap(entity)
      */
     public double[] getCollisionPosition(Entity entity) throws IllegalArgumentException{
-        if(this.overlap(entity)){
+       /*if(this.overlap(entity)){
             Helper.log("Entities overlap");
             throw new IllegalArgumentException("Entities overlap");
         }
@@ -694,8 +694,27 @@ public class Entity {
                
                 return pos;
             }
-        }
-    }
+        } 
+        */
+    	double timeToCollision = this.getTimeToCollision(entity);
+		if (timeToCollision == Double.POSITIVE_INFINITY)
+			return null;
+		double[] collisionPositionThisShip = {this.position[0] + this.velocity[0]*timeToCollision, this.position[1] + this.velocity[1]*timeToCollision};
+		double[] collisionPositionOtherShip = {entity.position[0] + entity.velocity[0]*timeToCollision, entity.position[1] + entity.velocity[1]*timeToCollision};	
+		double gradient = Math.atan((collisionPositionOtherShip[1] - collisionPositionThisShip[1])/(collisionPositionOtherShip[0] - collisionPositionThisShip[0]));
+		double xPositionCollisionPoint;
+		double yPositionCollisionPoint;
+		if (collisionPositionOtherShip[0] > collisionPositionThisShip[0])
+			xPositionCollisionPoint = collisionPositionThisShip[0] + Math.abs(this.radius*Math.cos(gradient));
+		else
+			xPositionCollisionPoint = collisionPositionThisShip[0] - Math.abs(this.radius*Math.cos(gradient));
+		if (collisionPositionOtherShip[1] > collisionPositionThisShip[1])
+			yPositionCollisionPoint = collisionPositionThisShip[1] + Math.abs(this.radius*Math.sin(gradient));
+		else
+			yPositionCollisionPoint = collisionPositionThisShip[1] - Math.abs(this.radius*Math.sin(gradient));
+		return new double[] {xPositionCollisionPoint, yPositionCollisionPoint};
+	}
+ 
    
   //Nominal
     /**
