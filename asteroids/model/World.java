@@ -123,7 +123,7 @@ public class World {
 		double[] size = new double[2];
 		size[0] = this.width;
 		size[1] = this.height;
-		Helper.log("w: " + size[0] + "; h: " + size[1]);
+		//Helper.log("w: " + size[0] + "; h: " + size[1]);
 		return size;
 	}
 
@@ -295,18 +295,24 @@ public class World {
 	public void evolve(double dt, CollisionListener collisionListener){
 		if(dt < 0 || !(Helper.isValidDouble(dt)))
 			throw new IllegalArgumentException("Time given at evolve is invalid");
+		Helper.log("evolving world");
 		double tC = getTimeToNextCollision();
+		Helper.log("getting tC: " + tC);
 		double[] pos = getNextCollisionPos();
+		Helper.log("Getting pos: " + pos[0] + "; " + pos[1]);
 		Entity[] entities = getNextCollidingEntities();
 		while (tC <= dt){
 			for(Entity entity: getEntities()) entity.move(tC);
 			if(entities[1] == null){
 				if(collisionListener != null) collisionListener.boundaryCollision(entities[0], pos[0], pos[1]);
 				entities[0].collideBoundary();
+				Helper.log("Found boundary collision");
 			}
 			else {
 				if(collisionListener != null) collisionListener.objectCollision(entities[0], entities[1], pos[0], pos[1]);
 				entities[0].collide(entities[1]);
+				Helper.log("Found entity collision");
+				Helper.log("Collision position: " + pos[0] + "; " + pos[1]);
 			}
 			
 			dt = dt - tC;

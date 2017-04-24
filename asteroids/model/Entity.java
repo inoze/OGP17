@@ -293,7 +293,6 @@ public class Entity {
 		}
 		if (this instanceof Bullet){
 			if(superWorld != null)
-				this.superWorld.removeShipFromWorld((Ship) this);
 				this.superWorld.removeBulletFromWorld((Bullet) this);
 		}
 		this.superWorld = null;
@@ -508,13 +507,16 @@ public class Entity {
             //  exception 3:
             //  if both answers are negative the entities are moving away from each other.
             if (dt1 < 0 && dt2 <0){
+            	//Helper.log("Ships are moving away from eachother");
                 return Double.POSITIVE_INFINITY;
             }
             if ((dt1 <= 0 && dt2 >= 0 ) || (dt1 > 0 && dt2 < 0)){
                 //throw new IllegalArgumentException("Already overlaps while calling timeToCollision");
-            	Helper.log("Ships already overlap when calling timeToCollision");
-            	return Double.POSITIVE_INFINITY;
+            	//Helper.log("Ships already overlap when calling timeToCollision");
+            	//return Double.POSITIVE_INFINITY;
+            	return 0;
             }
+            //Helper.log("Ships will collide");
             if (dt1 < dt2) return dt1;
             else return dt2 ;
         }
