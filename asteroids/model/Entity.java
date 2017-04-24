@@ -349,15 +349,20 @@ public class Entity {
     public void collideBoundary(){
     	if ((position[0] + radius == this.superWorld.getWorldSize()[0]) || (position[0] - radius == 0)){
     		this.velocity[0] = this.velocity[0] * -1;
+    		if (this instanceof Bullet){
+        		Bullet bullet = (Bullet) this;
+        			bullet.bouncesCounter();
+        	}
     	}
     	if ((position[1] + radius == this.superWorld.getWorldSize()[1]) || (position[1] - radius == 0)){
     		this.velocity[1] = this.velocity[1] * -1;
+    		if (this instanceof Bullet){
+        		Bullet bullet = (Bullet) this;
+        			bullet.bouncesCounter();
+        	}
     	} 	
-    	if (this instanceof Bullet){
-    		Bullet bullet = (Bullet) this;
-    			bullet.bouncesCounter();
-    	}
     }
+    
     //Total
     /**
 	 * Return the shortest time in which the given entity will collide with the
@@ -365,11 +370,34 @@ public class Entity {
 	 * 
 	 * @return If the entity isn't in a world the shortest time to a bondary collision is POSITIVE_INFINITY.
 	 *         | if 	this.superWorld == null
-	 *         | 		then	return Double.POSITIVE_INFINITY
+	 *         | 		then	result == Double.POSITIVE_INFINITY
 	 * @return If the entity has a x and y velocity of zero the time to a boundary collision is POSITIVE_INFINITY.
 	 *         | if 	this.velocity[0] == 0 && this.velocity[1] == 0
-	 *         |		then 	return Double.POSITIVE_INFINITY
-	 * @return 
+	 *         |		then 	result == Double.POSITIVE_INFINITY
+	 * @return The method returns the shortest time to a boundary collision.
+	 *         | double edgeY
+	 *		   | double edgeX
+	 *	       | double mY = 0
+	 *	       | double mX = 0
+	 *	       |
+	 *	       | if 	velocity[0] > 0
+	 *		   |	then 	edgeX = position[0] + radius
+	 *		   |        	mX = this.superWorld.getWorldSize()[0]
+	 *	       |
+	 *	       | else 	edgeX = position[0] - radius
+	 *	       | 	
+	 *         |if 		velocity[1] > 0
+	 *	       |	then	edgeY = position[1] + radius
+	 *		   |        	mY = this.superWorld.getWorldSize()[1]
+	 *		   |
+	 *	       | else	 edgeY = position[1] - radius
+	 *	       |
+	 *	       | double tX = (mX-edgeX)/velocity[0]
+	 *	       | double tY = (mY-edgeY)/velocity[1]
+	 *	       |
+	 *	       | if 	(tX <= tY) 
+	 *         | 	then 	result == tX
+	 *	       | else 	resutl == tY
 	 */
 	public double getTimeCollisionBoundary() {
 		//Exceptions
@@ -434,7 +462,7 @@ public class Entity {
      *         | double diffx = Math.abs(this.position[0] - entity.getPosition()[0])
      *         | double diffy = Math.abs(this.position[1] - entity.getPosition()[1])
      *         | double diff = Math.sqrt(Math.abs(Helper.square(diffx) - Helper.square(diffy)))
-     *         | return == diff
+     *         | result == diff
      * @throws IllegalArgumentException
      *         Throws an IllegalArgumentException if the given entity is the same entity
      *         to which the method is invoced.
@@ -460,7 +488,7 @@ public class Entity {
      * @return  Returns true if the entity on which the method is invoced is the
      *          the same entity as entity.
      *          | if(this == entity)
-     *          |    then return == true
+     *          |    then result == true
      * @return  Returns whether the entitiies overlap.
      *          | return (this.getDistanceBetween(entity)/(this.getRadius()+entity.getRadius()) <= -0.01)
      * @throws  IllegalArgumentException
