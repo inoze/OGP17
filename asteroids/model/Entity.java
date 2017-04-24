@@ -311,7 +311,7 @@ public class Entity {
      *         | this.setShipPosition(this.position[0] + (this.velocity[0] * dt), this.position[1] + (this.velocity[1] * dt))
      */
     public void move(double dt) throws IllegalArgumentException{
-        if ((dt < 0.0) && ( Double.isInfinite(dt))){
+        if (dt < 0.0) {
         	Helper.log(Double.toString(dt));
             throw new IllegalArgumentException("Invalid time");
         }
@@ -328,6 +328,8 @@ public class Entity {
                 }
             }    
     }
+    
+    
     //TODO comments
     public void collide(Entity entity){
     	Helper.log("Colliding entities");
