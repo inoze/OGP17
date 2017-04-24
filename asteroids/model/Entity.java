@@ -327,7 +327,25 @@ public class Entity {
     public void collide(Entity entity){
     	
     }
-   
+    
+    //Total
+   /**
+    * Method that deals with collisions between entities and boundaries.
+    * 
+    * @post   If the entity collides with the vertical boundries the x velocity is multiplied by minus one.
+    * 		  | if	 (position[0] + radius == this.superWorld.getWorldSize()[0]) || (position[0] - radius == 0)
+    * 		  |		then 	new.velocity[0] = old.velocity[0] * -1
+    * @post   If the entity collides with the horizontal boundries the y velocity is multiplied by minus one.
+    * 		  | if	 (position[1] + radius == this.superWorld.getWorldSize()[1]) || (position[1] - radius == 0)
+    * 		  |		then 	this.velocity[1] = old.velocity[1] * -1
+    * @effect If the entity on which this method is invoced is a bullet and the entity collides with a boundary
+    *         the method bouncesCounter is invoced on the entity.
+    *         | if 	((position[0] + radius == this.superWorld.getWorldSize()[0]) || (position[0] - radius == 0) || 
+    *         |     (position[1] + radius == this.superWorld.getWorldSize()[1]) || (position[1] - radius == 0)) &&
+    *         |		(this instanceof Bullet)
+    *         |		then    	Bullet bullet = (Bullet) this
+    *		  |					bullet.bouncesCounter()	 
+    */
     public void collideBoundary(){
     	if ((position[0] + radius == this.superWorld.getWorldSize()[0]) || (position[0] - radius == 0)){
     		this.velocity[0] = this.velocity[0] * -1;
@@ -340,23 +358,35 @@ public class Entity {
     			bullet.bouncesCounter();
     	}
     }
-    
+    //Total
     /**
 	 * Return the shortest time in which the given entity will collide with the
 	 * boundaries of its world.
 	 * 
+	 * @return If the entity isn't in a world the shortest time to a bondary collision is POSITIVE_INFINITY.
+	 *         | if 	this.superWorld == null
+	 *         | 		then	return Double.POSITIVE_INFINITY
+	 * @return If the entity has a x and y velocity of zero the time to a boundary collision is POSITIVE_INFINITY.
+	 *         | if 	this.velocity[0] == 0 && this.velocity[1] == 0
+	 *         |		then 	return Double.POSITIVE_INFINITY
+	 * @return 
 	 */
 	public double getTimeCollisionBoundary() {
+		//Exceptions
+		if (this.superWorld == null)	return Double.POSITIVE_INFINITY;
+		if (this.velocity[0] == 0 && this.velocity[1] == 0)		return Double.POSITIVE_INFINITY;
+		
 		double edgeY;
 		double edgeX;
 		double mY = 0;
 		double mX = 0;
-		if (velocity[0] >= 0){
+		
+		if (velocity[0] > 0){
 			edgeX = position[0] + radius;
 			mX = this.superWorld.getWorldSize()[0];
 		}
 		else edgeX = position[0] - radius;
-		if (velocity[1] >= 0){
+		if (velocity[1] > 0){
 			edgeY = position[1] + radius;
 			mY = this.superWorld.getWorldSize()[1];
 		}
@@ -365,6 +395,7 @@ public class Entity {
 		double tX = (mX-edgeX)/velocity[0];
 		double tY = (mY-edgeY)/velocity[1];
 		
+		//Return the smallest value
 		if (tX <= tY) return tX;
 		else return tY;
 		
@@ -617,7 +648,7 @@ public class Entity {
         return pos;
     }
 	
-    //Total
+	//Total
     /**
     * Check whether the given velocity is a valid velocity for
     * a entity.

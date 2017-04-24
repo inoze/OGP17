@@ -107,7 +107,16 @@ public class Bullet extends Entity{
 	public void setSource(Ship source){
 			this.source = source;
 	}
-	
+	/**
+	 * A method which deals with bounces of a bullet.
+	 * 
+	 * @post   The amount of bounces in icremented.
+	 *         | new.bounces = old.bounces + 1
+	 * @effect If the bullet has three bounces or more it is terminated.
+	 *         | if	 	bounces >2
+	 *         |	then 	this.terminateBullet()
+	 */
+	@Model
 	public void bouncesCounter(){
 		bounces++;
 		if (bounces > 2) this.terminateBullet();
