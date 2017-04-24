@@ -295,7 +295,9 @@ public class Ship extends Entity{
 	}
 
 	/**
-	 * Return the number of bullets loaded on <code>ship</code>.
+	 * Return the number of bullets loaded on theship.
+	 * 
+	 * 
 	 */
 	@Basic
 	public int getNbBulletsOnShip() throws ModelException {
@@ -304,6 +306,7 @@ public class Ship extends Entity{
 
 	/**
 	 * Load <code>bullet</code> on <code>ship</code>.
+	 * 
 	 */
 	@Raw
 	public void loadBulletOnShip(Bullet bullet) {

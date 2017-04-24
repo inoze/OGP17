@@ -2,6 +2,15 @@ package asteroids.model;
 import be.kuleuven.cs.som.annotate.*;
 //import asteroids.util.ModelException;
 
+/**
+ * A method which involves a bullet.
+ * 
+ * @invar Bounces can never be more than two.
+ *        | Bouncs <= 2 
+ * 
+ * @author Brent De Bleser & Jesse Geens
+ * @version 1.0 
+ */
 public class Bullet extends Entity{
 	
 	/**
@@ -116,7 +125,7 @@ public class Bullet extends Entity{
 	 *         | if	 	bounces >2
 	 *         |	then 	this.terminateBullet()
 	 */
-	@Model
+	@Model @Raw
 	public void bouncesCounter(){
 		bounces++;
 		if (bounces > 2) this.terminateBullet();
