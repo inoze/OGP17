@@ -265,12 +265,14 @@ public class World {
 		    if (a.getPosition() == position){ 
 		    	counter++;
 		    	entity = a;
+		    	Helper.log("EntityAt");
 		    }
 		}
 		for (Entity a : bullets){
 			if (a.getPosition() == position){ 
 		    	counter++;
 		    	entity = a;
+		    	Helper.log("EntityAt");
 			}
 		}
 
@@ -285,10 +287,12 @@ public class World {
 	private boolean entityOverlap(Entity entity){
 		for (Entity a : ships) {
 			if(a.overlap(entity) && a != entity)
+				Helper.log("Ships overlap at spawn");
 				return true;
 		}
 		for (Entity a : bullets) {
 			if(a.overlap(entity))
+				Helper.log("Bullets and ship overlap at spawn");
 				return true;
 		}
 		return false;
