@@ -346,8 +346,6 @@ public class World {
 			entities = getNextCollidingEntities();
 		}
 		for(Entity entity: getEntities()) entity.move(dt);
-		
-		
 	}
 
 	public double getTimeToNextCollision(){

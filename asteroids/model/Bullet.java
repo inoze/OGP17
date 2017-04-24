@@ -121,4 +121,14 @@ public class Bullet extends Entity{
 		bounces++;
 		if (bounces > 2) this.terminateBullet();
 	}
+	
+	/**
+	 * A method that resets the amount of bounces a bullet has done
+	 * 
+	 * @post The amount of bounces is reset to zero
+	 * 		 | this.bounces = 0
+	 */
+	public void bouncesReset(){
+		this.bounces = 0;
+	}
 }

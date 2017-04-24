@@ -190,11 +190,23 @@ public class Ship extends Entity{
 		this.terminate();
 	}
 
-
+    /**
+     * A method that turns on a ship's thruster
+     * 
+     * @post The thruster is set to active
+     * 		 | this.isThrusterActive = true
+     */
+    @Basic
 	public void thrustOn(){
 		this.isThrusterActive = true;
 	}
-	
+	/**
+	 * A method that turns off a ship's thruster
+	 * 
+	 * @post The thruster is set to inactive
+	 *		 | this.isThrusterActive = false
+	 */		 
+    @Basic
 	public void thrustOff(){
 		this.isThrusterActive = false;
 	}
@@ -303,13 +315,14 @@ public class Ship extends Entity{
 	}
 
 	/**
-	 * Load <code>bullet</code> on <code>ship</code>.
+	 * Loads bullets on ship
 	 */
 	@Raw
 	public void loadBulletOnShip(Bullet bullet) {
 		if(isValidBullet(bullet)){
 			bullets.add(bullet);
 			bullet.setSource(this);
+			bullet.bouncesReset();
 			totalMass += bullet.mass;
 		}
 	}
