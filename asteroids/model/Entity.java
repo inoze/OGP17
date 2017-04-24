@@ -22,7 +22,7 @@ import be.kuleuven.cs.som.annotate.*;
  *
  *
  * @author Brent De Bleser & Jesse Geens
- * @version 1.0
+ * @version 2.92
  */
 public class Entity {
 	
@@ -312,8 +312,10 @@ public class Entity {
      *         | this.setShipPosition(this.position[0] + (this.velocity[0] * dt), this.position[1] + (this.velocity[1] * dt))
      */
     public void move(double dt) throws IllegalArgumentException{
-        if ((dt < 0.0) && ( Double.isInfinite(dt)))
+        if ((dt < 0.0) && ( Double.isInfinite(dt))){
+        	Helper.log(Double.toString(dt));
             throw new IllegalArgumentException("Invalid time");
+        }
         else{
             try {
                    this.setPosition(this.getPosition()[0] + (this.getVelocity()[0] * dt), this.getPosition()[1] + (this.getVelocity()[1] * dt));
@@ -327,7 +329,7 @@ public class Entity {
                 }
             }    
     }
-    
+    //TODO comments
     public void collide(Entity entity){
     	Helper.log("Colliding entities");
     	//if(this.getDistanceBetween(entity) > 0.99 * (this.getRadius() + entity.getRadius()) && this.getDistanceBetween(entity) < 1.01 * (this.getRadius() + entity.getRadius())){
@@ -475,6 +477,7 @@ public class Entity {
 	}
 
 	/**
+	 * TODO comments
 	 * Return the first position at which the given entity will collide with the
 	 * boundaries of its world.
 	 */
@@ -486,6 +489,7 @@ public class Entity {
 	}
 
 	/**
+	 * TODO comments
 	 * Return the first position at which the first entity will collide with the
 	 * second entity.
 	 */
