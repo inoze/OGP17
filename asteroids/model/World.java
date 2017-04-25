@@ -3,7 +3,6 @@ package asteroids.model;
 import java.util.*;
 import be.kuleuven.cs.som.annotate.*;
 import asteroids.part2.CollisionListener;
-import asteroids.util.ModelException;
 
 /**
  * A class of worlds involving width, a height, a set of
@@ -38,6 +37,14 @@ public class World {
 	 * HashSet containing all the bullets in the world.
 	 */
 	private Set<Bullet> bullets = new HashSet<Bullet>();
+	/**
+	 * HashSet containing all the planetoids in the world.
+	 */
+	private Set<Planetoid> planetoids = new HashSet<Planetoid>();
+	/**
+	 * HashSet containing all the asteroids in the world.
+	 */
+	private Set<Asteroid> asteroids = new HashSet<Asteroid>();
 	/**
 	 * A constant which conatins the maximum possible value for a dimension.
 	 */
@@ -127,19 +134,33 @@ public class World {
 	}
 
 	/**
-	 * Return all ships located within <code>world</code>.
+	 * Returns all ships located in this world
 	 */
 	@Basic
-	public Set<? extends Ship> getWorldShips() throws ModelException {
+	public Set<? extends Ship> getShips(){
 		return ships;
 	}
 
 	/**
-	 * Return all bullets located in <code>world</code>.
+	 * Returns all bullets located in this world
 	 */
 	@Basic
-	public Set<? extends Bullet> getWorldBullets() throws ModelException {
+	public Set<? extends Bullet> getBullets(){
 		return bullets;
+	}
+	/**
+	 * Returns all planetoids located in this world
+	 */
+	@Basic
+	public Set<? extends Planetoid> getPlanetoids(){
+		return planetoids;
+	}
+	/**
+	 * Returns all asteroids located in this world
+	 */
+	@Basic
+	public Set<? extends Asteroid> getAsteroids(){
+		return asteroids;
 	}
 	
 	//Defensief
@@ -157,9 +178,15 @@ public class World {
 	 *		    | ship.setSuperWorld(this)
 	 */
 	public void addShipToWorld(Ship ship) throws IllegalArgumentException {
-		if(isValidShip(ship)){
+		if(canPlaceEntity(ship)){
+			ships.add(ship);
+			ship.setSuperWorld(this);
+		}else{
+			Helper.log("Can't place entity");
+		}
+		/*if(isValidShip(ship)){
 			if(ship.getWorld() == null){
-				if(this.entityAt(ship.getPosition()[0], ship.getPosition()[1]) == null /*&& !(entityOverlap(ship))*/){
+				if(this.entityAt(ship.getPosition()[0], ship.getPosition()[1]) == null && !(entityOverlap(ship))){
 
 					if(ship.getPosition()[0] > 0 && ship.getPosition()[1] > 0 && ship.getPosition()[0] + ship.getRadius() < this.getWorldSize()[0] && ship.getPosition()[1] + ship.getRadius() < this.getWorldSize()[1]){
 						ships.add(ship);
@@ -177,7 +204,7 @@ public class World {
 			}
 		else{
 			throw new IllegalArgumentException("ship isn't a valid Ship.");
-			}
+			}*/
 	}
 
 	/**
@@ -196,7 +223,7 @@ public class World {
 		if (ships.contains(ship)){
 			ships.remove(ship);
 		}
-		//else	throw new IllegalArgumentException("Ship isn't in the world.");
+		else	throw new IllegalArgumentException("Ship isn't in the world.");
 		
 	}
 
@@ -214,7 +241,7 @@ public class World {
 	 *		    | bullet.setSuperWorld(this)
 	 */
 	public void addBulletToWorld(Bullet bullet){
-		if(isValidBullet(bullet)){
+		if(canPlaceEntity(bullet)){
 			bullets.add(bullet);
 			bullet.setSuperWorld(this);
 		}
@@ -242,6 +269,86 @@ public class World {
 		else	throw new IllegalArgumentException("bullet isn't in the world.");
 		
 	}
+	/**
+	 * Add the planetoid to the world.
+	 * 
+	 * @param   planetoid
+	 *          The planetoid to be added to the world.
+	 * @throws  IllegalArgumentExceptione
+	 *          Throws an IllegalArgumentException if the planetoid isn't a valid Planetoid.
+	 *          | !(isValidBullet(bullet))
+	 * @post    planetoid is added to the hash set planetoids of the world to which the method is invoked
+	 *          and the planetoid's superWorld is set to the world the method is invoked.
+	 *          | planetoids.add(planetoid)
+	 *		    | planetoid.setSuperWorld(this)
+	 */
+	public void addPlanetoidToWorld(Planetoid planetoid){
+		if(canPlaceEntity(planetoid)){
+			planetoids.add(planetoid);
+			planetoid.setSuperWorld(this);
+		}
+		else	throw new IllegalArgumentException("planetoid isn't a valid Planetoid.");
+	}
+
+	/**
+	 * Remove the planetoid from the world.
+	 * 
+	 * @param   planetoid
+	 *          The planetoid to be removed from the world.
+	 * @throws  IllegalArgumentException
+	 *          Throws an IllegalArgumentException if the planetoid isn't in the world.
+	 *          | !(planetoids.contains(planetoid))
+	 * @post    The planetoid is removed from the hashset planetoids
+	 *          | for each planetoid in planetoids
+	 *          |		planetoids.remove(planetoid)
+	 */
+	public void removePlanetoidFromWorld(Planetoid planetoid) throws IllegalArgumentException {
+		if (planetoids.contains(planetoid)){
+			planetoids.remove(planetoid);
+		}
+		else	throw new IllegalArgumentException("planetoid isn't in the world.");
+		
+	}	/**
+	 * Add the asteroid to the world.
+	 * 
+	 * @param   asteroid
+	 *          The asteroid to be added to the world.
+	 * @throws  IllegalArgumentExceptione
+	 *          Throws an IllegalArgumentException if the asteroid isn't a valid asteroid.
+	 *          | !(isValidasteroid(asteroid))
+	 * @post    asteroid is added to the hash set asteroids of the world to which the method is invoked
+	 *          and the asteroid's superWorld is set to the world the method is invoked.
+	 *          | asteroids.add(asteroid)
+	 *		    | bullet.setSuperWorld(this)
+	 */
+	public void addAsteroidToWorld(Asteroid asteroid){
+		if(canPlaceEntity(asteroid)){
+			asteroids.add(asteroid);
+			asteroid.setSuperWorld(this);
+		}
+		else	throw new IllegalArgumentException("asteroid isn't a valid Asteroid.");
+	}
+
+	/**
+	 * Remove the asteroid from the world.
+	 * 
+	 * @param   asteroid
+	 *          The asteroid to be removed from the world.
+	 * @throws  IllegalArgumentException
+	 *          Throws an IllegalArgumentException if the asteroid isn't in the world.
+	 *          | !(asteroids.contains(asteroid))
+	 * @post    The asteroid is removed from the hashset asteroids
+	 *          | for each asteroid in asteroids
+	 *          |		asteroids.remove(asteroid)
+	 */
+	public void removeAsteroidFromWorld(Asteroid asteroid) throws IllegalArgumentException {
+		if (asteroids.contains(asteroid)){
+			asteroids.remove(asteroid);
+		}
+		else	throw new IllegalArgumentException("asteroid isn't in the world.");
+		
+	}
+	
 	//Total
 	/**
 	 * A method that gives an entity back  if any for a given x and y coordinate.
@@ -317,6 +424,8 @@ public class World {
 		Set<Entity> entities = new HashSet<Entity>();
 		entities.addAll(bullets);
 		entities.addAll(ships);
+		entities.addAll(asteroids);
+		entities.addAll(planetoids);
 		return entities;
 	}
 	
@@ -410,6 +519,14 @@ public class World {
 		return entities;
 	}
 	
+	private boolean canPlaceEntity(Entity entity) throws IllegalArgumentException{
+		if(isValidEntity(entity)){
+			return true;
+		}
+		else{
+			throw new IllegalArgumentException("Entity is not valid");
+		}
+	}
 	
 	//Total
 	/**
@@ -456,6 +573,12 @@ public class World {
 		if(bullet.isTerminated()){
 			return false;
 		}
+		return true;
+	}
+	
+	private boolean isValidEntity(Entity entity){
+		if(entity.isTerminated())
+			return false;
 		return true;
 	}
 }
