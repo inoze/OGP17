@@ -329,14 +329,14 @@ public class Facade implements IFacade {
 	 * Return all ships located within <code>world</code>.
 	 */
 	public Set<? extends Ship> getWorldShips(World world) throws ModelException {
-		return world.getWorldShips();
+		return world.getShips();
 	}
 
 	/**
 	 * Return all bullets located in <code>world</code>.
 	 */
 	public Set<? extends Bullet> getWorldBullets(World world) throws ModelException {
-		return world.getWorldBullets();
+		return world.getBullets();
 	}
 
 	/**
@@ -524,12 +524,16 @@ public class Facade implements IFacade {
 	/**
 	 * Add <code>asteroid</code> to <code>world</code>.
 	 */
-	public void addAsteroidToWorld(World world, Asteroid asteroid) throws ModelException{}
+	public void addAsteroidToWorld(World world, Asteroid asteroid) throws ModelException{
+		world.addAsteroidToWorld(asteroid);
+	}
 
 	/**
 	 * Remove <code>asteroid</code> from <code>world</code>.
 	 */
-	public void removeAsteroidFromWorld(World world, Asteroid asteroid) throws ModelException{}
+	public void removeAsteroidFromWorld(World world, Asteroid asteroid) throws ModelException{
+		world.removeAsteroidFromWorld(asteroid);
+	}
 
 	/**
 	 * Return all planetoids located in <code>world</code>.
@@ -541,12 +545,16 @@ public class Facade implements IFacade {
 	/**
 	 * Add <code>planetoid</code> to <code>world</code>.
 	 */
-	public void addPlanetoidToWorld(World world, Planetoid planetoid) throws ModelException{}
+	public void addPlanetoidToWorld(World world, Planetoid planetoid) throws ModelException{
+		world.addPlanetoidToWorld(planetoid);
+	}
 
 	/**
 	 * Remove <code>planetoid</code> from <code>world</code>.
 	 */
-	public void removePlanetoidFromWorld(World world, Planetoid planetoid) throws ModelException{}
+	public void removePlanetoidFromWorld(World world, Planetoid planetoid) throws ModelException{
+		world.removePlanetoidFromWorld(planetoid);
+	}
 
 	/**************
 	 * ASTEROID: Basic methods
@@ -703,7 +711,8 @@ public class Facade implements IFacade {
 	/**
 	 * Return the program loaded on the given ship.
 	 */
-	public Program getShipProgram(Ship ship) throws ModelException{}
+	public Program getShipProgram(Ship ship) throws ModelException{
+	}
 
 	/**
 	 * Load the given program on the given ship.

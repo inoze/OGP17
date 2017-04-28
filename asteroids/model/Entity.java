@@ -38,6 +38,14 @@ public class Entity {
 	 */
 	protected final double SHIP_DENSITY = 1.42E12;
 	/**
+	 * Constant containing the density of asteroids.
+	 */
+	protected final double ASTEROID_DENSITY = 2.65E12;
+	/**
+	 * Constant containing the density of planetoids.
+	 */
+	protected final double PLANETOID_DENSITY = 0.917E12;
+	/**
 	 * Constant containing the minimal radien of a bullet.
 	 */
 	protected final double MINIMAL_BULLET_RAD = 1;
@@ -116,6 +124,8 @@ public class Entity {
             //Set the mass of the entity.
             if(this instanceof Bullet){this.mass = (4/3)*Math.PI*Math.pow(radius, 3)*BULLET_DENSITY;}
             if(this instanceof Ship){this.mass = (4/3)*Math.PI*Math.pow(radius, 3)*SHIP_DENSITY;}
+            if(this instanceof Asteroid){this.mass = (4/3)*Math.PI*Math.pow(radius, 3)*ASTEROID_DENSITY;}
+            if(this instanceof Planetoid){this.mass = (4/3)*Math.PI*Math.pow(radius, 3)*PLANETOID_DENSITY;}            
         } 
 		else{
 			//Defensive throw for invalid radius.

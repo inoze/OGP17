@@ -521,6 +521,10 @@ public class World {
 	
 	private boolean canPlaceEntity(Entity entity) throws IllegalArgumentException{
 		if(isValidEntity(entity)){
+			if(entityAt(entity.getPosition()[0], entity.getPosition()[1]) != null)
+				return false;
+			if(entityOverlap(entity))
+				return false;
 			return true;
 		}
 		else{
@@ -545,9 +549,7 @@ public class World {
 	}
 	
 	//Total
-	/**
-	 * Check whether the given angle is a valid angle.
-	 * 
+	/**	 * 
 	 * @param  ship
 	 *         The ship to check.
 	 * @return True if and only if the ship isn't terminated.
@@ -562,7 +564,6 @@ public class World {
 	
 	//Total
 	/**
-	 * Check whether the given angle is a valid angle.
 	 * 
 	 * @param  bullet
 	 *         The bullet to check.
@@ -576,6 +577,14 @@ public class World {
 		return true;
 	}
 	
+	//Total
+		/**
+		 * 
+		 * @param  entity
+		 *         The entity to check.
+		 * @return True if and only if the entity isn't terminated.
+		 *         | result == (!(entity.isTerminated()))
+		 */
 	private boolean isValidEntity(Entity entity){
 		if(entity.isTerminated())
 			return false;

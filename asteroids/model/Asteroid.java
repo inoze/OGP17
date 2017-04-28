@@ -1,7 +1,5 @@
 package asteroids.model;
 
-import asteroids.util.ModelException;
-
 public class Asteroid extends Entity{
 	/**
 	 * Create a new non-null asteroid with the given position, velocity and

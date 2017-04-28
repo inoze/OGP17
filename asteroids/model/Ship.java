@@ -53,7 +53,7 @@ public class Ship extends Entity{
     /**
      * Variable that determines the force the thruster exerts
      */
-    private double thrusterForce = 1.1E21;
+    private double thrusterForce = 1.1E18;
     /**
      * Variable set containing all the (references to the) bullets in the ship. 
      */
