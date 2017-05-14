@@ -524,7 +524,7 @@ public class World {
 			if(entityAt(entity.getPosition()[0], entity.getPosition()[1]) != null)
 				return false;
 			if(entityOverlap(entity))
-				return false;
+				return true;
 			return true;
 		}
 		else{

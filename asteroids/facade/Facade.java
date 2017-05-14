@@ -355,7 +355,8 @@ public class Facade implements IFacade {
 	 * Remove <code>ship</code> from <code>world</code>.
 	 */
 	public void removeShipFromWorld(World world, Ship ship) throws ModelException {
-		world.removeShipFromWorld(ship);
+		try{world.removeShipFromWorld(ship);}
+		catch(IllegalArgumentException ex){throw new ModelException(ex.getMessage());}
 	}
 
 	/**
@@ -525,14 +526,16 @@ public class Facade implements IFacade {
 	 * Add <code>asteroid</code> to <code>world</code>.
 	 */
 	public void addAsteroidToWorld(World world, Asteroid asteroid) throws ModelException{
-		world.addAsteroidToWorld(asteroid);
+		try{world.addAsteroidToWorld(asteroid);}
+		catch(IllegalArgumentException ex){throw new ModelException(ex.getMessage());}
 	}
 
 	/**
 	 * Remove <code>asteroid</code> from <code>world</code>.
 	 */
 	public void removeAsteroidFromWorld(World world, Asteroid asteroid) throws ModelException{
-		world.removeAsteroidFromWorld(asteroid);
+		try{world.removeAsteroidFromWorld(asteroid);}
+		catch(IllegalArgumentException ex){throw new ModelException(ex.getMessage());}	
 	}
 
 	/**
@@ -546,14 +549,16 @@ public class Facade implements IFacade {
 	 * Add <code>planetoid</code> to <code>world</code>.
 	 */
 	public void addPlanetoidToWorld(World world, Planetoid planetoid) throws ModelException{
-		world.addPlanetoidToWorld(planetoid);
-	}
+		try{world.addPlanetoidToWorld(planetoid);}
+		catch(IllegalArgumentException ex){throw new ModelException(ex.getMessage());}	
+		}
 
 	/**
 	 * Remove <code>planetoid</code> from <code>world</code>.
 	 */
 	public void removePlanetoidFromWorld(World world, Planetoid planetoid) throws ModelException{
-		world.removePlanetoidFromWorld(planetoid);
+		try{world.removePlanetoidFromWorld(planetoid);}
+		catch(IllegalArgumentException ex){throw new ModelException(ex.getMessage());}
 	}
 
 	/**************
@@ -712,6 +717,7 @@ public class Facade implements IFacade {
 	 * Return the program loaded on the given ship.
 	 */
 	public Program getShipProgram(Ship ship) throws ModelException{
+		return null;
 	}
 
 	/**
@@ -725,11 +731,15 @@ public class Facade implements IFacade {
 	 * is not completely executed. Otherwise, returns the objects that have been
 	 * printed.
 	 */
-	public List<Object> executeProgram(Ship ship, double dt) throws ModelException{}
+	public List<Object> executeProgram(Ship ship, double dt) throws ModelException{
+		return null;
+	}
 
 	/**
 	 * Creates a new program factory.
 	 */
-	public IProgramFactory<?, ?, ?, ? extends Program> createProgramFactory() throws ModelException{}
+	public IProgramFactory<?, ?, ?, ? extends Program> createProgramFactory() throws ModelException{
+		return null;
+	}
 }
 
