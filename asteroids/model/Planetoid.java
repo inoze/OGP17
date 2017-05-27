@@ -17,4 +17,9 @@ public class Planetoid extends Entity{
 		if(Helper.isValidDouble(totalDistanceTraveled))
 			this.totalDistanceTraveled = distance;
 	}
+	
+	@Override
+	public double getRadius(){
+		return radius-(0.000001*getTotalDistanceTraveled());
+	}
 }

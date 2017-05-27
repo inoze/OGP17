@@ -50,9 +50,17 @@ public class Entity {
 	 */
 	protected final double MINIMAL_BULLET_RAD = 1;
 	/**
-	 * constant containing the minimal radien of a ship.
+	 * constant containing the minimal radius of a ship.
 	 */
 	protected final double MINIMAL_SHIP_RAD = 10;
+	/**
+	 * constant containing the minimal radius of a ship.
+	 */
+	protected final double MINIMAL_ASTEROID_RAD = 5;
+	/**
+	 * constant containing the minimal radius of an asteroid.
+	 */
+	protected final double MINIMAL_PLANETOID_RAD = 5;
 	/**
      * Variable containing the coordinates of the ship in the form of an array with length 2.
      */
@@ -792,6 +800,8 @@ public class Entity {
 	   if  (Helper.isValidDouble(radius)){
     	   if(this instanceof Bullet)	return radius >= MINIMAL_BULLET_RAD;
     	   if(this instanceof Ship) 	return radius >= MINIMAL_SHIP_RAD;
+    	   if(this instanceof Asteroid) return radius >= MINIMAL_ASTEROID_RAD;
+    	   if(this instanceof Planetoid) return radius >= MINIMAL_PLANETOID_RAD;
        }
 	   else { 
 		   throw new IllegalArgumentException("isValidRadius is invoced to a non ship, non bullet entity.");
