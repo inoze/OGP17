@@ -344,9 +344,9 @@ public class Facade implements IFacade {
 	 */
 	public void addShipToWorld(World world, Ship ship) throws ModelException {
 		try{
-		world.addShipToWorld(ship);
+			world.addShipToWorld(ship);
 		}
-		catch(IllegalArgumentException ex){
+		catch(Exception ex){
 			throw new ModelException(ex.getMessage());
 		}
 	}
@@ -493,7 +493,11 @@ public class Facade implements IFacade {
 	 * notify methods.
 	 */
 	public void evolve(World world, double dt, CollisionListener collisionListener) throws ModelException {
-		world.evolve(dt, collisionListener);
+		try{
+			world.evolve(dt, collisionListener);
+		}catch(IllegalArgumentException ex){
+			throw new ModelException(ex.getMessage());
+		}
 	}
 
 	/**
