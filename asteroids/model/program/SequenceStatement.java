@@ -1,5 +1,5 @@
 package asteroids.model.program;
 
-public class SequenceStatement {
+public class SequenceStatement extends Statement{
 
 }
