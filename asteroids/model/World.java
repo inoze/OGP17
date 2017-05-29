@@ -459,7 +459,10 @@ public class World {
 			pos = getNextCollisionPos();
 			entities = getNextCollidingEntities();
 		}
-		for(Entity entity: getEntities()) entity.move(dt);
+		for(Entity entity: getEntities()){ 
+			if(dt > 0) entity.move(dt);
+			else Helper.log("dt is " + dt);
+		}
 	}
 
 	public double getTimeToNextCollision(){
