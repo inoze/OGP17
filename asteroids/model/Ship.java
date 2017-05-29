@@ -99,9 +99,10 @@ public class Ship extends Entity{
     	super(xPosition, yPosition, xVelocity, yVelocity, radius);
     	if(isValidDirection(direction) && isValidRadius(radius)){
             this.direction = direction;
-            if(this.getMass() > mass)
-            	throw new IllegalArgumentException("Ship is lighter than minimum density");
-            	this.setMass(mass);
+            if(Math.pow(this.getRadius(), 3) * Math.PI * (4/3) * SHIP_DENSITY > mass || !(Helper.isValidDouble(mass)))
+            	//throw new IllegalArgumentException("Ship is lighter than minimum density");
+            	Helper.log("invalid mass");
+            	this.setMass(Math.pow(this.getRadius(), 3) * Math.PI * (4/3) * SHIP_DENSITY);
         }
         else{
         	this.terminateShip();
