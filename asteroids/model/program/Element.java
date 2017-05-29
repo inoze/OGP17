@@ -1,5 +1,5 @@
 package asteroids.model.program;
 
-public class ProgramElement {
+public class Element {
 
 }
