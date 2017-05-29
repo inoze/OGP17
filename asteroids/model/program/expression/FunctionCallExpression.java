@@ -1,7 +1,27 @@
 package asteroids.model.program.expression;
 
-import asteroids.model.program.Expression;
+import java.util.List;
 
-public class FunctionCallExpression extends Expression{
+import asteroids.model.program.*;
+import asteroids.part3.programs.SourceLocation;
+
+public class FunctionCallExpression extends Element implements Expression{
+
+	protected FunctionCallExpression(SourceLocation sourceLocation) {
+		super(sourceLocation);
+		// TODO Auto-generated constructor stub
+	}
+
+	@Override
+	public Object evaluate() throws IllegalArgumentException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Object evaluate(List actualArgs) throws IllegalArgumentException {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }

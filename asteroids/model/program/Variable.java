@@ -27,12 +27,10 @@ public class Variable <T> {
 	}
 
 	public String getName() {
-		// TODO Auto-generated method stub
 		return variableName;
 	}
 	
 	public String toString(){
 		return "[Variable: " + variableName + ", " + value + "]";
 	}
-
 }

@@ -6,6 +6,8 @@ import asteroids.part3.programs.SourceLocation;
 import java.util.List;
 
 import asteroids.model.program.*;
+import asteroids.model.program.statement.*;
+import asteroids.model.program.expression.*;
 
 public class ProgramFactory implements IProgramFactory <Expression, Statement, Function, Program>{
 
@@ -23,88 +25,85 @@ public class ProgramFactory implements IProgramFactory <Expression, Statement, F
 
 	@Override
 	public Statement createAssignmentStatement(String variableName, Expression value, SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		return null;
+		AssignmentStatement assignmentStatement = new AssignmentStatement(sourceLocation);
+		return assignmentStatement;
 	}
 
 	@Override
 	public Statement createWhileStatement(Expression condition, Statement body, SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		return null;
+		WhileStatement whileStatement = new WhileStatement(sourceLocation, condition, body);
+		return whileStatement;
 	}
 
 	@Override
 	public Statement createBreakStatement(SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		return null;
+		BreakStatement breakStatement = new BreakStatement(sourceLocation);
+		return breakStatement;
 	}
 
 	@Override
 	public Statement createReturnStatement(Expression value, SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		return null;
+		ReturnStatement returnStatement = new ReturnStatement(sourceLocation, value);
+		return returnStatement;
 	}
 
 	@Override
-	public Statement createIfStatement(Expression condition, Statement ifBody, Statement elseBody,
-			SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		return null;
+	public Statement createIfStatement(Expression condition, Statement ifBody, Statement elseBody, SourceLocation sourceLocation) {
+		IfStatement ifStatement = new IfStatement(sourceLocation, condition, ifBody, elseBody);
+		return ifStatement;
 	}
 
 	@Override
 	public Statement createPrintStatement(Expression value, SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		return null;
+		PrintStatement printStatement = new PrintStatement(sourceLocation, value);
+		return printStatement;
 	}
 
 	@Override
 	public Statement createSequenceStatement(List<Statement> statements, SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		return null;
+		SequenceStatement sequenceStatement = new SequenceStatement(sourceLocation, statements);
+		return sequenceStatement;
 	}
 
 	@Override
 	public Expression createReadVariableExpression(String variableName, SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		return null;
+		ReadVariableExpression readVariableExpression = new ReadVariableExpression(sourceLocation, variableName);
+		return readVariableExpression;
 	}
 
 	@Override
 	public Expression createReadParameterExpression(String parameterName, SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		return null;
+		ReadParameterExpression readParameterExpression = new ReadParameterExpression(sourceLocation, parameterName);
+		return readParameterExpression;
 	}
 
 	@Override
-	public Expression createFunctionCallExpression(String functionName, List<Expression> actualArgs,
-			SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		return null;
+	public Expression createFunctionCallExpression(String functionName, List<Expression> actualArgs, SourceLocation sourceLocation) {
+		FunctionCallExpression functionCallExpression = new FunctionCallExpression(sourceLocation, functionName, actualArgs);
+		return functionCallExpression;
 	}
 
 	@Override
 	public Expression createChangeSignExpression(Expression expression, SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		return null;
+		ChangeSignExpression changeSignExpression = new ChangeSignExpression(sourceLocation, expression);
+		return changeSignExpression;
 	}
 
 	@Override
 	public Expression createNotExpression(Expression expression, SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		return null;
+		NotExpression notExpression = new NotExpression(sourceLocation, expression);
+		return notExpression;
 	}
 
 	@Override
 	public Expression createDoubleLiteralExpression(double value, SourceLocation location) {
-		// TODO Auto-generated method stub
-		return null;
+		DoubleLiteralExpression doubleLiteralExpression = new DoubleLiteralExpression(location, value);
 	}
 
 	@Override
 	public Expression createNullExpression(SourceLocation location) {
-		// TODO Auto-generated method stub
-		return null;
+		NullExpression nullExpression = new NullExpression(location);
+		return nullExpression;
 	}
 
 	@Override

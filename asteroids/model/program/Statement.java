@@ -1,36 +1,20 @@
 package asteroids.model.program;
 
+import java.util.Optional;
+import java.util.Set;
+
 import asteroids.model.Program;
 import asteroids.part3.programs.SourceLocation;
 
-public abstract class Statement {
 
-	private SourceLocation location;
-	private Program program;
+public interface Statement {
 
-	public Statement(SourceLocation location) {
-		this.location = location;
-	}
-
-	public abstract void execute();
-
-	public void setProgram(Program program){
-		this.program = program;
-	}
+	public void execute();
 	
-	public Program getProgram(){
-		return program;
-	}
+	void setProgram(Program program);
+	
+	Program getProgram();
 
-	public boolean hasActiveBreakStatement() {
-		return false;
-	}
-
-	public SourceLocation getSourceLocation() {
-		return location;
-	}
-
-	public boolean failedToAdvanceTime() {
-		return false;
-	}
+	SourceLocation getSourceLocation();
 }
+

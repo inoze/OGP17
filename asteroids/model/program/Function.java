@@ -26,19 +26,7 @@ public class Function {
 	}
 	
 	public Object evaluate(List<Expression> actualArgs){
-		variables = new HashSet<Variable>();
-		setHasActiveBreakStatement(false);
-		try{
-			Optional result = body.execute(actualArgs);
-			if (body.hasActiveBreakStatement()) {
-				setHasActiveBreakStatement(true);
-				return null;
-			}
-			else setHasActiveBreakStatement(false);
-			return result.get();
-		} catch (NoSuchElementException e) {
-			throw new IllegalArgumentException("Functions need a return statement");
-		}
+		return null;
 	}
 
 	private void setHasActiveBreakStatement(boolean b) {

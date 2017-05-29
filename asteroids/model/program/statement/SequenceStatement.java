@@ -8,9 +8,9 @@ import asteroids.model.program.Statement;
 import asteroids.model.program.Variable;
 import asteroids.part3.programs.SourceLocation;
 
-public class PrintStatement extends  Element implements Statement{
+public class SequenceStatement extends  Element implements Statement{
 
-	protected PrintStatement(SourceLocation sourceLocation) {
+	protected SequenceStatement(SourceLocation sourceLocation) {
 		super(sourceLocation);
 		// TODO Auto-generated constructor stub
 	}
