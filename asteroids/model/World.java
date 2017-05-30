@@ -130,28 +130,6 @@ public class World {
 	 */
 	private final double height;
 	
-	
-	/**
-	 * Variable containing whether the world is terminated.
-	 */
-	private boolean isTerminated;
-	/**
-	 * HashSet containing all the ships in the world.
-	 */
-	private Set<Ship> ships = new HashSet<Ship>();
-	/**
-	 * HashSet containing all the bullets in the world.
-	 */
-	private Set<Bullet> bullets = new HashSet<Bullet>();
-	/**
-	 * HashSet containing all the planetoids in the world.
-	 */
-	private Set<Planetoid> planetoids = new HashSet<Planetoid>();
-	/**
-	 * HashSet containing all the asteroids in the world.
-	 */
-	private Set<Asteroid> asteroids = new HashSet<Asteroid>();
-	
 	/**
 	 * Returns all entities located in this world
 	 * 
@@ -185,8 +163,7 @@ public class World {
      *		   | 		then	resultSet.add(element)
      *		   | result == result	
 	 */
-	@Basic
-	public Set<? extends Entity> getEntitiesOfTheSameCLassAs(String type){
+	public Set<? extends Entity> getEntitiesOfTheCLass(String type){
 		
 		Set<Entity> resultSet = new HashSet<Entity>();
 		for	(Entity element : entities) {
@@ -194,6 +171,134 @@ public class World {
 				resultSet.add(element);
 		}
 		return resultSet;
+	}
+	
+	/**
+	 * Add an entity to the world.
+	 * 
+	 * @param   entity
+	 *          The Entity to be added to the World.
+	 * @throws  IllegalArgumentExceptione
+	 *          Throws an IllegalArgumentException if the entity can't be placed on in the world.
+	 *          | !(canPlaceEntity(entity))
+	 * @post    entity is added to the hash set bullets of the world to which the method is invoked
+	 *          and the entity's superWorld is set to the world the method is invoked.
+	 *          | entities.add(entity)
+	 *		    | entity.setSuperWorld(this)
+	 */
+	public void addEtityToWorld(Entity entity){
+		
+		if(canPlaceEntity(entity)){
+			entities.add(entity);
+			entity.setSuperWorld(this);
+		}
+		else 	throw new IllegalArgumentException("Can't place entity in entities @ World");
+	}
+	
+	/**
+	 * Remove the Entity from the World.
+	 * 
+	 * @param   entity
+	 *          The bullet to be removed from the world.
+	 * @throws  IllegalArgumentException
+	 *          Throws an IllegalArgumentException if the bullet isn't in the world.
+	 *          | !(entities.contains(entity))
+	 * @post    The bullet is removed from the hashset bullets
+	 *          | for some element in entities
+	 *          |	if  element == entity
+	 *          |		entities.remove(elemnt)
+	 */
+	public void removeEntityFromWorld(Entity entity) throws IllegalArgumentException {
+		//Lambda #1
+		if (entities.removeIf(i -> i == entity) == false) throw new IllegalArgumentException("Entity isn't placed in the world");
+	}
+	
+	//Total
+		/**
+		 * A method that gives an entity back  if any for a given x and y coordinate.
+		 * 
+		 * @param   x
+		 *          The x coordinate to check.
+		 * @param   y 
+		 * 			The y coordinate to check
+		 * @post	If there is an entity at the given x and y return that entity.
+		 * 			| implementation
+		 * @post	If there isn't an etity at the given x and y return null.
+		 * 			| implementation
+		 * @post 	If there are multiple entities at a x and y position return null.
+		 * 			| implementation
+		 */
+		public Entity entityAt(double x, double y){
+			double[] position = {x,y};
+			int counter = 0;
+			Entity entity = null;
+			for (Entity a : ships) {
+			    if (a.getPosition() == position){ 
+			    	counter++;
+			    	entity = a;
+			    	Helper.log("EntityAt");
+			    }
+			}
+			for (Entity a : bullets){
+				if (a.getPosition() == position){ 
+			    	counter++;
+			    	entity = a;
+			    	Helper.log("EntityAt");
+				}
+			}
+
+			if (counter > 1){
+				Helper.log("More than one object on position " + position);
+				entity = null;
+			}
+
+			return entity;
+		}
+		
+	
+	/**
+	 * Checks wheter or not a Entity can be placed in the World.
+	 * 
+	 * @param	Entity
+	 * 		 	The entity to be checked.
+	 * @return	The method returns false if the Entity is already in another world. 
+	 * 			In other words if the position of the Entity doesn't equal null.
+	 * 			| if	entityAt(entity.getPosition()[0], entity.getPosition()[1]) != null
+	 * 			| 		then	result == false
+	 * @return  If the Entity isn't placed in any world, the result equals wheter or not the entity
+	 * 			overlaps with an other entity in the world.
+	 * 			| if	entityAt(entity.getPosition()[0], entity.getPosition()[1]) == null
+	 * 			|		then result == !(entityOverlap(entity))
+	 * @throws 	IllegalArgumentException
+	 * 			Throws an IllegalArgumentException if the entity is terminated.
+	 * 			| entity.isTerminated()
+	 */
+	@Model 
+	private boolean canPlaceEntity(Entity entity) throws IllegalArgumentException{
+		if(!(entity.isTerminated())){
+			if(entityAt(entity.getPosition()[0], entity.getPosition()[1]) != null)
+				return false;
+			return !(entityOverlap(entity));
+		}
+		else{
+			throw new IllegalArgumentException("Entity is not valid");
+		}
+	}
+	
+	/**
+	 * 
+	 * @param entity
+	 * 		  The entity from which you want to know if it overlaps with something already in this world
+	 * @return True if there's already an entity on that position
+	 * 		   | result == a.overlap(entity)
+	 */
+	@Model
+	private boolean entityOverlap(Entity entity){
+		for (Entity a : entities) {
+			if(a.overlap(entity))
+				return true;
+			}
+		return false;
 	}
 	
 	/**
@@ -218,7 +323,7 @@ public class World {
 	        }
 		    ships.clear();
 	        for (Bullet bullet : bullets) {
-	            this.removeBulletFromWorld(bullet);
+	            this.removeEntityFromWorld(bullet);
 	        }
 	        bullets.clear();
 	        this.isTerminated = true;
@@ -232,253 +337,11 @@ public class World {
 		return this.isTerminated;
 	}
 	
-	//Defensief
 	/**
-	 * Add a ship to the world
-	 * 
-	 * @param   Ship
-	 *          The ship to be added to the world.
-	 * @throws  IllegalArgumentExceptione
-	 *          Throws an IllegalArgumentException if the ship isn't a valid Ship.
-	 *          | !(isValidShip(ship))
-	 * @post    Ship is added to the hash set ships of the world to which the method is invoked
-	 *          and the ship's superWorld is set to the world the method is invoked, if there isn't already an entity on that position.
-	 *          | ships.add(ship)
-	 *		    | ship.setSuperWorld(this)
+	 * Variable containing whether the world is terminated.
 	 */
-	public void addShipToWorld(Ship ship) throws IllegalArgumentException {
-		if(canPlaceEntity(ship)){
-			ships.add(ship);
-			ship.setSuperWorld(this);
-		}else{
-			Helper.log("Can't place entity");
-		}
-		/*if(isValidShip(ship)){
-			if(ship.getWorld() == null){
-				if(this.entityAt(ship.getPosition()[0], ship.getPosition()[1]) == null && !(entityOverlap(ship))){
-
-					if(ship.getPosition()[0] > 0 && ship.getPosition()[1] > 0 && ship.getPosition()[0] + ship.getRadius() < this.getWorldSize()[0] && ship.getPosition()[1] + ship.getRadius() < this.getWorldSize()[1]){
-						ships.add(ship);
-						ship.setSuperWorld(this);
-					}
-					else
-						throw new IllegalArgumentException("Ship is out of bounds");
-				}
-				else{
-					Helper.log("Already an entity on the position");
-				}
-			}
-			else{
-				throw new IllegalArgumentException("Ship is already in a world");}
-			}
-		else{
-			throw new IllegalArgumentException("ship isn't a valid Ship.");
-			}*/
-	}
-
-	/**
-	 * Remove the ship from the world.
-	 * 
-	 * @param   ship
-	 *          The ship to be removed from the world.
-	 * @throws  IllegalArgumentException
-	 *          Throws an IllegalArgumentException if the ship isn't in the world.
-	 *          | !(ships.contains(ship))
-	 * @post    The ship is removed from the hashset ships
-	 *          | for each ship in ships
-	 *          |		ships.remove(ship)
-	 */
-	public void removeShipFromWorld(Ship ship) throws IllegalArgumentException {
-		if (ships.contains(ship)){
-			ships.remove(ship);
-		}
-		else	throw new IllegalArgumentException("Ship isn't in the world.");
-		
-	}
-
-	/**
-	 * Add the bullet to the world.
-	 * 
-	 * @param   bullet
-	 *          The bullet to be added to the world.
-	 * @throws  IllegalArgumentExceptione
-	 *          Throws an IllegalArgumentException if the bullet isn't a valid Bullet.
-	 *          | !(isValidBullet(bullet))
-	 * @post    bullet is added to the hash set bullets of the world to which the method is invoked
-	 *          and the bullet's superWorld is set to the world the method is invoked.
-	 *          | bullets.add(bullet)
-	 *		    | bullet.setSuperWorld(this)
-	 */
-	public void addBulletToWorld(Bullet bullet){
-		if(canPlaceEntity(bullet)){
-			bullets.add(bullet);
-			bullet.setSuperWorld(this);
-		}
-		else	throw new IllegalArgumentException("bullet isn't a valid Bullet.");
-	}
-
-	/**
-	 * Remove the bullet from the world.
-	 * 
-	 * @param   bullet
-	 *          The bullet to be removed from the world.
-	 * @throws  IllegalArgumentException
-	 *          Throws an IllegalArgumentException if the bullet isn't in the world.
-	 *          | !(bullets.contains(bullet))
-	 * @post    The bullet is removed from the hashset bullets
-	 *          | for each bullet in bullets
-	 *          |		bullets.remove(bullet)
-	 */
-	public void removeBulletFromWorld(Bullet bullet) throws IllegalArgumentException {
-		if (bullets.contains(bullet)){
-			//bullet.setSuperWorld(null);
-			//bullet.terminate();
-			bullets.remove(bullet);
-		}
-		else	throw new IllegalArgumentException("bullet isn't in the world.");
-		
-	}
-	/**
-	 * Add the planetoid to the world.
-	 * 
-	 * @param   planetoid
-	 *          The planetoid to be added to the world.
-	 * @throws  IllegalArgumentExceptione
-	 *          Throws an IllegalArgumentException if the planetoid isn't a valid Planetoid.
-	 *          | !(isValidBullet(bullet))
-	 * @post    planetoid is added to the hash set planetoids of the world to which the method is invoked
-	 *          and the planetoid's superWorld is set to the world the method is invoked.
-	 *          | planetoids.add(planetoid)
-	 *		    | planetoid.setSuperWorld(this)
-	 */
-	public void addPlanetoidToWorld(Planetoid planetoid){
-		if(canPlaceEntity(planetoid)){
-			planetoids.add(planetoid);
-			planetoid.setSuperWorld(this);
-		}
-		else	throw new IllegalArgumentException("planetoid isn't a valid Planetoid.");
-	}
-
-	/**
-	 * Remove the planetoid from the world.
-	 * 
-	 * @param   planetoid
-	 *          The planetoid to be removed from the world.
-	 * @throws  IllegalArgumentException
-	 *          Throws an IllegalArgumentException if the planetoid isn't in the world.
-	 *          | !(planetoids.contains(planetoid))
-	 * @post    The planetoid is removed from the hashset planetoids
-	 *          | for each planetoid in planetoids
-	 *          |		planetoids.remove(planetoid)
-	 */
-	public void removePlanetoidFromWorld(Planetoid planetoid) throws IllegalArgumentException {
-		if (planetoids.contains(planetoid)){
-			planetoids.remove(planetoid);
-		}
-		else	throw new IllegalArgumentException("planetoid isn't in the world.");
-		
-	}	/**
-	 * Add the asteroid to the world.
-	 * 
-	 * @param   asteroid
-	 *          The asteroid to be added to the world.
-	 * @throws  IllegalArgumentExceptione
-	 *          Throws an IllegalArgumentException if the asteroid isn't a valid asteroid.
-	 *          | !(isValidasteroid(asteroid))
-	 * @post    asteroid is added to the hash set asteroids of the world to which the method is invoked
-	 *          and the asteroid's superWorld is set to the world the method is invoked.
-	 *          | asteroids.add(asteroid)
-	 *		    | bullet.setSuperWorld(this)
-	 */
-	public void addAsteroidToWorld(Asteroid asteroid){
-		if(canPlaceEntity(asteroid)){
-			asteroids.add(asteroid);
-			asteroid.setSuperWorld(this);
-		}
-		else	throw new IllegalArgumentException("asteroid isn't a valid Asteroid.");
-	}
-
-	/**
-	 * Remove the asteroid from the world.
-	 * 
-	 * @param   asteroid
-	 *          The asteroid to be removed from the world.
-	 * @throws  IllegalArgumentException
-	 *          Throws an IllegalArgumentException if the asteroid isn't in the world.
-	 *          | !(asteroids.contains(asteroid))
-	 * @post    The asteroid is removed from the hashset asteroids
-	 *          | for each asteroid in asteroids
-	 *          |		asteroids.remove(asteroid)
-	 */
-	public void removeAsteroidFromWorld(Asteroid asteroid) throws IllegalArgumentException {
-		if (asteroids.contains(asteroid)){
-			asteroids.remove(asteroid);
-		}
-		else	throw new IllegalArgumentException("asteroid isn't in the world.");
-		
-	}
+	private boolean isTerminated;
 	
-	//Total
-	/**
-	 * A method that gives an entity back  if any for a given x and y coordinate.
-	 * 
-	 * @param   x
-	 *          The x coordinate to check.
-	 * @param   y 
-	 * 			The y coordinate to check
-	 * @post	If there is an entity at the given x and y return that entity.
-	 * 			| implementation
-	 * @post	If there isn't an etity at the given x and y return null.
-	 * 			| implementation
-	 * @post 	If there are multiple entities at a x and y position return null.
-	 * 			| implementation
-	 */
-	public Entity entityAt(double x, double y){
-		double[] position = {x,y};
-		int counter = 0;
-		Entity entity = null;
-		for (Entity a : ships) {
-		    if (a.getPosition() == position){ 
-		    	counter++;
-		    	entity = a;
-		    	Helper.log("EntityAt");
-		    }
-		}
-		for (Entity a : bullets){
-			if (a.getPosition() == position){ 
-		    	counter++;
-		    	entity = a;
-		    	Helper.log("EntityAt");
-			}
-		}
-
-		if (counter > 1){
-			Helper.log("More than one object on position " + position);
-			entity = null;
-		}
-
-		return entity;
-	}
-	/**
-	 * 
-	 * @param entity
-	 * 		  The entity from which you want to know if it overlaps with something already in this world
-	 * @return True if there's already an entity on that position
-	 * 		   | result == a.overlap(entity)
-	 */
-	private boolean entityOverlap(Entity entity){
-		for (Entity a : ships) {
-			if(a.overlap(entity) && a != entity)
-				Helper.log("Ships overlap at spawn");
-				return true;
-		}
-		for (Entity a : bullets) {
-			if(a.overlap(entity))
-				Helper.log("Bullets and ship overlap at spawn");
-				return true;
-		}
-		return false;
-	}
 	/**
 	 * A method which retunrs all the entities in the world.
 	 * 
@@ -591,61 +454,5 @@ public class World {
 		return entities;
 	}
 	
-	private boolean canPlaceEntity(Entity entity) throws IllegalArgumentException{
-		if(isValidEntity(entity)){
-			if(entityAt(entity.getPosition()[0], entity.getPosition()[1]) != null)
-				return false;
-			if(entityOverlap(entity))
-				return true;
-			return true;
-		}
-		else{
-			throw new IllegalArgumentException("Entity is not valid");
-		}
-	}
 	
-	
-	
-	//Total
-	/**	 * 
-	 * @param  ship
-	 *         The ship to check.
-	 * @return True if and only if the ship isn't terminated.
-	 *         | result == (!(ship.isTerminatedShip()))
-	 */
-	private boolean isValidShip(Ship ship){
-		if(ship.isTerminated()){
-			return false;
-		}
-		return true;
-	}
-	
-	//Total
-	/**
-	 * 
-	 * @param  bullet
-	 *         The bullet to check.
-	 * @return True if and only if the bullet isn't terminated.
-	 *         | result == (!(bullet.isTerminatedBullet()))
-	 */
-	private boolean isValidBullet(Bullet bullet){
-		if(bullet.isTerminated()){
-			return false;
-		}
-		return true;
-	}
-	
-	//Total
-		/**
-		 * 
-		 * @param  entity
-		 *         The entity to check.
-		 * @return True if and only if the entity isn't terminated.
-		 *         | result == (!(entity.isTerminated()))
-		 */
-	private boolean isValidEntity(Entity entity){
-		if(entity.isTerminated())
-			return false;
-		return true;
-	}
 }
