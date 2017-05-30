@@ -232,21 +232,13 @@ public class World {
 			double[] position = {x,y};
 			int counter = 0;
 			Entity entity = null;
-			for (Entity a : ships) {
+			for (Entity a : entities) {
 			    if (a.getPosition() == position){ 
 			    	counter++;
 			    	entity = a;
 			    	Helper.log("EntityAt");
 			    }
 			}
-			for (Entity a : bullets){
-				if (a.getPosition() == position){ 
-			    	counter++;
-			    	entity = a;
-			    	Helper.log("EntityAt");
-				}
-			}
-
 			if (counter > 1){
 				Helper.log("More than one object on position " + position);
 				entity = null;
@@ -318,14 +310,10 @@ public class World {
 	 */
 	@Basic
 	public void terminateWorld(){
-		 for (Ship ship : ships) {
-	            this.removeShipFromWorld(ship);
+		 for (Entity entity : entities) {
+	            this.removeEntityFromWorld(entity);
 	        }
-		    ships.clear();
-	        for (Bullet bullet : bullets) {
-	            this.removeEntityFromWorld(bullet);
-	        }
-	        bullets.clear();
+		    entities.clear();
 	        this.isTerminated = true;
 	}
 	
