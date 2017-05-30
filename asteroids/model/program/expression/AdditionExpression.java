@@ -48,7 +48,7 @@ public class AdditionExpression extends Element implements Expression<Double> {
 
 	@Override
 	public Double calculate(List actualArgs) throws IllegalArgumentException {
-		return this.getLeftExpression().calculate() + this.getRightExpression().calculate();
+		return this.getLeftExpression().calculate() + this.getRightExpression().calculate(actualArgs);
 	}
 
 }
