@@ -96,7 +96,7 @@ public class Ship extends Entity{
     */
 
     public Ship(double xPosition, double yPosition, double xVelocity, double yVelocity, double radius, double direction, double mass) throws IllegalArgumentException, ModelException {
-    	super(xPosition, yPosition, xVelocity, yVelocity, radius);
+    	super(xPosition, yPosition, xVelocity, yVelocity, radius, "Ship");
     	if(isValidDirection(direction) && isValidRadius(radius)){
             this.direction = direction;
             if(Math.pow(this.getRadius(), 3) * Math.PI * (4/3) * SHIP_DENSITY > mass || !(Helper.isValidDouble(mass)))
@@ -440,5 +440,6 @@ public class Ship extends Entity{
     	double[] coo = {newx,newy};
     	return coo;
     }
+    
 }
 

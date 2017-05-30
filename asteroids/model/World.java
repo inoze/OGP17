@@ -1,6 +1,11 @@
 package asteroids.model;
 
 import java.util.*;
+
+import javax.sound.sampled.AudioFileFormat.Type;
+
+import com.sun.xml.internal.bind.v2.schemagen.xmlschema.TypeHost;
+
 import be.kuleuven.cs.som.annotate.*;
 import asteroids.part2.CollisionListener;
 
@@ -12,19 +17,120 @@ import asteroids.part2.CollisionListener;
  *          | isValidDimension(width)
  * @invar   Height must be a valid dimension.
  *          | isValidDimension(height)
+ *          
  * @author  Brent De Bleser & Jesse Geens
- * @version 1.0
+ * @version 3.0
  */
 public class World {
+
 	/**
+	 * A constant which conatins the maximum possible value for a dimension.
+	 */
+	private final static Double UPPER_BOUND_WORLD = Double.MAX_VALUE;
+
+	
+	/**
+	 * Create a new world with the given width and
+	 * height.
+	 * 
+	 * @param   width
+	 *          The width of the new world.
+	 * @param   heigt
+	 *          The height of the new world.
+	 * @post    The given width and height become the width and height of the new world.
+	 *          | new.width = width
+	 *          | new.height = height
+	 * @post    If one of the given dimensions isn't a valid dimension set that dimension to the closest possible dimension.
+	 *          | if	!(isValidDimension(width))
+	 *          |	then	if		width < 0.0
+	 *          |				then	new.width = 0.0
+	 *       	|			else	new.width = UPPER_BOUND_WORLD
+	 *          | if	!(isValidDimension(height))
+	 *          |	then 	if 		height <0.0
+	 *          |				then	new.height = 0.0
+	 *          |			else	new.height = UPPPER_BOUND_WORLD
+	 */
+	@Raw
+	public World(double width, double height){
+		
+		if(isValidDimension(width))
+			this.width = width;
+		
+		else{
+			if (width < 0.0)
+				this.width = 0.0;
+			
+			else this.width = UPPER_BOUND_WORLD;
+		}
+		
+		if (isValidDimension(height))
+			this.height = height;
+		
+		else{
+			if (height < 0.0)
+				this.height = 0.0;
+			
+			else this.height = UPPER_BOUND_WORLD;
+		}
+		
+	}
+	
+	/**
+	 * Initializes a world with the default size.
+	 * 
+	 * @effect 	A new world with the highest possible dimensions.
+	 * 			| World(UPPER_BOUND_WORLD, UPPER_BOUND_WORLD)
+	 */
+	@Raw
+	public World() {
+		this(UPPER_BOUND_WORLD, UPPER_BOUND_WORLD);
+	}
+	
+	//Total
+	/**
+	 * Return the size of the world as an array containing the width,
+	 * followed by the height.
+	 * 
+	 * @return Returns the width and height of the world in array form with length 2,
+	 * 		   with the width on index 0 and haight index 1
+	 *         | double[] size = new double[2]
+	 *    	   | size[0] = this.width
+	 *	       | size[1] = this.height
+	 *         | result == size
+	 */
+	@Basic 
+	public double[] getWorldSize() {
+		double[] size = new double[2];
+		size[0] = this.width;
+		size[1] = this.height;
+		return size;
+	}
+		
+	//Total
+	/**
+	 * Check whether the given angle is a valid angle.
+	 * 
+	 * @param  dimension
+	 *         The dimension to check.
+	 * @return True if and only if dimension is smaller or equal to 0 and
+	 *         dimension is smaller or equal.
+	 *         | result == !((dimension < 0) || (dimension > Double.MAX_VALUE))
+	 */
+	@Model @Raw
+	private boolean isValidDimension(double dimension){
+		return !((dimension < 0) || (dimension > UPPER_BOUND_WORLD));
+	}
+	
 	/**
 	 * Variable containing the width of the world.
 	 */
-	private double width = 0.0;
+	private final double width;
 	/**
 	 * Variable containing the height of the world.
 	 */
-	private double height = 0.0;
+	private final double height;
+	
+	
 	/**
 	 * Variable containing whether the world is terminated.
 	 */
@@ -45,46 +151,59 @@ public class World {
 	 * HashSet containing all the asteroids in the world.
 	 */
 	private Set<Asteroid> asteroids = new HashSet<Asteroid>();
-	/**
-	 * A constant which conatins the maximum possible value for a dimension.
-	 */
-	private final static Double UPPER_BOUND_WORLD =  Double.MAX_VALUE;
-	
 	
 	/**
-	 * Create a new world with the given width and
-	 * height.
+	 * Returns all entities located in this world
 	 * 
-	 * @param   width
-	 *          The width of the new world.
-	 * @param   heigt
-	 *          The height of the new world.
-	 * @post    The given width and height become the width and height of the new world.
-	 *          | new.width = width
-	 *          | new.height = height
-	 * @throws  IllegalArgumentException
-	 *          Throws an IllegalArgumentException if the height or width isn't a valid dimension.
-	 *          | !(isValidDimension(width) && isValidDimension(height))
+	 * @result The method returns a set with all entities
+	 *         | result == entities
 	 */
-	public World(double width, double height) throws IllegalArgumentException {
-		if(isValidDimension(width) && isValidDimension(height)){
-			this.width = width;
-			this.height = height;
-		}
-		else{
-			throw new IllegalArgumentException("Invalid dimensions given @ World");
-		}
+	@Basic
+	public Set<? extends Entity> getEntities(){
+		return entities;
 	}
 	
 	/**
-	 * Initializes a world with the default size.
+	 * Return the number of entities in this world.
 	 * 
-	 * @effect 	A new world with the highest possible dimensions.
-	 * 			| World(Double.MAX_VALUE, Double.MAX_VALUE)
+	 * @return  returns the size of entities.
+	 * 			| result == entities.size()
 	 */
-	public World() {
-		this(Double.MAX_VALUE, Double.MAX_VALUE);
+	@Basic @Raw
+	public int getNbEntities() {
+		return entities.size();
 	}
+	
+	//Total
+	/**
+	 * Returns all entities located in this world
+	 * 
+	 * @result The method returns a set with all entities in the set entities of a specified type.
+	 *         | Set<Entity> resultSet = new HashSet<Entity>();
+     *		   | for each 	element in	 entities
+     *		   | 	 if 	element.typeNamrr() == type
+     *		   | 		then	resultSet.add(element)
+     *		   | result == result	
+	 */
+	@Basic
+	public Set<? extends Entity> getEntitiesOfTheSameCLassAs(String type){
+		
+		Set<Entity> resultSet = new HashSet<Entity>();
+		for	(Entity element : entities) {
+			if (element.getTypeName() == type)
+				resultSet.add(element);
+		}
+		return resultSet;
+	}
+	
+	/**
+	 * HashSet conatining all entities in the world.
+	 */
+	private Set<Entity> entities = new HashSet<Entity>();
+	
+		
+	
+	
 
 	/**
 	 * Terminate the world.
@@ -111,56 +230,6 @@ public class World {
 	@Basic @Raw
 	public boolean isTerminatedWorld(){
 		return this.isTerminated;
-	}
-	
-	//Total
-	/**
-	 * Return the size of the world as an array containing the width,
-	 * followed by the height.
-	 * 
-	 * @return Returns the width and height of the world in array form with length 2,
-	 * 		   with the width on index 0 and haight index 1
-	 *         | double[] size = new double[2]
-     *    	   | size[0] = this.width
-	 *	       | size[1] = this.height
-	 *         | result == size
-	 */
-	@Basic
-	public double[] getWorldSize() {
-		double[] size = new double[2];
-		size[0] = this.width;
-		size[1] = this.height;
-		return size;
-	}
-
-	/**
-	 * Returns all ships located in this world
-	 */
-	@Basic
-	public Set<? extends Ship> getShips(){
-		return ships;
-	}
-
-	/**
-	 * Returns all bullets located in this world
-	 */
-	@Basic
-	public Set<? extends Bullet> getBullets(){
-		return bullets;
-	}
-	/**
-	 * Returns all planetoids located in this world
-	 */
-	@Basic
-	public Set<? extends Planetoid> getPlanetoids(){
-		return planetoids;
-	}
-	/**
-	 * Returns all asteroids located in this world
-	 */
-	@Basic
-	public Set<? extends Asteroid> getAsteroids(){
-		return asteroids;
 	}
 	
 	//Defensief
@@ -419,7 +488,7 @@ public class World {
 	 *       	| entities.addAll(ships);
 	 *	        | result ==  entities 
 	 */
-	@Basic
+	/**@Basic
 	public Set<Entity> getEntities(){
 		Set<Entity> entities = new HashSet<Entity>();
 		entities.addAll(bullets);
@@ -427,7 +496,7 @@ public class World {
 		entities.addAll(asteroids);
 		entities.addAll(planetoids);
 		return entities;
-	}
+	}*/
 	
 	public void evolve(double dt, CollisionListener collisionListener){
 		if(dt < 0 || !(Helper.isValidDouble(dt)))
@@ -535,21 +604,7 @@ public class World {
 		}
 	}
 	
-	//Total
-	/**
-	 * Check whether the given angle is a valid angle.
-	 * 
-	 * @param  dimension
-	 *         The dimension to check.
-	 * @return True if and only if dimension is smaller or equal to 0,
-	 *         dimension is smaller or equal to Double.MAX_VALUE and dimesnion is finite.
-	 *         | result == ((dimension <= 0) || (dimension >= Double.MAX_VALUE) || !(Double.isFinite(dimension)))
-	 */
-	private boolean isValidDimension(double dimension){
-		if((dimension <= 0) || (dimension >= UPPER_BOUND_WORLD) || !(Double.isFinite(dimension)))
-			return false;
-		return true;
-	}
+	
 	
 	//Total
 	/**	 * 

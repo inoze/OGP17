@@ -1,7 +1,5 @@
 package asteroids.model;
 
-import be.kuleuven.cs.som.annotate.Model;
-
 /**
  * A class wiyh the sole purpose of containing often used aid-functions.
  *
@@ -13,8 +11,17 @@ public class Helper {
 	/**
      * Variable that determines whether or not debug output is enabled
      */
-    public static boolean debug = true;
+    private static boolean debug = true;
     
+    /**
+     * returns wheter or not debug is on;
+     * 
+     * @return returns the value of debug.
+     * 		   | result == debug;
+     */
+    public static boolean debugIsOn(){
+    	return debug;
+    }
     /**
      * A helper method to make a small errorMessage
      *

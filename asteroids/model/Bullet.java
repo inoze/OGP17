@@ -44,7 +44,7 @@ public class Bullet extends Entity{
 	 *          | super(x, y, xVelocity, yVelocity, radius)
 	 */
 	public Bullet(double x, double y, double xVelocity, double yVelocity, double radius) throws IllegalArgumentException {
-		super(x, y, xVelocity, yVelocity, radius);
+		super(x, y, xVelocity, yVelocity, radius,"Bullet");
 	}
 
 	
@@ -140,4 +140,5 @@ public class Bullet extends Entity{
 	public void bouncesReset(){
 		this.bounces = 0;
 	}
+	
 }

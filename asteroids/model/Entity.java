@@ -95,32 +95,39 @@ public class Entity {
 	/**
 	 * 
 	 * @param   x
-	 *          The x coordinate of the new entity
+	 *          The x coordinate of the new entity.
 	 * @param   y
-	 * 		    The y coordinate of the new entity
+	 * 		    The y coordinate of the new entity.
 	 * @param   xVelocity
-	 *          The x velocity of the new entity
+	 *          The x velocity of the new entity.
 	 * @param   yVelocity
-	 *          The y velocity of the new entity
+	 *          The y velocity of the new entity.
 	 * @param   radius
-	 *          The radius of the new entity
+	 *          The radius of the new entity.
+	 * @param   typeName
+	 *          String  representation of the type of the entity.
+	 *          
 	 * @throws  IllegalArgumentException
 	 *          Throws an IllegalArgumentException if the radius is invalid.
 	 *          | !(isValidRadius(radius))
+	 *          
 	 * @effect  x and y are used to set the position of the entity.
 	 *          | this.setPosition(x, y)       
 	 * @effect  xVelocity and yVelocity are used to set the velocity of the entity.
 	 *          | this.setVelocity(xVelocity, yVelocity)
+	 *          
 	 * @post    radius is set as the radius of the entity.
-	 *          | this.radius = radius
+	 *          | new.radius = radius
 	 * @post    If the Entity is an instance of Bullet the mass is calculated with BULLET_DENSITY.
 	 *          | if 	this instanceof Bullet
-	 *          |	then	this.mass = (4/3)*Math.PI*Math.pow(radius, 3)*BULLET_DENSITY
+	 *          |	then	new.mass = (4/3)*Math.PI*Math.pow(radius, 3)*BULLET_DENSITY
 	 * @post	If the Entity is an instance of Ship the mass is calculated with SHIP_DENSITY.
 	 *          | if 	this instanceof Ship
-	 *          |	then	this.mass = (4/3)*Math.PI*Math.pow(radius, 3)*SHIP_DENSITY
+	 *          |	then	new.mass = (4/3)*Math.PI*Math.pow(radius, 3)*SHIP_DENSITY
+	 * @post    typeName is set to the given typeName.
+	 *          | new.typeName = typeName
 	 */
-	protected Entity (double x, double y, double xVelocity, double yVelocity, double radius) throws IllegalArgumentException {
+	protected Entity (double x, double y, double xVelocity, double yVelocity, double radius, String typeName) throws IllegalArgumentException {
 		//Control if the radius is valid.
 		if(isValidRadius(radius)){
 			// Set position of entity (setter itself is defensive.
@@ -129,6 +136,8 @@ public class Entity {
             this.setVelocity(xVelocity, yVelocity);
             //Set radius of entity.
             this.radius = radius;
+            //Set the typeName of the entity.
+            this.typeName = typeName;
             //Set the mass of the entity.
             if(this instanceof Bullet){this.mass = (4/3)*Math.PI*Math.pow(radius, 3)*BULLET_DENSITY;}
             if(this instanceof Ship){this.mass = (4/3)*Math.PI*Math.pow(radius, 3)*SHIP_DENSITY;}
@@ -864,4 +873,19 @@ public class Entity {
 	   if(world == null) return false;
 	   return !(world.isTerminatedWorld());
    }
+  
+   /**
+    * returns in String form which type of Entity this is.
+    * 
+    * @return returns the typeName of this entity.
+    * 		  | result ==  typeName
+    */
+   @Basic @Immutable
+   public String getTypeName() {
+	   return typeName;
+   }
+  /**
+   * A string representation of the type of the entity.
+   */
+   private final String typeName;
 }

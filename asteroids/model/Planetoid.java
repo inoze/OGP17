@@ -5,7 +5,7 @@ public class Planetoid extends Entity{
 	private double totalDistanceTraveled;
 	
 	public Planetoid(double x, double y, double xVelocity, double yVelocity, double radius, double totalDistanceTraveled){
-		super(x, y, xVelocity, yVelocity, radius);
+		super(x, y, xVelocity, yVelocity, radius, "Planetoid");
 		this.setTotalDistanceTraveled(totalDistanceTraveled);
 	}
 	
@@ -22,4 +22,5 @@ public class Planetoid extends Entity{
 	public double getRadius(){
 		return radius-(0.000001*getTotalDistanceTraveled());
 	}
+	
 }

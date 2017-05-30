@@ -329,14 +329,14 @@ public class Facade implements IFacade {
 	 * Return all ships located within <code>world</code>.
 	 */
 	public Set<? extends Ship> getWorldShips(World world) throws ModelException {
-		return world.getShips();
+		return (Set<? extends Ship>) world.getEntitiesOfTheSameCLassAs("Ship");
 	}
 
 	/**
 	 * Return all bullets located in <code>world</code>.
 	 */
 	public Set<? extends Bullet> getWorldBullets(World world) throws ModelException {
-		return world.getBullets();
+		return (Set<? extends Bullet>) world.getEntitiesOfTheSameCLassAs("Bullet");
 	}
 
 	/**
@@ -523,7 +523,7 @@ public class Facade implements IFacade {
 	 * Return all asteroids located in <code>world</code>.
 	 */
 	public Set<? extends Asteroid> getWorldAsteroids(World world) throws ModelException{
-		return world.getAsteroids();
+		return (Set<? extends Asteroid>) world.getEntitiesOfTheSameCLassAs("Asteroid");
 	}
 
 	/**
@@ -546,7 +546,7 @@ public class Facade implements IFacade {
 	 * Return all planetoids located in <code>world</code>.
 	 */
 	public Set<? extends Planetoid> getWorldPlanetoids(World world) throws ModelException{
-		return world.getPlanetoids();
+		return (Set<? extends Planetoid>) world.getEntitiesOfTheSameCLassAs("Planetoid");
 	}
 
 	/**
