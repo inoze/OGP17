@@ -243,7 +243,7 @@ public class Facade implements IFacade {
 	 * velocity along the X-axis, followed by the velocity along the Y-axis.
 	 */
 	public double[] getBulletVelocity(Bullet bullet) throws ModelException {
-		return bullet.getPosition();
+		return bullet.getVelocity();
 	}
 
 	/**

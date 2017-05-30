@@ -6,20 +6,49 @@ import asteroids.model.program.*;
 import asteroids.part3.programs.SourceLocation;
 
 public class FunctionCallExpression extends Element implements Expression{
+	
+	private String name;
+	private List<Expression> arguments;
+	private boolean breakDiscovered;
 
-	protected FunctionCallExpression(SourceLocation sourceLocation) {
+	protected FunctionCallExpression(SourceLocation sourceLocation, String name, List<Expression> arguments) {
 		super(sourceLocation);
-		// TODO Auto-generated constructor stub
+		this.setName(name);
+		this.setArguments(arguments);
+	}
+
+	private List<Expression> getArguments() {
+		return arguments;
+	}
+
+	private String getName() {
+		return name;
+	}
+
+	private boolean isBreakDiscovered() {
+		return breakDiscovered;
+	}
+
+	private void setArguments(List<Expression> arguments) {
+		this.arguments = arguments;
+	}
+	
+	private void setBreakDiscovered(boolean breakDiscovered) {
+		this.breakDiscovered = breakDiscovered;
+	}
+
+	private void setName(String name) {
+		this.name = name;
 	}
 
 	@Override
-	public Object evaluate() throws IllegalArgumentException {
+	public Object calculate() throws IllegalArgumentException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Object evaluate(List actualArgs) throws IllegalArgumentException {
+	public Object calculate(List actualArgs) throws IllegalArgumentException {
 		// TODO Auto-generated method stub
 		return null;
 	}
