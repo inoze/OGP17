@@ -6,23 +6,31 @@ import asteroids.model.program.Element;
 import asteroids.model.program.Expression;
 import asteroids.part3.programs.SourceLocation;
 
-public class ReadVariableExpression extends Element implements Expression{
+public class ReadVariableExpression extends Element implements Expression<Object>{
+	
+	private String variableName;
 
-	protected ReadVariableExpression(SourceLocation sourceLocation) {
+	protected ReadVariableExpression(SourceLocation sourceLocation, String name) {
 		super(sourceLocation);
-		// TODO Auto-generated constructor stub
+		setVariableName(name);
+	}
+
+	public String getVariableName() {
+		return this.variableName;
+	}
+
+	public void setVariableName(String variableName) {
+		this.variableName = variableName;
 	}
 
 	@Override
-	public Object evaluate() throws IllegalArgumentException {
-		// TODO Auto-generated method stub
-		return null;
+	public Object calculate() throws IllegalArgumentException {
+		return getProgram().getVariable(variableName).getValue();
 	}
 
 	@Override
-	public Object evaluate(List actualArgs) throws IllegalArgumentException {
-		// TODO Auto-generated method stub
-		return null;
+	public Object calculate(List actualArgs) throws IllegalArgumentException {
+		return getProgram().getVariable(variableName).getValue();
 	}
 
 }

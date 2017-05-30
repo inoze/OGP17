@@ -6,23 +6,30 @@ import asteroids.model.program.Element;
 import asteroids.model.program.Expression;
 import asteroids.part3.programs.SourceLocation;
 
-public class NotExpression extends Element implements Expression{
+public class NotExpression extends Element implements Expression<Boolean>{
 
+	private Expression<Boolean> expression;
+	
 	protected NotExpression(SourceLocation sourceLocation) {
 		super(sourceLocation);
-		// TODO Auto-generated constructor stub
+	}
+
+	public Expression<Boolean> getExpression() {
+		return expression;
+	}
+
+	public void setExpression(Expression<Boolean> expression) {
+		this.expression = expression;
 	}
 
 	@Override
-	public Object evaluate() throws IllegalArgumentException {
-		// TODO Auto-generated method stub
-		return null;
+	public Boolean calculate() throws IllegalArgumentException {
+		return !expression.calculate();
 	}
 
 	@Override
-	public Object evaluate(List actualArgs) throws IllegalArgumentException {
-		// TODO Auto-generated method stub
-		return null;
+	public Boolean calculate(List<Expression> actualArgs) throws IllegalArgumentException {
+		return !expression.calculate(actualArgs);
 	}
 
 }

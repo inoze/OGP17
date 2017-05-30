@@ -14,13 +14,13 @@ public class ReadParameterExpression extends Element implements Expression{
 	}
 
 	@Override
-	public Object evaluate() throws IllegalArgumentException {
+	public Object calculate() throws IllegalArgumentException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Object evaluate(List actualArgs) throws IllegalArgumentException {
+	public Object calculate(List actualArgs) throws IllegalArgumentException {
 		// TODO Auto-generated method stub
 		return null;
 	}

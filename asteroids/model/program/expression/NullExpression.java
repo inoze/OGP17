@@ -2,26 +2,24 @@ package asteroids.model.program.expression;
 
 import java.util.List;
 
+import asteroids.model.Entity;
 import asteroids.model.program.Element;
 import asteroids.model.program.Expression;
 import asteroids.part3.programs.SourceLocation;
 
-public class NullExpression extends Element implements Expression {
+public class NullExpression extends Element implements Expression<Entity> {
 
 	protected NullExpression(SourceLocation sourceLocation) {
 		super(sourceLocation);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
-	public Object calculate() throws IllegalArgumentException {
-		// TODO Auto-generated method stub
+	public Entity calculate() throws IllegalArgumentException {
 		return null;
 	}
 
 	@Override
-	public Object calculate(List actualArgs) throws IllegalArgumentException {
-		// TODO Auto-generated method stub
+	public Entity calculate(List actualArgs) throws IllegalArgumentException {
 		return null;
 	}
 
