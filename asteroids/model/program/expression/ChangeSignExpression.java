@@ -5,23 +5,30 @@ import java.util.List;
 import asteroids.model.program.*;
 import asteroids.part3.programs.SourceLocation;
 
-public class ChangeSignExpression extends Element implements Expression{
+public class ChangeSignExpression extends Element implements Expression<Double>{
 
-	protected ChangeSignExpression(SourceLocation sourceLocation) {
+	private Expression<Double> expression;
+	
+	public ChangeSignExpression(SourceLocation sourceLocation, Expression<Double> expression) {
 		super(sourceLocation);
-		// TODO Auto-generated constructor stub
+		this.setExpression(expression);
+	}
+
+	public Expression<Double> getExpression() {
+		return this.expression;
+	}
+
+	public void setExpression(Expression<Double> expression) {
+		this.expression = expression;
 	}
 
 	@Override
-	public Object evaluate() throws IllegalArgumentException {
-		// TODO Auto-generated method stub
-		return null;
+	public Double calculate() throws IllegalArgumentException {
+		return -this.getExpression().calculate();
 	}
 
 	@Override
-	public Object evaluate(List actualArgs) throws IllegalArgumentException {
-		// TODO Auto-generated method stub
-		return null;
+	public Double calculate(List actualArgs) throws IllegalArgumentException {
+		return -this.getExpression().calculate(actualArgs);
 	}
-
 }

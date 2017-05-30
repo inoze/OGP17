@@ -98,6 +98,7 @@ public class ProgramFactory implements IProgramFactory <Expression, Statement, F
 	@Override
 	public Expression createDoubleLiteralExpression(double value, SourceLocation location) {
 		DoubleLiteralExpression doubleLiteralExpression = new DoubleLiteralExpression(location, value);
+		return doubleLiteralExpression;
 	}
 
 	@Override
