@@ -1,22 +1,23 @@
 package asteroids.model.program.expression;
 
-
 import java.util.List;
 
 import asteroids.model.Program;
-import asteroids.model.program.*;
+import asteroids.model.program.Element;
+import asteroids.model.program.Expression;
 import asteroids.part3.programs.SourceLocation;
 
-public class AdditionExpression extends Element implements Expression<Double> {
+public class EqualityExpression extends Element implements Expression<Boolean>{
+
 	private Expression<Double> leftExpression;
 	private Expression<Double> rightExpression;
-
-	public AdditionExpression(SourceLocation sourceLocation, Expression<Double> e1, Expression<Double> e2) {
-		super(sourceLocation);
-		setLeftExpression(e1);
-		setRightExpression(e2);
-	}
 	
+	protected EqualityExpression(SourceLocation sourceLocation, Expression<Double> e1, Expression<Double> e2) {
+		super(sourceLocation);
+		this.setLeftExpression(e1);
+		this.setRightExpression(e2);
+	}
+
 	private Expression<Double> getLeftExpression(){
 		return this.leftExpression;
 	}
@@ -40,15 +41,14 @@ public class AdditionExpression extends Element implements Expression<Double> {
 		this.getRightExpression().setProgram(program);
 	}
 	
-	
 	@Override
-	public Double calculate() throws IllegalArgumentException {
-		return this.getLeftExpression().calculate() + this.getRightExpression().calculate();
+	public Boolean calculate() throws IllegalArgumentException {
+		return this.getLeftExpression().calculate().equals(this.getRightExpression().calculate());
 	}
 
 	@Override
-	public Double calculate(List actualArgs) throws IllegalArgumentException {
-		return this.getLeftExpression().calculate() + this.getRightExpression().calculate(actualArgs);
+	public Boolean calculate(List actualArgs) throws IllegalArgumentException {
+		return this.getLeftExpression().calculate(actualArgs).equals(this.getRightExpression().calculate(actualArgs));
 	}
 
 }
