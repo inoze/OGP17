@@ -21,5 +21,4 @@ public class GetVYExpression extends EntityExpression{
 	public Double calculate(List actualArgs) throws IllegalArgumentException {
 		return this.getEntity().calculate(actualArgs).getVelocity()[1];
 	}
-
 }

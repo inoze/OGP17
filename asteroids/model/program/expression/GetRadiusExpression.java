@@ -2,27 +2,25 @@ package asteroids.model.program.expression;
 
 import java.util.List;
 
+import asteroids.model.Entity;
 import asteroids.model.program.Element;
 import asteroids.model.program.Expression;
 import asteroids.part3.programs.SourceLocation;
 
-public class GetRadiusExpression extends Element implements Expression{
+public class GetRadiusExpression extends EntityExpression{
 
-	protected GetRadiusExpression(SourceLocation sourceLocation) {
-		super(sourceLocation);
-		// TODO Auto-generated constructor stub
+	protected GetRadiusExpression(SourceLocation sourceLocation, Expression<Entity> entity) {
+		super(sourceLocation, entity);
 	}
 
 	@Override
-	public Object evaluate() throws IllegalArgumentException {
-		// TODO Auto-generated method stub
-		return null;
+	public Double calculate() throws IllegalArgumentException {
+		return this.getEntity().calculate().getRadius();
 	}
 
 	@Override
-	public Object evaluate(List actualArgs) throws IllegalArgumentException {
-		// TODO Auto-generated method stub
-		return null;
+	public Double calculate(List actualArgs) throws IllegalArgumentException {
+		return this.getEntity().calculate(actualArgs).getRadius();
 	}
 
 }
