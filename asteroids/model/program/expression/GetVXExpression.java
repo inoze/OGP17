@@ -2,27 +2,23 @@ package asteroids.model.program.expression;
 
 import java.util.List;
 
-import asteroids.model.program.Element;
+import asteroids.model.Entity;
 import asteroids.model.program.Expression;
 import asteroids.part3.programs.SourceLocation;
 
-public class GetVXExpression extends Element implements Expression{
-
-	protected GetVXExpression(SourceLocation sourceLocation) {
-		super(sourceLocation);
-		// TODO Auto-generated constructor stub
+public class GetVXExpression extends EntityExpression{
+	
+	protected GetVXExpression(SourceLocation sourceLocation, Expression<Entity> entity) {
+		super(sourceLocation, entity);
 	}
 
 	@Override
-	public Object evaluate() throws IllegalArgumentException {
-		// TODO Auto-generated method stub
-		return null;
+	public Double calculate() throws IllegalArgumentException {
+		return this.getEntity().calculate().getVelocity()[0];
 	}
 
 	@Override
-	public Object evaluate(List actualArgs) throws IllegalArgumentException {
-		// TODO Auto-generated method stub
-		return null;
+	public Double calculate(List actualArgs) throws IllegalArgumentException {
+		return this.getEntity().calculate(actualArgs).getVelocity()[0];
 	}
-
 }
