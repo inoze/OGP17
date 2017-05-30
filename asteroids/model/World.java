@@ -143,11 +143,8 @@ public class World {
 	
 	/**
 	 * Return the number of entities in this world.
-	 * 
-	 * @return  returns the size of entities.
-	 * 			| result == entities.size()
 	 */
-	@Basic @Raw
+	@Basic
 	public int getNbEntities() {
 		return entities.size();
 	}
@@ -308,7 +305,6 @@ public class World {
 	 * @post The ships and bullets are removed from the the hashsets bullets and ships, the boolean isTerminated is set to true.
 	 *       | implementation
 	 */
-	@Basic
 	public void terminateWorld(){
 		 for (Entity entity : entities) {
 	            this.removeEntityFromWorld(entity);
@@ -329,25 +325,6 @@ public class World {
 	 * Variable containing whether the world is terminated.
 	 */
 	private boolean isTerminated;
-	
-	/**
-	 * A method which retunrs all the entities in the world.
-	 * 
-	 * @return  Returns a set of entities which contains all the entities in the world
-	 *          | Set<Entity> entities = new HashSet<Entity>()
-	 *	        | entities.addAll(bullets);
-	 *       	| entities.addAll(ships);
-	 *	        | result ==  entities 
-	 */
-	/**@Basic
-	public Set<Entity> getEntities(){
-		Set<Entity> entities = new HashSet<Entity>();
-		entities.addAll(bullets);
-		entities.addAll(ships);
-		entities.addAll(asteroids);
-		entities.addAll(planetoids);
-		return entities;
-	}*/
 	
 	public void evolve(double dt, CollisionListener collisionListener){
 		if(dt < 0 || !(Helper.isValidDouble(dt)))
