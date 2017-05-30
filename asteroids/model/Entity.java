@@ -315,11 +315,11 @@ public class Entity {
 	public void terminate(){
 		if (this instanceof Ship){
 			if (superWorld != null)
-			this.superWorld.removeShipFromWorld((Ship) this);
+			this.superWorld.removeEntityFromWorld((Ship) this);
 		}
 		if (this instanceof Bullet){
 			if(superWorld != null)
-				this.superWorld.removeBulletFromWorld((Bullet) this);
+				this.superWorld.removeEntityFromWorld((Bullet) this);
 		}
 		this.superWorld = null;
 		this.isTerminated = true;
@@ -423,14 +423,14 @@ public class Entity {
     *		  |					bullet.bouncesCounter()	 
     */
     public void collideBoundary(){
-    	if ((position[0] + radius == this.superWorld.getWorldSize()[0]) || (0.0 == position[0] - radius)){
+    	if ((position[0] + radius == this.superWorld.getWorldWidth()) || (0.0 == position[0] - radius)){
     		if (this instanceof Bullet){
         		Bullet bullet = (Bullet) this;
         			bullet.bouncesCounter();
         	}
     		this.velocity[0] = this.velocity[0] * -1;
     	}
-    	if ((position[1] + radius == this.superWorld.getWorldSize()[1]) || (0.0 == position[1] - radius)){
+    	if ((position[1] + radius == this.superWorld.getWorldHeight()) || (0.0 == position[1] - radius)){
     		if (this instanceof Bullet){
         		Bullet bullet = (Bullet) this;
         			bullet.bouncesCounter();
@@ -487,12 +487,12 @@ public class Entity {
 		
 		if (velocity[0] > 0){
 			edgeX = position[0] + radius;
-			mX = this.superWorld.getWorldSize()[0];
+			mX = this.superWorld.getWorldWidth();
 		}
 		else edgeX = position[0] - radius;
 		if (velocity[1] > 0){
 			edgeY = position[1] + radius;
-			mY = this.superWorld.getWorldSize()[1];
+			mY = this.superWorld.getWorldHeight();
 		}
 		else edgeY = position[1] - radius;
 		

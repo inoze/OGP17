@@ -384,7 +384,7 @@ public class Ship extends Entity{
 			if(isValidBullet(bullet)){
 				this.removeBulletFromShip(bullet);
 				World world = this.superWorld;
-				world.addBulletToWorld(bullet);
+				world.addEntityToWorld(bullet);
 				bullet.setSuperWorld(world);
 				bullet.setPosition(this.bulletSpawnCalculator(bullet.getRadius())[0], this.bulletSpawnCalculator(bullet.getRadius())[1]);
 				bullet.setVelocity(250 * Math.cos(this.getShipDirection()), 250 * Math.sin(this.getShipDirection()));

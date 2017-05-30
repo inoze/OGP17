@@ -307,7 +307,7 @@ public class Facade implements IFacade {
 	 * Terminate <code>world</code>.
 	 */
 	public void terminateWorld(World world) throws ModelException {
-		world.terminateWorld();
+		world.terminate();
 	}
 
 	/**
@@ -322,7 +322,10 @@ public class Facade implements IFacade {
 	 * followed by the height.
 	 */
 	public double[] getWorldSize(World world) throws ModelException {
-		return world.getWorldSize();
+		double[] size = new double[2];
+		size[0] = world.getWorldWidth();
+		size[1] = world.getWorldHeight();
+		return size;
 	}
 
 	/**

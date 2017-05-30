@@ -2,9 +2,6 @@ package asteroids.model;
 
 import java.util.*;
 
-import javax.sound.sampled.AudioFileFormat.Type;
-
-import com.sun.xml.internal.bind.v2.schemagen.xmlschema.TypeHost;
 
 import be.kuleuven.cs.som.annotate.*;
 import asteroids.part2.CollisionListener;
@@ -17,6 +14,9 @@ import asteroids.part2.CollisionListener;
  *          | isValidDimension(width)
  * @invar   Height must be a valid dimension.
  *          | isValidDimension(height)
+ * @invar	The entities in each world must be proper entities
+ * 			for that world.
+ * 			| hasProperEntities()
  *          
  * @author  Brent De Bleser & Jesse Geens
  * @version 3.0
@@ -54,23 +54,23 @@ public class World {
 	public World(double width, double height){
 		
 		if(isValidDimension(width))
-			this.width = width;
+			this.worldWidth = width;
 		
 		else{
 			if (width < 0.0)
-				this.width = 0.0;
+				this.worldWidth = 0.0;
 			
-			else this.width = UPPER_BOUND_WORLD;
+			else this.worldWidth = UPPER_BOUND_WORLD;
 		}
 		
 		if (isValidDimension(height))
-			this.height = height;
+			this.worldHeight = height;
 		
 		else{
 			if (height < 0.0)
-				this.height = 0.0;
+				this.worldHeight = 0.0;
 			
-			else this.height = UPPER_BOUND_WORLD;
+			else this.worldHeight = UPPER_BOUND_WORLD;
 		}
 		
 	}
@@ -85,34 +85,36 @@ public class World {
 	public World() {
 		this(UPPER_BOUND_WORLD, UPPER_BOUND_WORLD);
 	}
+			
 	
-	//Total
 	/**
-	 * Return the size of the world as an array containing the width,
-	 * followed by the height.
-	 * 
-	 * @return Returns the width and height of the world in array form with length 2,
-	 * 		   with the width on index 0 and haight index 1
-	 *         | double[] size = new double[2]
-	 *    	   | size[0] = this.width
-	 *	       | size[1] = this.height
-	 *         | result == size
+	 * Returns the width of the world.
 	 */
-	@Basic 
-	public double[] getWorldSize() {
-		double[] size = new double[2];
-		size[0] = this.width;
-		size[1] = this.height;
-		return size;
+	@Basic @Raw @Immutable
+	public double getWorldWidth(){
+		return worldWidth;
 	}
-		
+	
+	/**
+	 * Variable containing the width of the world.
+	 */
+	private final double worldWidth;
+	
+	/**
+	 * returns the height of the world.
+	 */
+	@Basic @Raw @Immutable
+	public double getWorldHeight(){
+		return worldHeight;
+	}
+	
 	//Total
 	/**
 	 * Check whether the given angle is a valid angle.
 	 * 
 	 * @param  dimension
 	 *         The dimension to check.
-	 * @return True if and only if dimension is smaller or equal to 0 and
+     * @return True if and only if dimension is smaller or equal to 0 and
 	 *         dimension is smaller or equal.
 	 *         | result == !((dimension < 0) || (dimension > Double.MAX_VALUE))
 	 */
@@ -120,15 +122,52 @@ public class World {
 	private boolean isValidDimension(double dimension){
 		return !((dimension < 0) || (dimension > UPPER_BOUND_WORLD));
 	}
-	
-	/**
-	 * Variable containing the width of the world.
-	 */
-	private final double width;
+		
 	/**
 	 * Variable containing the height of the world.
 	 */
-	private final double height;
+	private final double worldHeight;
+	
+	
+	
+	/**
+	 * Check whether this world has the given entity as one of the entities in it.
+	 * @param 	entity
+	 * 			The entity to be check.
+	 */
+	@Basic @Raw
+	public boolean hasAsEntity(Entity entity){
+		return entities.contains(entity);
+	}
+	
+	
+	/**
+	 * Checks whether or not this world has proper entities in it.
+	 * 
+	 * @return	Returns true if and only if this world can have each of it's entities as
+	 * 			entity in it and if each of these entities references this world as their superWorld.
+	 * 			| result ==
+	 * 			|	for each entity in 	entities :
+	 * 			|		(	if	(this.hasAsEntity(entity))
+	 * 			|			then	(canHaveAsEntity(entity)
+	 * 			|				&&	entity.getWorld() == this))
+	 */
+	@Raw
+	public boolean hasProperEntities(){
+		
+		for (Entity entity : entities){
+			if (!(this.hasAsEntity(entity) && entity.getWorld() == this)) return false;
+		}
+		return true;
+	}
+	
+	/**
+	 * Return the number of entities in this world.
+	 */
+	@Basic
+	public int getNbEntities() {
+		return entities.size();
+	}
 	
 	/**
 	 * Returns all entities located in this world
@@ -140,15 +179,7 @@ public class World {
 	public Set<? extends Entity> getEntities(){
 		return entities;
 	}
-	
-	/**
-	 * Return the number of entities in this world.
-	 */
-	@Basic
-	public int getNbEntities() {
-		return entities.size();
-	}
-	
+
 	//Total
 	/**
 	 * Returns all entities located in this world
@@ -170,6 +201,40 @@ public class World {
 		return resultSet;
 	}
 	
+	//Total
+		/**
+		 * A method that gives an entity back  if any for a given x and y coordinate.
+		 * 
+		 * @param   x
+		 *          The x coordinate to check.
+		 * @param   y 
+		 * 			The y coordinate to check
+		 * @post	If there is an entity at the given x and y return that entity.
+		 * 			| implementation
+		 * @post	If there isn't an etity at the given x and y return null.
+		 * 			| implementation
+		 * @post 	If there are multiple entities at a x and y position return null.
+		 * 			| implementation
+		 */
+		public Entity entityAt(double x, double y){
+		double[] position = {x,y};
+		int counter = 0;
+		Entity entity = null;
+		for (Entity a : entities) {
+		    if (a.getPosition() == position){ 
+		    	counter++;
+		    	entity = a;
+		    	Helper.log("EntityAt");
+		    }
+		}
+		if (counter > 1){
+			Helper.log("More than one object on position " + position);
+			entity = null;
+		}
+		return entity;
+		}
+
+	
 	/**
 	 * Add an entity to the world.
 	 * 
@@ -185,7 +250,7 @@ public class World {
 	 */
 	public void addEntityToWorld(Entity entity){
 		
-		if(canPlaceEntity(entity)){
+		if(canHaveAsEntity(entity)){
 			entities.add(entity);
 			entity.setSuperWorld(this);
 		}
@@ -208,47 +273,12 @@ public class World {
 	public void removeEntityFromWorld(Entity entity) throws IllegalArgumentException {
 		//Lambda #1
 		if (entities.removeIf(i -> i == entity) == false) throw new IllegalArgumentException("Entity isn't placed in the world");
-	}
-	
-	//Total
-		/**
-		 * A method that gives an entity back  if any for a given x and y coordinate.
-		 * 
-		 * @param   x
-		 *          The x coordinate to check.
-		 * @param   y 
-		 * 			The y coordinate to check
-		 * @post	If there is an entity at the given x and y return that entity.
-		 * 			| implementation
-		 * @post	If there isn't an etity at the given x and y return null.
-		 * 			| implementation
-		 * @post 	If there are multiple entities at a x and y position return null.
-		 * 			| implementation
-		 */
-		public Entity entityAt(double x, double y){
-			double[] position = {x,y};
-			int counter = 0;
-			Entity entity = null;
-			for (Entity a : entities) {
-			    if (a.getPosition() == position){ 
-			    	counter++;
-			    	entity = a;
-			    	Helper.log("EntityAt");
-			    }
-			}
-			if (counter > 1){
-				Helper.log("More than one object on position " + position);
-				entity = null;
-			}
-
-			return entity;
-		}
+	}	
 		
-	
 	/**
-	 * Checks wheter or not a Entity can be placed in the World.
+	 * Checks whether or not an Entity can be placed in the World.
 	 * 
-	 * @param	Entity
+	 * @param	entity
 	 * 		 	The entity to be checked.
 	 * @return	The method returns false if the Entity is already in another world. 
 	 * 			In other words if the position of the Entity doesn't equal null.
@@ -262,18 +292,18 @@ public class World {
 	 * 			Throws an IllegalArgumentException if the entity is terminated.
 	 * 			| entity.isTerminated()
 	 */
-	@Model 
-	private boolean canPlaceEntity(Entity entity) throws IllegalArgumentException{
+	@Model @Raw
+	private boolean canHaveAsEntity(Entity entity) throws IllegalArgumentException{
 		if(!(entity.isTerminated())){
 			if(entityAt(entity.getPosition()[0], entity.getPosition()[1]) != null)
 				return false;
 			return !(entityOverlap(entity));
 		}
 		else{
-			throw new IllegalArgumentException("Entity is not valid");
+			throw new IllegalArgumentException("Entity is already terminated.");
 		}
 	}
-	
+
 	/**
 	 * 
 	 * @param entity
@@ -281,7 +311,7 @@ public class World {
 	 * @return True if there's already an entity on that position
 	 * 		   | result == a.overlap(entity)
 	 */
-	@Model
+	@Model 
 	private boolean entityOverlap(Entity entity){
 		for (Entity a : entities) {
 			if(a.overlap(entity))
@@ -295,9 +325,6 @@ public class World {
 	 */
 	private Set<Entity> entities = new HashSet<Entity>();
 	
-		
-	
-	
 
 	/**
 	 * Terminate the world.
@@ -305,7 +332,7 @@ public class World {
 	 * @post The ships and bullets are removed from the the hashsets bullets and ships, the boolean isTerminated is set to true.
 	 *       | implementation
 	 */
-	public void terminateWorld(){
+	public void terminate(){
 		 for (Entity entity : entities) {
 	            this.removeEntityFromWorld(entity);
 	        }
@@ -314,7 +341,7 @@ public class World {
 	}
 	
 	/**
-	 * Check whether the world is terminated.
+	 * Checks whether the world is terminated.
 	 */
 	@Basic @Raw
 	public boolean isTerminatedWorld(){
@@ -324,7 +351,7 @@ public class World {
 	/**
 	 * Variable containing whether the world is terminated.
 	 */
-	private boolean isTerminated;
+	private boolean isTerminated = false;
 	
 	public void evolve(double dt, CollisionListener collisionListener){
 		if(dt < 0 || !(Helper.isValidDouble(dt)))
