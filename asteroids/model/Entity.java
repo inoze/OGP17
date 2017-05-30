@@ -296,7 +296,7 @@ public class Entity {
      *         | !(isValidWorld(world))
      */
     protected void setSuperWorld(World world) throws IllegalArgumentException{
-    	if(isValidWorld(world))		this.superWorld = world;
+    	if(world == null || isValidWorld(world))		this.superWorld = world;
     	else throw new IllegalArgumentException("Isn't a valid world");
     }
     
@@ -870,7 +870,7 @@ public class Entity {
     *          |  result ==  world.isTerminatedWorld()
     */ 
    protected boolean isValidWorld(World world){
-	   if(world == null) return false;
+
 	   return !(world.isTerminatedWorld());
    }
   

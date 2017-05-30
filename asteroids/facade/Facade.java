@@ -143,19 +143,18 @@ public class Facade implements IFacade {
 	}
 
 	/**
-	 * Return the total mass of <code>ship</code> (i.e., including bullets
-	 * loaded onto the ship).
-	 */
-	public double getShipMass(Ship ship) throws ModelException {
-		return ship.getMass();
-	}
-
-	/**
 	 * Return the world of <code>ship</code>.
 	 */
 	public World getShipWorld(Ship ship) throws ModelException {
 		//return ship.getShipWorld();
 		return ship.getWorld();
+	}
+	/**
+	 * Return the total mass of <code>ship</code> (i.e., including bullets
+	 * loaded onto the ship).
+	 */
+	public double getShipMass(Ship ship) throws ModelException {
+		return ship.getShipTotalMass();
 	}
 
 	/**

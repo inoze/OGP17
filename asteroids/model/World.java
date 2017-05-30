@@ -177,7 +177,8 @@ public class World {
 	 */
 	@Basic
 	public Set<? extends Entity> getEntities(){
-		return entities;
+		Set<Entity> resultSet = new HashSet<Entity>(entities);
+		return resultSet;
 	}
 
 	//Total
@@ -261,18 +262,23 @@ public class World {
 	 * Remove the Entity from the World.
 	 * 
 	 * @param   entity
-	 *          The bullet to be removed from the world.
+	 *          The entity to be removed from the world.
 	 * @throws  IllegalArgumentException
 	 *          Throws an IllegalArgumentException if the bullet isn't in the world.
 	 *          | !(entities.contains(entity))
-	 * @post    The bullet is removed from the hashset bullets
+	 * @post    The entity is removed from the hashset entities
 	 *          | for some element in entities
 	 *          |	if  element == entity
 	 *          |		entities.remove(elemnt)
+	 * @post	The entitie's superWorld is set to null.
+	 * 			| entity.setSuperWorld(null)
 	 */
 	public void removeEntityFromWorld(Entity entity) throws IllegalArgumentException {
-		//Lambda #1
-		if (entities.removeIf(i -> i == entity) == false) throw new IllegalArgumentException("Entity isn't placed in the world");
+		if(entities.contains(entity)){
+			entity.setSuperWorld(null);
+			entities.remove(entity);
+		}
+		else throw new IllegalArgumentException("entity isn't part of the world on which it want's to be removed.");
 	}	
 		
 	/**
@@ -281,13 +287,12 @@ public class World {
 	 * @param	entity
 	 * 		 	The entity to be checked.
 	 * @return	The method returns false if the Entity is already in another world. 
-	 * 			In other words if the position of the Entity doesn't equal null.
-	 * 			| if	entityAt(entity.getPosition()[0], entity.getPosition()[1]) != null
+	 * 			| if	entity.getWorld() != null
 	 * 			| 		then	result == false
 	 * @return  If the Entity isn't placed in any world, the result equals wheter or not the entity
-	 * 			overlaps with an other entity in the world.
-	 * 			| if	entityAt(entity.getPosition()[0], entity.getPosition()[1]) == null
-	 * 			|		then result == !(entityOverlap(entity))
+	 * 			overlaps with an other entity in the world or the boundries of the world.
+	 * 			| if	entity.getWorld() == null
+	 * 			|		then result == !(entityOverlap(entity) || entityBoundryOverlap(entity))
 	 * @throws 	IllegalArgumentException
 	 * 			Throws an IllegalArgumentException if the entity is terminated.
 	 * 			| entity.isTerminated()
@@ -295,15 +300,35 @@ public class World {
 	@Model @Raw
 	private boolean canHaveAsEntity(Entity entity) throws IllegalArgumentException{
 		if(!(entity.isTerminated())){
-			if(entityAt(entity.getPosition()[0], entity.getPosition()[1]) != null)
+			if(entity.getWorld() != null){
 				return false;
-			return !(entityOverlap(entity));
+		}
+			return !(entityOverlap(entity) || entityBoundryOverlap(entity));
 		}
 		else{
 			throw new IllegalArgumentException("Entity is already terminated.");
 		}
 	}
-
+	/**
+	 * A method which controls whether or not an entity is overlapping with a boundry.
+	 * 
+	 * @param 	entity
+	 * 			The entity to be controled.
+	 * @return 	Returns true if and only if the x or y position minus 99% of the radius of the entity is smaller then the 0
+	 * 			or if the x and y position of the entity added with 99% of the radius exceed the worldWidth or worldHeight respectivaly.
+	 * 			| result == 
+	 * 			| 	entity.getPosition()[0]-(entity.getRadius()/100)*99) <= 0.0 
+	 * 			|		|| (entity.getPosition()[1]-(entity.getRadius()/100)*99) <= 0.0
+	 * 			|			|| entity.getPosition()[0]+(entity.getRadius()/100)*99) >= worldWidth
+	 * 			|				|| entity.getPosition()[1]+(entity.getRadius()/100)*99) >= worldHeight
+	 */
+	@Model
+	private boolean entityBoundryOverlap(Entity entity){
+		
+		if ( (entity.getPosition()[0]-(entity.getRadius()/100)*99) <= 0.0 || (entity.getPosition()[1]-(entity.getRadius()/100)*99) <= 0.0) return true;
+		if ( (entity.getPosition()[0]+(entity.getRadius()/100)*99) >= worldWidth || (entity.getPosition()[1]+(entity.getRadius()/100)*99) >= worldHeight) return true;
+		return false;
+	}
 	/**
 	 * 
 	 * @param entity
