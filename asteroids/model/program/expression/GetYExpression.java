@@ -2,27 +2,24 @@ package asteroids.model.program.expression;
 
 import java.util.List;
 
-import asteroids.model.program.Element;
+import asteroids.model.Entity;
 import asteroids.model.program.Expression;
 import asteroids.part3.programs.SourceLocation;
 
-public class GetYExpression extends Element implements Expression{
+public class GetYExpression extends EntityExpression{
 
-	protected GetYExpression(SourceLocation sourceLocation) {
-		super(sourceLocation);
-		// TODO Auto-generated constructor stub
+	protected GetYExpression(SourceLocation sourceLocation, Expression<Entity> entity) {
+		super(sourceLocation, entity);
 	}
 
 	@Override
-	public Object evaluate() throws IllegalArgumentException {
-		// TODO Auto-generated method stub
-		return null;
+	public Double calculate() throws IllegalArgumentException {
+		return this.getEntity().calculate().getPosition()[1];
 	}
 
 	@Override
-	public Object evaluate(List actualArgs) throws IllegalArgumentException {
-		// TODO Auto-generated method stub
-		return null;
+	public Double calculate(List actualArgs) throws IllegalArgumentException {
+		return this.getEntity().calculate(actualArgs).getPosition()[1];
 	}
 
 }
