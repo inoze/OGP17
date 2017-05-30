@@ -8,21 +8,29 @@ import asteroids.part3.programs.SourceLocation;
 
 public class SqrtExpression extends Element implements Expression{
 
-	protected SqrtExpression(SourceLocation sourceLocation) {
+	private Expression<Double> expression;
+	
+	public SqrtExpression(SourceLocation sourceLocation, Expression<Double> e1) {
 		super(sourceLocation);
-		// TODO Auto-generated constructor stub
+		this.setExpression(e1);
+	}
+	
+	private Expression<Double> getExpression(){
+		return this.expression;
+	}
+	
+	private void setExpression(Expression<Double> expression){
+		this.expression = expression;
 	}
 
 	@Override
-	public Object evaluate() throws IllegalArgumentException {
-		// TODO Auto-generated method stub
-		return null;
+	public Double calculate() throws IllegalArgumentException {
+		return Math.sqrt(this.getExpression().calculate());
 	}
 
 	@Override
-	public Object evaluate(List actualArgs) throws IllegalArgumentException {
-		// TODO Auto-generated method stub
-		return null;
+	public Double calculate(List actualArgs) throws IllegalArgumentException {
+		return Math.sqrt(this.getExpression().calculate(actualArgs));
 	}
 
 }

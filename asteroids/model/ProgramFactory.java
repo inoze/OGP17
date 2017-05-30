@@ -138,7 +138,7 @@ public class ProgramFactory implements IProgramFactory <Expression, Statement, F
 
 	@Override
 	public Expression createPlanetExpression(SourceLocation location) {
-		PlanetExpression planetExpression = new PlanetExpresson(location);
+		PlanetExpression planetExpression = new PlanetExpression(location);
 		return planetExpression;
 	}
 
