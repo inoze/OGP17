@@ -59,6 +59,8 @@ public class Ship extends Entity{
      */
     private Set<Bullet> bullets = new HashSet<Bullet>();
     
+    private Program program;
+    
     //Initializers
    
     //Defensive
@@ -146,6 +148,11 @@ public class Ship extends Entity{
 		return this.thrusterForce/this.getShipTotalMass();
 	}
 	
+    @Basic
+    public Program getProgram(){
+    	return this.program;
+    }
+    
 	/**
 	 * Return whether ship's thruster is active.
 	 */
@@ -175,6 +182,10 @@ public class Ship extends Entity{
         assert Helper.isValidDouble(direction);
         direction = surplusRadians(direction);
         this.direction = direction;
+    }
+    
+    public void setShipProgram(Program program){
+    	this.program = program;
     }
     
 	/**

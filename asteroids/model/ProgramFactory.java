@@ -13,8 +13,8 @@ public class ProgramFactory implements IProgramFactory <Expression, Statement, F
 
 	@Override
 	public Program createProgram(List<Function> functions, Statement main) {
-		// TODO Auto-generated method stub
-		return null;
+		Program program = new Program(functions, main);
+		return program;
 	}
 
 	@Override
@@ -108,140 +108,138 @@ public class ProgramFactory implements IProgramFactory <Expression, Statement, F
 
 	@Override
 	public Expression createSelfExpression(SourceLocation location) {
-		// TODO Auto-generated method stub
-		return null;
+		SelfExpression selfExpression = new SelfExpression(location);
+		return selfExpression;
 	}
 
 	@Override
 	public Expression createShipExpression(SourceLocation location) {
-		// TODO Auto-generated method stub
-		return null;
+		ShipExpression shipExpression = new ShipExpression(location);
+		return shipExpression;
 	}
 
 	@Override
 	public Expression createAsteroidExpression(SourceLocation location) {
-		// TODO Auto-generated method stub
-		return null;
+		AsteroidExpression asteroidExpression = new AsteroidExpression(location);
+		return asteroidExpression;
 	}
 
 	@Override
 	public Expression createPlanetoidExpression(SourceLocation location) {
-		// TODO Auto-generated method stub
-		return null;
+		PlanetoidExpression planetoidExpression = new PlanetoidExpression(location);
+		return planetoidExpression;
 	}
 
 	@Override
 	public Expression createBulletExpression(SourceLocation location) {
-		// TODO Auto-generated method stub
-		return null;
+		BulletExpression bulletExpression = new BulletExpression(location);
+		return bulletExpression;
 	}
 
 	@Override
 	public Expression createPlanetExpression(SourceLocation location) {
-		// TODO Auto-generated method stub
-		return null;
+		PlanetExpression planetExpression = new PlanetExpresson(location);
+		return planetExpression;
 	}
 
 	@Override
 	public Expression createAnyExpression(SourceLocation location) {
-		// TODO Auto-generated method stub
-		return null;
+		AnyExpression anyExpression = new AnyExpression(location);
+		return anyExpression;
 	}
 
 	@Override
 	public Expression createGetXExpression(Expression e, SourceLocation location) {
-		// TODO Auto-generated method stub
-		return null;
+		GetXExpression getXExpression = new GetXExpression(location, e);
 	}
 
 	@Override
 	public Expression createGetYExpression(Expression e, SourceLocation location) {
-		// TODO Auto-generated method stub
-		return null;
+		GetYExpression getYExpression = new GetYExpression(location, e);
+		return getYExpression;
 	}
 
 	@Override
 	public Expression createGetVXExpression(Expression e, SourceLocation location) {
-		// TODO Auto-generated method stub
-		return null;
+		GetVXExpression getVXExpression = new GetVXExpression(location, e);
 	}
 
 	@Override
 	public Expression createGetVYExpression(Expression e, SourceLocation location) {
-		// TODO Auto-generated method stub
-		return null;
+		GetVYExpression getVYExpression = new GetVYExpression(location, e);
+		return getVYExpression;
 	}
 
 	@Override
 	public Expression createGetRadiusExpression(Expression e, SourceLocation location) {
-		// TODO Auto-generated method stub
-		return null;
+		GetRadiusExpression getRadiusExpression = new GetRadiusExpression(location, e);
+		return getRadiusExpression;
 	}
 
 	@Override
 	public Expression createLessThanExpression(Expression e1, Expression e2, SourceLocation location) {
-		// TODO Auto-generated method stub
-		return null;
+		LessThanExpression lessThanExpression = new LessThanExpression(location, e1, e2);
+		return lessThanExpression;
 	}
 
 	@Override
 	public Expression createEqualityExpression(Expression e1, Expression e2, SourceLocation location) {
-		// TODO Auto-generated method stub
-		return null;
+		EqualityExpression equalityExpression = new EqualityExpression(location, e1, e2);
+		return equalityExpression;
 	}
 
 	@Override
 	public Expression createAdditionExpression(Expression e1, Expression e2, SourceLocation location) {
-		// TODO Auto-generated method stub
-		return null;
+		AdditionExpression additionExpression = new AdditionExpression(location, e1, e2);
+		return additionExpression;
 	}
 
 	@Override
 	public Expression createMultiplicationExpression(Expression e1, Expression e2, SourceLocation location) {
-		// TODO Auto-generated method stub
-		return null;
+		MultiplicationExpression multiplicationExpression = new MultiplicationExpression(location, e1, e2);
+		return multiplicationExpression;
 	}
 
 	@Override
 	public Expression createSqrtExpression(Expression e, SourceLocation location) {
-		// TODO Auto-generated method stub
-		return null;
+		SqrtExpression sqrtExpression = new SqrtExpression(location, e);
+		return sqrtExpression;
 	}
 
 	@Override
 	public Expression createGetDirectionExpression(SourceLocation location) {
-		// TODO Auto-generated method stub
-		return null;
+		GetDirectionExpression getDirectionExpression = new GetDirectionExpression(location);
+		return getDirectionExpression;
 	}
 
 	@Override
 	public Statement createThrustOnStatement(SourceLocation location) {
-		// TODO Auto-generated method stub
-		return null;
+		ThrustOnStatement thrustOnStatement = new ThrustOnStatement(location);
+		return thrustOnStatement;
 	}
 
 	@Override
 	public Statement createThrustOffStatement(SourceLocation location) {
-		// TODO Auto-generated method stub
-		return null;
+		ThrustOffStatement thrustOffStatement = new ThrustOffStatement(location);
+		return thrustOffStatement;
 	}
 
 	@Override
 	public Statement createFireStatement(SourceLocation location) {
-		// TODO Auto-generated method stub
-		return null;
+		FireStatement fireStatement = new FireStatement(location);
+		return fireStatement;
 	}
 
 	@Override
 	public Statement createTurnStatement(Expression angle, SourceLocation location) {
-		// TODO Auto-generated method stub
-		return null;
+		TurnStatement turnStatement = new TurnStatement(location, angle);
+		return turnStatement;
 	}
 
 	@Override
 	public Statement createSkipStatement(SourceLocation location) {
-		// TODO Auto-generated method stub
-		return null;
+		SkipStatement skipStatement = new SkipStatement(location);
+		return skipStatement;
 	}
 
 }
