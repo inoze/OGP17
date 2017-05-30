@@ -183,7 +183,7 @@ public class World {
 	 *          | entities.add(entity)
 	 *		    | entity.setSuperWorld(this)
 	 */
-	public void addEtityToWorld(Entity entity){
+	public void addEntityToWorld(Entity entity){
 		
 		if(canPlaceEntity(entity)){
 			entities.add(entity);
@@ -418,6 +418,7 @@ public class World {
 		}
 		return entities;
 	}
+
 	
 	
 }

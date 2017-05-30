@@ -344,7 +344,7 @@ public class Facade implements IFacade {
 	 */
 	public void addShipToWorld(World world, Ship ship) throws ModelException {
 		try{
-			world.addShipToWorld(ship);
+			world.addEntityToWorld(ship);
 		}
 		catch(Exception ex){
 			throw new ModelException(ex.getMessage());
@@ -355,7 +355,7 @@ public class Facade implements IFacade {
 	 * Remove <code>ship</code> from <code>world</code>.
 	 */
 	public void removeShipFromWorld(World world, Ship ship) throws ModelException {
-		try{world.removeShipFromWorld(ship);}
+		try{world.removeEntityFromWorld(ship);}
 		catch(IllegalArgumentException ex){throw new ModelException(ex.getMessage());}
 	}
 
@@ -363,14 +363,14 @@ public class Facade implements IFacade {
 	 * Add <code>bullet</code> to <code>world</code>.
 	 */
 	public void addBulletToWorld(World world, Bullet bullet) throws ModelException {
-		world.addBulletToWorld(bullet);
+		world.addEntityToWorld(bullet);
 	}
 
 	/**
 	 * Remove <code>ship</code> from <code>world</code>.
 	 */
 	public void removeBulletFromWorld(World world, Bullet bullet) throws ModelException {
-		world.removeBulletFromWorld(bullet);
+		world.removeEntityFromWorld(bullet);
 	}
 
 	/**************
@@ -530,7 +530,7 @@ public class Facade implements IFacade {
 	 * Add <code>asteroid</code> to <code>world</code>.
 	 */
 	public void addAsteroidToWorld(World world, Asteroid asteroid) throws ModelException{
-		try{world.addAsteroidToWorld(asteroid);}
+		try{world.addEntityToWorld(asteroid);}
 		catch(IllegalArgumentException ex){throw new ModelException(ex.getMessage());}
 	}
 
@@ -538,7 +538,7 @@ public class Facade implements IFacade {
 	 * Remove <code>asteroid</code> from <code>world</code>.
 	 */
 	public void removeAsteroidFromWorld(World world, Asteroid asteroid) throws ModelException{
-		try{world.removeAsteroidFromWorld(asteroid);}
+		try{world.removeEntityFromWorld(asteroid);}
 		catch(IllegalArgumentException ex){throw new ModelException(ex.getMessage());}	
 	}
 
@@ -553,7 +553,7 @@ public class Facade implements IFacade {
 	 * Add <code>planetoid</code> to <code>world</code>.
 	 */
 	public void addPlanetoidToWorld(World world, Planetoid planetoid) throws ModelException{
-		try{world.addPlanetoidToWorld(planetoid);}
+		try{world.addEntityToWorld(planetoid);}
 		catch(IllegalArgumentException ex){throw new ModelException(ex.getMessage());}	
 		}
 
@@ -561,7 +561,7 @@ public class Facade implements IFacade {
 	 * Remove <code>planetoid</code> from <code>world</code>.
 	 */
 	public void removePlanetoidFromWorld(World world, Planetoid planetoid) throws ModelException{
-		try{world.removePlanetoidFromWorld(planetoid);}
+		try{world.removeEntityFromWorld(planetoid);}
 		catch(IllegalArgumentException ex){throw new ModelException(ex.getMessage());}
 	}
 
