@@ -338,11 +338,10 @@ public class World {
 	 */
 	@Model 
 	private boolean entityOverlap(Entity entity){
-		for (Entity a : entities) {
-			if(a.overlap(entity))
-				return true;
-			}
-		return false;
+		return getEntities().stream()
+				.filter(other -> entity.overlap(other) && (entity != other))
+				.findFirst()
+				.isPresent();
 	}
 	
 	/**

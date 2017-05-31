@@ -576,9 +576,11 @@ public class Entity {
      *          
      */
     public boolean overlap(Entity entity){
+    	
     	if (entity == null) throw new IllegalArgumentException("The second entity does not exist.");
 		if (this == entity) return true;
-		else return (this.getDistanceBetween(entity)/(this.getRadius()+entity.getRadius()) <= -0.01);
+    	return this.getDistanceBetween(entity) <= (0.99 * (this.getRadius() + entity.getRadius()));
+    	
     }
    
     //Defensive
