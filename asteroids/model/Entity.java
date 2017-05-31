@@ -540,7 +540,7 @@ public class Entity {
      * @return Returns the distance between entity and the entity on which the method is invoced.
      *         | double diffx = Math.abs(this.position[0] - entity.getPosition()[0])
      *         | double diffy = Math.abs(this.position[1] - entity.getPosition()[1])
-     *         | double diff = Math.sqrt(Math.abs(Helper.square(diffx) - Helper.square(diffy)))
+     *         | double diff = Math.sqrt(Helper.square(diffx) + Helper.square(diffy))
      *         | result == diff
      * @throws IllegalArgumentException
      *         Throws an IllegalArgumentException if the given entity is the same entity
@@ -550,9 +550,9 @@ public class Entity {
     public double getDistanceBetween(Entity entity) throws IllegalArgumentException{
         if(this == entity) throw new IllegalArgumentException("this == entity");
         else{
-            double diffx = Math.abs(this.getPosition()[0] - entity.getPosition()[0]);
-            double diffy = Math.abs(this.getPosition()[1] - entity.getPosition()[1]);
-            double diff = Math.sqrt(Math.abs(Helper.square(diffx) - Helper.square(diffy)));
+            double diffx = Math.abs(entity.getPosition()[0] - this.getPosition()[0]);
+            double diffy = Math.abs(entity.getPosition()[1] - this.getPosition()[1]);
+            double diff = Math.sqrt(Helper.square(diffx) + Helper.square(diffy));
             return diff;
         }
     }
