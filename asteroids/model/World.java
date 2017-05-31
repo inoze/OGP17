@@ -120,7 +120,7 @@ public class World {
 	 */
 	@Model @Raw
 	private boolean isValidDimension(double dimension){
-		return !((dimension < 0) || (dimension > UPPER_BOUND_WORLD));
+		return !((dimension < 0) || (dimension > UPPER_BOUND_WORLD) || !Helper.isValidDouble(dimension));
 	}
 		
 	/**
@@ -218,21 +218,11 @@ public class World {
 		 * 			| implementation
 		 */
 		public Entity entityAt(double x, double y){
-		double[] position = {x,y};
-		int counter = 0;
-		Entity entity = null;
-		for (Entity a : entities) {
-		    if (a.getPosition() == position){ 
-		    	counter++;
-		    	entity = a;
-		    	Helper.log("EntityAt");
-		    }
-		}
-		if (counter > 1){
-			Helper.log("More than one object on position " + position);
-			entity = null;
-		}
-		return entity;
+			
+			return getEntities().stream()
+					.filter(i -> i.getPosition()[0] == x && i.getPosition()[1] == y)
+					.findFirst()
+					.orElse(null);
 		}
 
 	

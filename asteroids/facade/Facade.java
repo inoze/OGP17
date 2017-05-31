@@ -43,7 +43,7 @@ public class Facade implements IFacade {
 	 * Return the orientation of ship (in radians).
 	 */
 	public double getShipOrientation(Ship ship) throws ModelException{
-		return ship.getShipDirection();
+		return ship.getDirection();
 	}
 
 	/**
@@ -132,7 +132,7 @@ public class Facade implements IFacade {
 	 * Terminate <code>ship</code>.
 	 */
 	public void terminateShip(Ship ship) throws ModelException {
-		ship.terminateShip();
+		ship.terminate();
 	}
 
 	/**
@@ -154,14 +154,14 @@ public class Facade implements IFacade {
 	 * loaded onto the ship).
 	 */
 	public double getShipMass(Ship ship) throws ModelException {
-		return ship.getShipTotalMass();
+		return ship.getTotalMass();
 	}
 
 	/**
 	 * Return whether <code>ship</code>'s thruster is active.
 	 */
 	public boolean isShipThrusterActive(Ship ship) throws ModelException {
-		return ship.isShipThrusterActive();
+		return ship.isThrusterActive();
 	}
 
 	/**
@@ -179,7 +179,7 @@ public class Facade implements IFacade {
 	 * Return the acceleration of <code>ship</code>.
 	 */
 	public double getShipAcceleration(Ship ship) throws ModelException {
-		return ship.getShipAcceleration();
+		return ship.getAcceleration();
 	}
 
 	/**
@@ -266,7 +266,7 @@ public class Facade implements IFacade {
 	 * if it is positioned on a ship.
 	 */
 	public World getBulletWorld(Bullet bullet) throws ModelException {
-		return bullet.getBulletWorld();
+		return bullet.getWorld();
 	}
 
 	/**
