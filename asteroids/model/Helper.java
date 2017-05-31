@@ -47,7 +47,7 @@ public class Helper {
      *         | result == (!(Double.isNaN(number) || (Double.isInfinite(number))))
      */
     public static boolean isValidDouble(double number){
-        if(Double.isNaN(number) || Double.isInfinite(number) || !(number < Double.MAX_VALUE))
+        if(Double.isNaN(number) || Double.isInfinite(number) || number > Double.MAX_VALUE)
             return false;
         return true;
     }
@@ -111,6 +111,5 @@ public class Helper {
     public static double square(double x){
         return Math.pow(x, 2);
     }
-    
-
+   
 }
