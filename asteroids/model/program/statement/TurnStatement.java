@@ -6,27 +6,46 @@ import asteroids.model.program.Statement;
 import asteroids.part3.programs.SourceLocation;
 
 public class TurnStatement extends Element implements Statement {
+	
+	private Expression angle;
+	private boolean consumesTime;
 
 	public TurnStatement(SourceLocation sourceLocation, Expression angle) {
 		super(sourceLocation);
-		// TODO Auto-generated constructor stub
+		this.setAngle(angle);
 	}
 
-	@Override
-	public void execute() {
-		// TODO Auto-generated method stub
-		
+	public Expression getAngle() {
+		return angle;
 	}
 
 	@Override
 	public boolean consumesTime() {
-		// TODO Auto-generated method stub
-		return false;
+		return this.consumesTime;
+	}
+
+	public void setConsumesTime(boolean consumesTime) {
+		this.consumesTime = consumesTime;
+	}
+
+	public void setAngle(Expression angle) {
+		this.angle = angle;
+	}
+
+	@Override
+	public void execute() {
+		setConsumesTime(true);
+		getProgram().setSourceLocation(getSourceLocation());
+		if (getProgram().getTime() < 0.2) {
+			setConsumesTime(true);
+			return;
+		}
+		getProgram().getShip().turn((Double)angle.calculate());
+		getProgram().advanceTime();		
 	}
 
 	@Override
 	public boolean hasBreak() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
