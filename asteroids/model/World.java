@@ -341,17 +341,20 @@ public class World {
 	
 
 	/**
-	 * Terminate the world.
+	 * Terminate this world.
 	 * 
-	 * @post The ships and bullets are removed from the the hashsets bullets and ships, the boolean isTerminated is set to true.
-	 *       | implementation
+	 * @effect	Every superWorld of each entity in this world is set to null
+	 * 			| for each entity in entitiesm
+	 * 			|	entity.setSuperWorld(null)
+	 * @effect	entities is cleared.
+	 * 			| entities.clear()
+	 * @post	isTerminated is set to true.
+	 * 			| new.isTerminated = true
 	 */
 	public void terminate(){
-		 for (Entity entity : entities) {
-	            this.removeEntityFromWorld(entity);
-	        }
-		    entities.clear();
-	        this.isTerminated = true;
+		 entities.forEach(entity -> entity.setSuperWorld(null));
+		 entities.clear();
+	     this.isTerminated = true;
 	}
 	
 	/**
