@@ -6,7 +6,7 @@ import asteroids.part3.programs.SourceLocation;
 
 public class SkipStatement extends Element implements Statement {
 
-	protected SkipStatement(SourceLocation sourceLocation) {
+	public SkipStatement(SourceLocation sourceLocation) {
 		super(sourceLocation);
 		// TODO Auto-generated constructor stub
 	}
@@ -15,6 +15,18 @@ public class SkipStatement extends Element implements Statement {
 	public void execute() {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public boolean consumesTime() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean hasBreak() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

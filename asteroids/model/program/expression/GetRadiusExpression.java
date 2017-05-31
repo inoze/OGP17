@@ -9,7 +9,7 @@ import asteroids.part3.programs.SourceLocation;
 
 public class GetRadiusExpression extends EntityExpression{
 
-	protected GetRadiusExpression(SourceLocation sourceLocation, Expression<Entity> entity) {
+	public GetRadiusExpression(SourceLocation sourceLocation, Expression<Entity> entity) {
 		super(sourceLocation, entity);
 	}
 

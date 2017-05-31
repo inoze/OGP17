@@ -1,23 +1,41 @@
 package asteroids.model.program.statement;
 
-import java.util.Optional;
-import java.util.Set;
-
 import asteroids.model.program.Element;
+import asteroids.model.program.Expression;
 import asteroids.model.program.Statement;
-import asteroids.model.program.Variable;
 import asteroids.part3.programs.SourceLocation;
 
 public class ReturnStatement extends  Element implements Statement{
 
-	protected ReturnStatement(SourceLocation sourceLocation) {
+	private Expression expression;
+	
+	public ReturnStatement(SourceLocation sourceLocation, Expression expression) {
 		super(sourceLocation);
-		// TODO Auto-generated constructor stub
+		setExpression(expression);
+	}
+
+	public Expression getExpression() {
+		return expression;
+	}
+
+	public void setExpression(Expression expression) {
+		this.expression = expression;
 	}
 
 	@Override
-	public void execute() {
+	public void execute() throws IllegalArgumentException{
+		throw new IllegalArgumentException("Invalid run @ ReturnStatement");
+	}
+
+	@Override
+	public boolean consumesTime() {
 		// TODO Auto-generated method stub
-		
+		return false;
+	}
+
+	@Override
+	public boolean hasBreak() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

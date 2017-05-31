@@ -11,7 +11,7 @@ public class FunctionCallExpression extends Element implements Expression{
 	private List<Expression> arguments;
 	private boolean breakDiscovered;
 
-	protected FunctionCallExpression(SourceLocation sourceLocation, String name, List<Expression> arguments) {
+	public FunctionCallExpression(SourceLocation sourceLocation, String name, List<Expression> arguments) {
 		super(sourceLocation);
 		this.setName(name);
 		this.setArguments(arguments);
@@ -43,8 +43,12 @@ public class FunctionCallExpression extends Element implements Expression{
 
 	@Override
 	public Object calculate() throws IllegalArgumentException {
-		// TODO Auto-generated method stub
-		return null;
+		Function function =  getProgram().getFunction(name);
+		Object[] calculatedarguments = arguments.stream().map(arg -> arg.calculate()).toArray();
+		Object result = function.calculate(calculatedarguments);
+		if (function.hasBreak()) setBreakDiscovered(true);
+		else setBreakDiscovered(false);
+		return result;
 	}
 
 	@Override

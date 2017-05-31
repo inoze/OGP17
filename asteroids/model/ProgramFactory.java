@@ -152,6 +152,7 @@ public class ProgramFactory implements IProgramFactory <Expression, Statement, F
 	@Override
 	public Expression createGetXExpression(Expression e, SourceLocation location) {
 		GetXExpression getXExpression = new GetXExpression(location, e);
+		return getXExpression;
 	}
 
 	@Override
@@ -163,6 +164,7 @@ public class ProgramFactory implements IProgramFactory <Expression, Statement, F
 	@Override
 	public Expression createGetVXExpression(Expression e, SourceLocation location) {
 		GetVXExpression getVXExpression = new GetVXExpression(location, e);
+		return getVXExpression;
 	}
 
 	@Override

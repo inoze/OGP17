@@ -18,7 +18,7 @@ public class ChangeSignExpression extends Element implements Expression<Double>{
 		return this.expression;
 	}
 
-	public void setExpression(Expression<Double> expression) {
+	private void setExpression(Expression<Double> expression) {
 		this.expression = expression;
 	}
 

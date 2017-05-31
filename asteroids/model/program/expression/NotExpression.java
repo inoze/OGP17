@@ -10,8 +10,9 @@ public class NotExpression extends Element implements Expression<Boolean>{
 
 	private Expression<Boolean> expression;
 	
-	protected NotExpression(SourceLocation sourceLocation) {
+	public NotExpression(SourceLocation sourceLocation, Expression<Boolean> expression) {
 		super(sourceLocation);
+		this.setExpression(expression);
 	}
 
 	public Expression<Boolean> getExpression() {

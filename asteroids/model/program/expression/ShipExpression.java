@@ -8,7 +8,7 @@ import asteroids.part3.programs.SourceLocation;
 
 public class ShipExpression extends Element implements Expression {
 
-	protected ShipExpression(SourceLocation sourceLocation) {
+	public ShipExpression(SourceLocation sourceLocation) {
 		super(sourceLocation);
 		// TODO Auto-generated constructor stub
 	}

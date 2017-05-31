@@ -8,7 +8,7 @@ import asteroids.part3.programs.SourceLocation;
 
 public class PlanetoidExpression extends Element implements Expression {
 
-	protected PlanetoidExpression(SourceLocation sourceLocation) {
+	public PlanetoidExpression(SourceLocation sourceLocation) {
 		super(sourceLocation);
 		// TODO Auto-generated constructor stub
 	}

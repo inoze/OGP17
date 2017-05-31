@@ -8,7 +8,7 @@ import asteroids.part3.programs.SourceLocation;
 
 public class BulletExpression extends Element implements Expression {
 
-	protected BulletExpression(SourceLocation sourceLocation) {
+	public BulletExpression(SourceLocation sourceLocation) {
 		super(sourceLocation);
 		// TODO Auto-generated constructor stub
 	}

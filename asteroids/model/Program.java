@@ -26,8 +26,8 @@ public class Program {
 	public List<Object> execute(double dt) throws IllegalArgumentException {
 		timeRemaining += dt;
 		body.execute();
-		if (!body.failedToAdvanceTime()) {
-			if(body.hasActiveBreakStatement()) throw new IllegalArgumentException("Break statements cannot occur outside function bodies");
+		if (!body.consumesTime()) { //!Important - not sure if negation is correct
+			if(body.hasBreak()) throw new IllegalArgumentException("Break statements cannot occur outside function bodies");
 			location = new SourceLocation(0, 0);
 			List<Object> resultsToThrow = results; 
 			results = null;
@@ -69,11 +69,11 @@ public class Program {
 		results.add(result);
 	}
 
-	public SourceLocation getLocation() {
+	public SourceLocation getSourceLocation() {
 		return this.location;
 	}
 
-	public void setCurrentLocation(SourceLocation location) {
+	public void setSourceLocation(SourceLocation location) {
 		this.location = location;
 	}
 

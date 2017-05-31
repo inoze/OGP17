@@ -11,7 +11,7 @@ public class ReadParameterExpression extends Element implements Expression<Objec
 
 	private String parameter;
 
-	protected ReadParameterExpression(SourceLocation sourceLocation, String paramName) {
+	public ReadParameterExpression(SourceLocation sourceLocation, String paramName) {
 		super(sourceLocation);
 		setParameter(paramName);
 	}
@@ -20,7 +20,7 @@ public class ReadParameterExpression extends Element implements Expression<Objec
 		return this.parameter;
 	}
 
-	public void setParameter(String parameter) {
+	private void setParameter(String parameter) {
 		this.parameter = parameter;
 	}
 

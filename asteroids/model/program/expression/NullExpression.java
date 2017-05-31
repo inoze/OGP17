@@ -9,7 +9,7 @@ import asteroids.part3.programs.SourceLocation;
 
 public class NullExpression extends Element implements Expression<Entity> {
 
-	protected NullExpression(SourceLocation sourceLocation) {
+	public NullExpression(SourceLocation sourceLocation) {
 		super(sourceLocation);
 	}
 

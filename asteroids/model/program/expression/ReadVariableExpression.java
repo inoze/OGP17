@@ -10,7 +10,7 @@ public class ReadVariableExpression extends Element implements Expression<Object
 	
 	private String variableName;
 
-	protected ReadVariableExpression(SourceLocation sourceLocation, String name) {
+	public ReadVariableExpression(SourceLocation sourceLocation, String name) {
 		super(sourceLocation);
 		setVariableName(name);
 	}
@@ -19,7 +19,7 @@ public class ReadVariableExpression extends Element implements Expression<Object
 		return this.variableName;
 	}
 
-	public void setVariableName(String variableName) {
+	private void setVariableName(String variableName) {
 		this.variableName = variableName;
 	}
 

@@ -34,4 +34,16 @@ public class AssignmentStatement extends  Element implements Statement{
 		// TODO Auto-generated method stub	
 	}
 
+	@Override
+	public boolean consumesTime() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean hasBreak() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

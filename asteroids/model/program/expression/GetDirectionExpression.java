@@ -20,7 +20,7 @@ public class GetDirectionExpression extends EntityExpression{
 
 	@Override
 	public Double calculate(List actualArgs) throws IllegalArgumentException {
-		return this.getEntity().calculate(actualArgs).getRadius();
+		return this.getEntity().calculate(actualArgs).getDirection();
 	}
 
 }

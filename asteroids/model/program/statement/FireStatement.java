@@ -5,16 +5,36 @@ import asteroids.model.program.Statement;
 import asteroids.part3.programs.SourceLocation;
 
 public class FireStatement extends Element implements Statement{
+	private boolean consumesTime;
 
-	protected FireStatement(SourceLocation sourceLocation) {
+	public FireStatement(SourceLocation sourceLocation) {
 		super(sourceLocation);
-		// TODO Auto-generated constructor stub
+	}
+
+	public boolean consumesTime() {
+		return this.consumesTime;
+	}
+
+	public void setConsumesTime(boolean b) {
+		this.consumesTime = b;
 	}
 
 	@Override
 	public void execute() {
-		// TODO Auto-generated method stub
-		
+		setConsumesTime(true);
+		getProgram().setSourceLocation(getSourceLocation());
+		if (getProgram().getTime() <= 0.2) {
+			setConsumesTime(false);
+			return;
+		}
+		getProgram().getShip().fireBullet();
+		getProgram().advanceTime();
 	}
 
+
+	@Override
+	public boolean hasBreak() {
+		// TODO Auto-generated method stub
+		return false;
+	}	
 }

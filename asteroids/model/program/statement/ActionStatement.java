@@ -21,4 +21,16 @@ public class ActionStatement extends Element implements Statement{
 		
 	}
 
+	@Override
+	public boolean hasBreak() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean consumesTime() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

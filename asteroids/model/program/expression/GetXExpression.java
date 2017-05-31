@@ -8,7 +8,7 @@ import asteroids.part3.programs.SourceLocation;
 
 public class GetXExpression extends EntityExpression{
 
-	protected GetXExpression(SourceLocation sourceLocation, Expression<Entity> entity) {
+	public GetXExpression(SourceLocation sourceLocation, Expression<Entity> entity) {
 		super(sourceLocation, entity);
 	}
 
