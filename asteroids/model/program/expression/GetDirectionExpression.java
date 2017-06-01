@@ -6,21 +6,21 @@ import asteroids.model.Entity;
 import asteroids.model.program.*;
 import asteroids.part3.programs.SourceLocation;
 
-public class GetDirectionExpression extends EntityExpression{
+public class GetDirectionExpression extends Element implements Expression{
 
-	protected GetDirectionExpression(SourceLocation sourceLocation, Expression<Entity> entity) {
-		super(sourceLocation, entity);
+	public GetDirectionExpression(SourceLocation sourceLocation) {
+		super(sourceLocation);
 	}
 	
 
 	@Override
 	public Double calculate() throws IllegalArgumentException {
-		return this.getEntity().calculate().getDirection();
+		return this.getProgram().getShip().getDirection();
 	}
 
 	@Override
 	public Double calculate(List actualArgs) throws IllegalArgumentException {
-		return this.getEntity().calculate(actualArgs).getDirection();
+		return this.getProgram().getShip().getDirection();
 	}
 
 }
