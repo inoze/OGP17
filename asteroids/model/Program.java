@@ -17,7 +17,6 @@ public class Program {
 	
 	public Program(List<Function> functions, Statement main) {
 		this.functions = functions;
-		this.body = body;
 		main.setProgram(this);
 		for(Function function: functions) function.setProgram(this);
 		timeRemaining = 0;
@@ -26,7 +25,7 @@ public class Program {
 	public List<Object> execute(double dt) throws IllegalArgumentException {
 		timeRemaining += dt;
 		body.execute();
-		if (!body.consumesTime()) { //!Important - not sure if negation is correct
+		if (body.consumesTime()) { //!Important - not sure if negation is correct
 			if(body.hasBreak()) throw new IllegalArgumentException("Break statements cannot occur outside function bodies");
 			location = new SourceLocation(0, 0);
 			List<Object> resultsToThrow = results; 

@@ -16,20 +16,37 @@ public class Function {
 	private SourceLocation sourceLocation;
 	private Program program;
 	private Set<Variable> variables = new HashSet<Variable>();
-	private boolean hasBreakStatement;
+	private boolean hasBreak;
 
 	public Function(String functionName, Statement body, SourceLocation sourceLocation) {
 		this.name = functionName;
 		this.body = body;
-		this.sourceLocation = sourceLocation;
+		this.setSourceLocation(sourceLocation);
 	}
 	
-	public Object evaluate(List<Expression> actualArgs){
-		return null;
+	public SourceLocation getSourceLocation() {
+		return this.sourceLocation;
+	}
+	
+	public String getName() {
+		return this.name;
 	}
 
-	private void setHasBreakStatement(boolean b) {
-		this.hasBreakStatement = b;
+	public boolean hasBreak() {
+		return this.hasBreak;
+	}
+	
+
+	public Set<Variable> getVariables() {
+		return new HashSet<Variable>(variables);
+	}
+
+	public void setSourceLocation(SourceLocation sourceLocation) {
+		this.sourceLocation = sourceLocation;
+	}
+
+	private void setHasBreak(boolean b) {
+		this.hasBreak = b;
 	}
 
 	public void setProgram(Program program) {
@@ -37,24 +54,16 @@ public class Function {
 		body.setProgram(program);
 	}
 	
-	public Set<Variable> getVariables() {
-		return new HashSet<Variable>(variables);
-	}
-	
 	public void addVariable(Variable variable) {
 		variables.add(variable);
+	}
+	
+	public Object calculate(Object[] calculatedarguments){
+		return null;
 	}
 
 	public Object getVariable(String variableName) throws NoSuchElementException {
 		return getVariables().stream().filter(variable -> variable.getName().equals(variableName)).findFirst().get().getValue();
-	}
-
-	public String getName() {
-		return this.name;
-	}
-
-	public boolean hasBreakStatement() {
-		return hasBreakStatement;
 	}
 
 }
