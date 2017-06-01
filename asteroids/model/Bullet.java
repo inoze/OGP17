@@ -47,7 +47,7 @@ public class Bullet extends Entity{
 	/**
 	 * Returns the density of a bullet.
 	 */
-	@Immutable
+	@Immutable @Raw
 	public double getBulletDensity(){
 		return BULLET_DENSITY;
 	}
@@ -65,7 +65,7 @@ public class Bullet extends Entity{
 	 *          | resutl == source
 	 * @note    If the bullet isn't fired source contains null by default.
 	 */
-	@Basic
+	@Basic @Raw
 	public Ship getBulletSource() {
 		return source;
 	}
@@ -76,7 +76,7 @@ public class Bullet extends Entity{
 	 * 
 	 * @return If the 
 	 */
-	@Basic
+	@Basic @Raw
 	public Ship getBulletShip() {
 		if(this.getWorld() == null)
 			return this.getBulletSource();
@@ -93,10 +93,29 @@ public class Bullet extends Entity{
 	  * @post  The source of the bullet is set to the given source.
 	  *        | new.source == source
 	  */
+	@Raw
 	public void setSource(Ship source){
 			this.source = source;
 	}
 	
+	/**
+     * Set the word of bullet to the given world.
+     * 
+     * @param 	world
+     * 			The world to be set as the new world of the bullet.
+     * @effect	If the given world is null the source of the bullet will also be set to null.
+     * 			| if world == null
+     * 			|	then	setSource(null)
+     * 			|			super.setSuperWorld(world)
+     * @effect 	The world of bullet is set to the given world.
+     * 			| super.setSuperWorld(world)
+     */
+    @Override @Raw
+    public void setSuperWorld(World world){
+    	if (world == null)	setSource(null);
+    	super.setSuperWorld(world);
+    }
+    
 	/**
 	 * Variable containing the source ship of the bullet.
 	 * 
@@ -116,7 +135,7 @@ public class Bullet extends Entity{
 	@Raw
 	public void bouncesCounter(){
 		bounces++;
-		if (bounces > 2) this.terminateBullet();
+		if (bounces > 2) this.terminate();
 	}
 	
 	/**
@@ -140,13 +159,34 @@ public class Bullet extends Entity{
      *
      * @post   The source of this bullet is set to null.
      *         | new.source = null
-     * @effect The bullet is terminated at entity level
-     *         | this.terminate()
+     * @post   isTerminated is set to true.
+     * 		   | new.isTerminated == true
+     * @effect If the world of the bullet isn't null the bullet is removed from that world
+     * 		   and the world of the bullet is set to null.
+     * 		   | if getWorld() != null
+     * 		   |	then 	getWorld().removeEntityFromWorld((Bullet) this)
+	 *         |			setSuperWorld(null);
+	 * @effect If the world of the bullet is null the bullet will be removed from the ship 
+	 * 		   on which it is loaded.
+	 * 		   | if getWolrd() == null
+	 * 		   |	then 	source.removeBulletFromShip(this)
+	 * 
 	 */
-	@Basic
-	public void terminateBullet() {
-		this.terminate();
+	@Override
+	public void terminate() {
+		
+		if(getWorld() != null){
+			getWorld().removeEntityFromWorld((Bullet) this);
+			setSuperWorld(null);
+		}
+		else {
+			source.removeBulletFromShip(this);
+		}
+		
 		this.source = null;
+		
+		this.isTerminated = true;
+		
 	}
 	
 	
@@ -158,8 +198,9 @@ public class Bullet extends Entity{
      * @return	True if and only if radis is bigger than the minimal radius for a bullet and if radius is a valid double.
      * 			| result == (radius > MINIMAL_BULLET_RAD && Helper.isValidDouble(radius))
      */
-    @Model
+    @Model @Raw
     private boolean isValidRadius(double radius){
     	return (radius > MINIMAL_BULLET_RAD && Helper.isValidDouble(radius));
     }
+    
 }

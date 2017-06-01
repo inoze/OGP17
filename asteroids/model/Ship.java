@@ -99,7 +99,7 @@ public class Ship extends Entity{
     	super(xPosition, yPosition, xVelocity, yVelocity, radius, "Ship");
     	
     	if (!isValidRadius(getRadius())) throw new IllegalArgumentException("Invalid radius @ ship");
-    	
+
     	setDirection(direction);
     	setMass(mass);
     	setTotalMass(mass);
@@ -164,7 +164,7 @@ public class Ship extends Entity{
      *        | new.direction == direction
      */
     public void setDirection(double direction) {
-        assert isValidDirection(direction);
+        assert isValidDirection(direction) : "klote";
         this.direction = direction;
     }
     
@@ -219,7 +219,7 @@ public class Ship extends Entity{
     @Basic @Override
 	public void terminate() {
     	bullets = null;
-		this.terminate();
+		super.terminate();
 	}
 
     /**
