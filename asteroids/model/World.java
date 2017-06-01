@@ -192,7 +192,7 @@ public class World {
      *		   | 		then	resultSet.add(element)
      *		   | result == result	
 	 */
-	public Set<? extends Entity> getEntitiesOfTheCLass(String type){
+	public Set<? extends Entity> getEntitiesOfTheClass(String type){
 		
 		Set<Entity> resultSet = new HashSet<Entity>();
 		for	(Entity element : entities) {

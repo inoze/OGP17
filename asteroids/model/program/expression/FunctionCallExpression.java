@@ -1,6 +1,7 @@
 package asteroids.model.program.expression;
 
 import java.util.List;
+import java.util.Set;
 
 import asteroids.model.program.*;
 import asteroids.part3.programs.SourceLocation;
@@ -52,9 +53,10 @@ public class FunctionCallExpression extends Element implements Expression{
 	}
 
 	@Override
-	public Object calculate(List actualArgs) throws IllegalArgumentException {
+	public Object calculate(Object[] actualArgs, Set localVars) throws IllegalArgumentException {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
 
 }

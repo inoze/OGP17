@@ -1,9 +1,10 @@
 package asteroids.model.program.expression;
 
-import java.util.List;
+import java.util.Set;
 
 import asteroids.model.program.Element;
 import asteroids.model.program.Expression;
+import asteroids.model.program.Variable;
 import asteroids.part3.programs.SourceLocation;
 
 public class ReadVariableExpression extends Element implements Expression<Object>{
@@ -29,7 +30,7 @@ public class ReadVariableExpression extends Element implements Expression<Object
 	}
 
 	@Override
-	public Object calculate(List actualArgs) throws IllegalArgumentException {
+	public Object calculate(Object[] actualArgs, Set<Variable> localVars) throws IllegalArgumentException {
 		return getProgram().getVariable(variableName).getValue();
 	}
 

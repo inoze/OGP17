@@ -1,10 +1,10 @@
 package asteroids.model.program.expression;
 
-import java.util.List;
+import java.util.Set;
 
 import asteroids.model.program.Element;
 import asteroids.model.program.Expression;
-import asteroids.model.program.Function;
+import asteroids.model.program.Variable;
 import asteroids.part3.programs.SourceLocation;
 
 public class ReadParameterExpression extends Element implements Expression<Object>{
@@ -29,11 +29,10 @@ public class ReadParameterExpression extends Element implements Expression<Objec
 		throw new IllegalArgumentException();
 	}
 
-
 	@Override
-	public Object calculate(List actualArgs) throws IllegalArgumentException {
-		// TODO Auto-generated method stub
-		return null;
+	public Object calculate(Object[] actualArgs, Set<Variable> localVars) throws IllegalArgumentException {
+		int index = Integer.parseInt(getParameter().substring(1, getParameter().length()));
+		return actualArgs[index-1];
 	}
 
 }

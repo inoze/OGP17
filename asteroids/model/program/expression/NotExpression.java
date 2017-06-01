@@ -1,9 +1,11 @@
 package asteroids.model.program.expression;
 
 import java.util.List;
+import java.util.Set;
 
 import asteroids.model.program.Element;
 import asteroids.model.program.Expression;
+import asteroids.model.program.Variable;
 import asteroids.part3.programs.SourceLocation;
 
 public class NotExpression extends Element implements Expression<Boolean>{
@@ -29,8 +31,8 @@ public class NotExpression extends Element implements Expression<Boolean>{
 	}
 
 	@Override
-	public Boolean calculate(List<Expression> actualArgs) throws IllegalArgumentException {
-		return !expression.calculate(actualArgs);
+	public Boolean calculate(Object[] actualArgs, Set<Variable> localVars) throws IllegalArgumentException {
+		return !expression.calculate(actualArgs, localVars);
 	}
 
 }

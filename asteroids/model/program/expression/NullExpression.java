@@ -1,10 +1,12 @@
 package asteroids.model.program.expression;
 
 import java.util.List;
+import java.util.Set;
 
 import asteroids.model.Entity;
 import asteroids.model.program.Element;
 import asteroids.model.program.Expression;
+import asteroids.model.program.Variable;
 import asteroids.part3.programs.SourceLocation;
 
 public class NullExpression extends Element implements Expression<Entity> {
@@ -19,7 +21,7 @@ public class NullExpression extends Element implements Expression<Entity> {
 	}
 
 	@Override
-	public Entity calculate(List actualArgs) throws IllegalArgumentException {
+	public Entity calculate(Object[] actualArgs, Set<Variable> localVars) throws IllegalArgumentException {
 		return null;
 	}
 
