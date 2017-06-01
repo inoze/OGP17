@@ -1,9 +1,11 @@
 package asteroids.model.program.expression;
 
 import java.util.List;
+import java.util.Set;
 
 import asteroids.model.Entity;
 import asteroids.model.program.Expression;
+import asteroids.model.program.Variable;
 import asteroids.part3.programs.SourceLocation;
 
 public class GetVYExpression extends EntityExpression{
@@ -18,7 +20,7 @@ public class GetVYExpression extends EntityExpression{
 	}
 
 	@Override
-	public Double calculate(List actualArgs) throws IllegalArgumentException {
-		return this.getEntity().calculate(actualArgs).getVelocity()[1];
+	public Double calculate(Object[] actualArgs, Set<Variable> localVars) throws IllegalArgumentException {
+		return this.getEntity().calculate(actualArgs, localVars).getVelocity()[1];
 	}
 }

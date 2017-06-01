@@ -1,15 +1,14 @@
 package asteroids.model.program;
 
-import java.util.List;
+import java.util.Set;
 
 import asteroids.model.Program;
-import asteroids.part3.programs.SourceLocation;
 
 public interface Expression<T> {
  
 	public abstract T calculate() throws IllegalArgumentException;
 	
-	public abstract T calculate(List<Expression> actualArgs) throws IllegalArgumentException;
+	public abstract T calculate(Object[] actualArgs, Set<Variable> localVars) throws IllegalArgumentException;
 	
 	public void setProgram(Program program);
 	

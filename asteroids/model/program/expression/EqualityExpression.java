@@ -1,10 +1,12 @@
 package asteroids.model.program.expression;
 
 import java.util.List;
+import java.util.Set;
 
 import asteroids.model.Program;
 import asteroids.model.program.Element;
 import asteroids.model.program.Expression;
+import asteroids.model.program.Variable;
 import asteroids.part3.programs.SourceLocation;
 
 public class EqualityExpression extends ComparisonExpression{
@@ -18,8 +20,8 @@ public class EqualityExpression extends ComparisonExpression{
 	}
 
 	@Override
-	public Boolean calculate(List actualArgs) throws IllegalArgumentException {
-		return this.getLeftExpression().calculate(actualArgs).equals(this.getRightExpression().calculate(actualArgs));
+	public Boolean calculate(Object[] actualArgs, Set<Variable> localVars) throws IllegalArgumentException {
+		return this.getLeftExpression().calculate(actualArgs, localVars).equals(this.getRightExpression().calculate(actualArgs, localVars));
 	}
 
 }

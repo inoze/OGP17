@@ -1,10 +1,12 @@
 package asteroids.model.program.expression;
 
 import java.util.List;
+import java.util.Set;
 
 import asteroids.model.Entity;
 import asteroids.model.program.Element;
 import asteroids.model.program.Expression;
+import asteroids.model.program.Variable;
 import asteroids.part3.programs.SourceLocation;
 
 public class GetRadiusExpression extends EntityExpression{
@@ -19,8 +21,8 @@ public class GetRadiusExpression extends EntityExpression{
 	}
 
 	@Override
-	public Double calculate(List actualArgs) throws IllegalArgumentException {
-		return this.getEntity().calculate(actualArgs).getRadius();
+	public Double calculate(Object[] actualArgs, Set<Variable> localVars) throws IllegalArgumentException {
+		return this.getEntity().calculate(actualArgs, localVars).getRadius();
 	}
 
 }

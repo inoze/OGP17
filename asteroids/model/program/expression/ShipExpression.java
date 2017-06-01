@@ -1,28 +1,38 @@
 package asteroids.model.program.expression;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
+import asteroids.model.*;
 import asteroids.model.program.Element;
 import asteroids.model.program.Expression;
+import asteroids.model.program.Variable;
 import asteroids.part3.programs.SourceLocation;
 
-public class ShipExpression extends Element implements Expression {
+public class ShipExpression extends Element implements Expression<Entity> {
 
-	public ShipExpression(SourceLocation sourceLocation) {
-		super(sourceLocation);
-		// TODO Auto-generated constructor stub
+	private Set<? extends Entity> ships = new HashSet<Ship>();
+
+	public ShipExpression(SourceLocation location) {
+		super(location);
 	}
 
+	
 	@Override
-	public Object calculate() throws IllegalArgumentException {
-		// TODO Auto-generated method stub
+	public Ship calculate() {
+		Ship ship = getProgram().getShip();
+		if (ship.getWorld() == null) return null;
+		ships = ship.getWorld().getEntitiesOfTheClass("Ship");
+		Optional<? extends Entity> closestShip = ships.stream().reduce((s1, s2) -> (ship.getDistanceBetween(s1) < ship.getDistanceBetween(s2) ? s1 : s2));
+		if (closestShip.isPresent()) return (Ship)closestShip.get();
 		return null;
 	}
 
 	@Override
-	public Object calculate(List actualArgs) throws IllegalArgumentException {
-		// TODO Auto-generated method stub
-		return null;
+	public Entity calculate(Object[] actualArgs, Set<Variable> localVars) throws IllegalArgumentException {
+		return this.calculate();
 	}
 
 }
