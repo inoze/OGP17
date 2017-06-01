@@ -35,12 +35,140 @@ public class Ship extends Entity{
 	 * Constant containing the density of bullets.
 	 */
 	 private final double SHIP_DENSITY = 1.42E12;
+	 
+	 /**
+	    * Initialize this new ship with a given x- and y-position, x- and y-velocity, radaius and
+	    * a given direction
+	    *
+	    * @param  xPosition
+	    *         The x-position of the ship.
+	    * @param  yPosition
+	    *         The y-position of the ship.
+	    * @param  xVelocity
+	    *         The ship's velocity on the x-axis
+	    * @param  yVelocity
+	    *         The ship's velocity on the y-axis
+	    * @param  radius
+	    *         The radius (size) of the ship
+	    * @param  direction
+	    *         The direction of the ship in radians.
+	    * @param  mass
+	    * 		  The mass of the ship.
+	    * @post   The given radius is equal to the new radius.
+	    *         | new.getShipRadius() == radius
+	    * @effect The mass of the ship is set to the given mass.
+	    * 		  | this.setMass(mass)
+	    * @effect The direction of the ship is set to the given direction.
+	    *         | this.setDirection(direction)
+	    * @effect The formal arguments of the constructor of the superclass are initiallised with the corresponding formal arguments of ship.
+	    * 		  |super(xPosition, yPosition, xVelocity, yVelocity, radius, "Ship")
+	    * @throws IllegalArgumentException
+	    *         Throws an IllegalArgumentException if the given radius is invalid.
+	    *         | radius <= MINIMAL_SHIP_RAD
+	    */
+		@Raw
+	    public Ship(double xPosition, double yPosition, double xVelocity, double yVelocity, double radius, double direction, double mass) throws IllegalArgumentException, ModelException {
+	    	super(xPosition, yPosition, xVelocity, yVelocity, radius, "Ship");
+	    	
+	    	if (!isValidRadius(getRadius())) throw new IllegalArgumentException("Invalid radius @ ship");
+
+	    	setDirection(direction);
+	    	setMass(mass);
+	    	setTotalMass(mass);
+	    }
+	    
 	
-    //Variables
+	/**
+     * Return the direction of ship (in radians).
+	 */
+	 @Basic
+	 public double getDirection(){
+		 return this.direction;
+	 }
+	
+	 
+    /**
+     * A method to set to direction of a ship
+     * to a given value.
+     * @param direction
+     *        The new direction of the ship
+     * @pre   The given direction must be a valid direction.
+     *        | isValidDirection(direction)
+     * @post  The new direction of the ship is the given direction
+     *        | new.direction == direction
+     */
+    public void setDirection(double direction) {
+        assert isValidDirection(direction) : "klote";
+        this.direction = direction;
+	}
+
+    /**
+     * Check whether the given direction is a valid direction for
+     * a ship.
+     *
+     * @param   direction
+     *          The orienation to check.
+     * @return  True if and only if the given direction is bigger or equal to zero and smaller or equal to 2*pi.
+     *         | result == ((direction >= 0) && (direction <= (2*Math.PI) && Helepr.isValidDouble(direction)
+     */
+	@Model
+    private boolean isValidDirection(double direction){
+        return ((direction >= 0) && (direction < 2*Math.PI) && Helper.isValidDouble(direction));
+	}
+	
     /**
      *variable containg the direction of the ship.
      */
     private double direction;
+    
+	/**
+	 * Return the total mass of ship (i.e., including bullets
+	 * loaded onto the ship).
+	 */
+    @Basic
+	public double getTotalMass() {
+		return this.totalMass;
+	}
+	
+    
+    /**
+     * Method that set's the total mass of the ship to a given mass.
+     * 
+     * @param 	mass
+     * 			The mass to be set.
+     * @post	If the mass is a valid total mass the total mass is set to the given mass.
+     * 			| if isValidTotalMass(mass)
+     * 			|	then new.totalMass == mass
+     * @post	If the mass isn't a valid total mass the total mass is set to 
+     * 			the miimal ship mass.
+     * 			| if !isValidTotalMass(mass)
+     * 			|	then new.totalMass == (Math.pow(this.getRadius(), 3) * Math.PI * (4/3) * SHIP_DENSITY)
+     */
+    public void setTotalMass(double mass){
+    	if (isValidTotalMass(mass)) this.totalMass = mass;
+    	else totalMass = (Math.pow(this.getRadius(), 3) * Math.PI * 4.0 * SHIP_DENSITY / 3.0);
+    }
+    
+    /**
+     * Checks whether a mass is a valid total mass.
+     * 
+     * @param 	mass
+     * 			| The mass to check.
+     * @return	Returns true if and only if the mass is esual to the sum of the mass of all the bullets
+     * 			loaded within in and it's own mass.
+     * 			| double i = 0
+     * 			| for each bullet in bullets
+     * 			| 	i =+ bullet.getMass()
+     * 			|
+     * 			| i =+ this.getMass()
+     * 			| result ==  (mass == i) 
+     */
+    @Model
+    private boolean isValidTotalMass(double mass){
+    	if (!Helper.isValidDouble(mass)) return false;
+    	return (mass == (bullets.isEmpty() ? this.mass : this.mass + bullets.stream().map(bullet -> bullet.getMass()).reduce((u, t) -> u + t).get()));
+    }
+    
     /**
      * Variable containing the total mass of the ship.
      */
@@ -53,78 +181,26 @@ public class Ship extends Entity{
      * Variable that determines the force the thruster exerts
      */
     private double thrusterForce = 1.1E18;
+    
+    
+    
+    
+    
     /**
      * Variable set containing all the (references to the) bullets in the ship. 
      */
     private Set<Bullet> bullets = new HashSet<Bullet>();
     
-    private Program program;
     
-    //Initializers
-   
-    //Defensive
     
-   /**
-    * Initialize this new ship with a given x- and y-position, x- and y-velocity, radaius and
-    * a given direction
-    *
-    * @param  xPosition
-    *         The x-position of the ship.
-    * @param  yPosition
-    *         The y-position of the ship.
-    * @param  xVelocity
-    *         The ship's velocity on the x-axis
-    * @param  yVelocity
-    *         The ship's velocity on the y-axis
-    * @param  radius
-    *         The radius (size) of the ship
-    * @param  direction
-    *         The direction of the ship in radians.
-    * @param  mass
-    * 		  The mass of the ship.
-    * @post   The given radius is equal to the new radius.
-    *         | new.getShipRadius() == radius
-    * @effect The mass of the ship is set to the given mass.
-    * 		  | this.setMass(mass)
-    * @effect The direction of the ship is set to the given direction.
-    *         | this.setDirection(direction)
-    * @effect The formal arguments of the constructor of the superclass are initiallised with the corresponding formal arguments of ship.
-    * 		  |super(xPosition, yPosition, xVelocity, yVelocity, radius, "Ship")
-    * @throws IllegalArgumentException
-    *         Throws an IllegalArgumentException if the given radius is invalid.
-    *         | radius <= MINIMAL_SHIP_RAD
-    */
+    
+    
+    
+    
+    private Program program;   
 
-    public Ship(double xPosition, double yPosition, double xVelocity, double yVelocity, double radius, double direction, double mass) throws IllegalArgumentException, ModelException {
-    	super(xPosition, yPosition, xVelocity, yVelocity, radius, "Ship");
-    	
-    	if (!isValidRadius(getRadius())) throw new IllegalArgumentException("Invalid radius @ ship");
+    
 
-    	setDirection(direction);
-    	setMass(mass);
-    	setTotalMass(mass);
-    }
- 
-   
-    //Getters   
-    /**
-     * Return the direction of ship (in radians).
-     */
-    @Basic
-    public double getDirection(){
-        return this.direction;
-    }
-   
-       
-	/**
-	 * Return the total mass of ship (i.e., including bullets
-	 * loaded onto the ship).
-	 */
-    @Basic
-	public double getTotalMass() {
-		return this.totalMass;
-	}
-	
 	/**
 	 * Return the acceleration of ship.
 	 */
@@ -149,78 +225,14 @@ public class Ship extends Entity{
 		return this.isThrusterActive;
 	}
     
-   
-    ///Setters
-   
-    //Nominal
-    /**
-     * A method to set to direction of a ship
-     * to a given value.
-     * @param direction
-     *        The new direction of the ship
-     * @pre   The given direction must be a valid direction.
-     *        | isValidDirection(direction)
-     * @post  The new direction of the ship is the given direction
-     *        | new.direction == direction
-     */
-    public void setDirection(double direction) {
-        assert isValidDirection(direction) : "klote";
-        this.direction = direction;
-    }
-    
-    /**
-     * A method to set the mass of a ship to a given value.
-     * 
-     * @param 	mass
-     * 			The mass to be set.
-     * @post   	If the mass of the ship is invalid it wil be set to the minimal mass for a ship.
-     *         	| this.setMass(Math.pow(this.getRadius(), 3) * Math.PI * (4/3) * SHIP_DENSITY
-     * @post	If the given mass is valid the mass of the ship is set to the given mass.
-     * 			| if this.isvalidMass(mass)
-     * 			| 	then super.setMass(mass)
-     */
-    @Override
-    public void setMass(double mass){
-		
-    	if (isValidMass(mass)) super.setMass(mass);
-    	else  super.setMass(Math.pow(this.getRadius(), 3) * Math.PI * 4.0 * SHIP_DENSITY / 3.0);
-    }
+  
     
     public void setProgram(Program program){
     	this.program = program;
     }
     
-    /**
-     * Method that set's the total mass of the ship to a given mass.
-     * 
-     * @param 	mass
-     * 			The mass to be set.
-     * @post	If the mass is a valid total mass the total mass is set to the given mass.
-     * 			| if isValidTotalMass(mass)
-     * 			|	then new.totalMass == mass
-     * @post	If the mass isn't a valid total mass the total mass is set to 
-     * 			the miimal ship mass.
-     * 			| if !isValidTotalMass(mass)
-     * 			|	then new.totalMass == (Math.pow(this.getRadius(), 3) * Math.PI * (4/3) * SHIP_DENSITY)
-     */
-    public void setTotalMass(double mass){
-    	if (isValidTotalMass(mass)) this.totalMass = mass;
-    	else totalMass = (Math.pow(this.getRadius(), 3) * Math.PI * 4.0 * SHIP_DENSITY / 3.0);
-    }
-    
-	/**
-	 * Terminate ship.
-	 * 
-	 * @post    The set of all bullets is set to null.
-	 *          | bullets = null
-	 * @effect  The ship is terminated on entity level.
-	 *          | super.terminate()
-	 */
-    @Basic @Override
-	public void terminate() {
-    	bullets = null;
-		super.terminate();
-	}
+
+
 
     /**
      * A method that turns on a ship's thruster
@@ -395,23 +407,39 @@ public class Ship extends Entity{
 		}
 	}
 	
-	   
-    //Validity checkers
-   
-    //Nominal
+    
     /**
-     * Check whether the given direction is a valid direction for
-     * a ship.
-     *
-     * @param   direction
-     *          The orienation to check.
-     * @return  True if and only if the given direction is bigger or equal to zero and smaller or equal to 2*pi.
-     *         | result == ((direction >= 0) && (direction <= (2*Math.PI) && Helepr.isValidDouble(direction)
+     * A method to set the mass of a ship to a given value.
+     * 
+     * @param 	mass
+     * 			The mass to be set.
+     * @post   	If the mass of the ship is invalid it wil be set to the minimal mass for a ship.
+     *         	| this.setMass(Math.pow(this.getRadius(), 3) * Math.PI * (4/3) * SHIP_DENSITY
+     * @post	If the given mass is valid the mass of the ship is set to the given mass.
+     * 			| if this.isvalidMass(mass)
+     * 			| 	then super.setMass(mass)
      */
-	@Model
-    private boolean isValidDirection(double direction){
-        return ((direction >= 0) && (direction < 2*Math.PI) && Helper.isValidDouble(direction));
+    @Override
+    public void setMass(double mass){
+		
+    	if (isValidMass(mass)) super.setMass(mass);
+    	else  super.setMass(Math.pow(this.getRadius(), 3) * Math.PI * 4.0 * SHIP_DENSITY / 3.0);
     }
+    
+    
+	/**
+	 * Terminate ship.
+	 * 
+	 * @post    The set of all bullets is set to null.
+	 *          | bullets = null
+	 * @effect  The ship is terminated on entity level.
+	 *          | super.terminate()
+	 */
+    @Basic @Override
+	public void terminate() {
+    	bullets = null;
+		super.terminate();
+	}
 
 	/**
      * Checks whether a given bullet is valid.
@@ -461,24 +489,6 @@ public class Ship extends Entity{
     protected boolean isValidMass(double mass){
     	return (mass >= 4.0*Math.PI*Math.pow(radius, 3)*SHIP_DENSITY / 3.0 && Helper.isValidDouble(mass));
     }
-    /**
-     * Checks whether a mass is a valid total mass.
-     * 
-     * @param 	mass
-     * 			| The mass to check.
-     * @return	Returns true if and only if the mass is esual to the sum of the mass of all the bullets
-     * 			loaded within in and it's own mass.
-     * 			| double i = 0
-     * 			| for each bullet in bullets
-     * 			| 	i =+ bullet.getMass()
-     * 			|
-     * 			| i =+ this.getMass()
-     * 			| result ==  (mass == i) 
-     */
-    @Model
-    private boolean isValidTotalMass(double mass){
-    	if (!Helper.isValidDouble(mass)) return false;
-    	return (mass == (bullets.isEmpty() ? this.mass : this.mass + bullets.stream().map(bullet -> bullet.getMass()).reduce((u, t) -> u + t).get()));
-    }
+
 }
 
