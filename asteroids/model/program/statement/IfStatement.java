@@ -49,11 +49,11 @@ public class IfStatement extends  Element implements Statement{
 		return this.elseBody;
 	}
 
-	public boolean isHasIf() {
+	public boolean hasIf() {
 		return this.hasIf;
 	}
 
-	public boolean isHasElse() {
+	public boolean hasElse() {
 		return this.hasElse;
 	}
 
@@ -61,8 +61,8 @@ public class IfStatement extends  Element implements Statement{
 		this.hasBreak = hasBreak;
 	}
 
-	public void setConsumesTime(boolean consumesTime) {
-		this.consumesTime = consumesTime;
+	public void setConsumesTime(boolean b) {
+		this.consumesTime = b;
 	}
 	
 	public void setHasElse(boolean hasElse) {
@@ -85,10 +85,46 @@ public class IfStatement extends  Element implements Statement{
 		this.condition = condition;
 	}
 
-
 	@Override
 	public void execute() {
-		// TODO Auto-generated method stub
+		setConsumesTime(true);
+		setHasBreak(false);
+		if(!hasIf() && !hasElse()){
+			if (condition.calculate()) setHasIf(true);
+			else{
+				if (getElseBody() == null) return;
+				setHasElse(true);
+			}
+		}
+
+		if(hasIf()){
+			ifBody.execute();
+			if(!ifBody.consumesTime()){
+				setConsumesTime(false);
+				return;
+			}
+			else{
+				if(ifBody.hasBreak()) setHasBreak(true);
+				else setHasBreak(false);
+				setHasIf(false);
+			}
+					
+		}
+				
+		if(hasElse()){
+		elseBody.execute();
+			if (!elseBody.consumesTime()){
+			setConsumesTime(false);	
+			return;
+			}
+			else{
+				if(elseBody.hasBreak()) setHasBreak(true);
+				else setHasBreak(false);
+				setHasElse(false);
+			}
+		}
+		return;
+				
 		
 	}
 

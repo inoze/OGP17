@@ -365,14 +365,22 @@ public class Facade implements IFacade {
 	 * Add <code>bullet</code> to <code>world</code>.
 	 */
 	public void addBulletToWorld(World world, Bullet bullet) throws ModelException {
-		world.addEntityToWorld(bullet);
+		try{
+			world.addEntityToWorld(bullet);
+		}catch(Exception ex){
+			throw new ModelException(ex.getMessage());
+		}
 	}
 
 	/**
 	 * Remove <code>ship</code> from <code>world</code>.
 	 */
 	public void removeBulletFromWorld(World world, Bullet bullet) throws ModelException {
+		try{
 		world.removeEntityFromWorld(bullet);
+		}catch(Exception ex){
+			throw new ModelException(ex.getMessage());
+		}
 	}
 
 	/**************
