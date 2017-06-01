@@ -370,9 +370,12 @@ public class World {
 	 */
 	private boolean isTerminated = false;
 	
+	
+	
 	public void evolve(double dt, CollisionListener collisionListener){
 		if(dt < 0 || !(Helper.isValidDouble(dt)))
 			throw new IllegalArgumentException("Time given at evolve is invalid");
+		
 		Helper.log("evolving world");
 		double tC = getTimeToNextCollision();
 		Helper.log("getting tC: " + tC);
@@ -407,12 +410,15 @@ public class World {
 	}
 
 	public double getTimeToNextCollision(){
+		
 		double time = Double.POSITIVE_INFINITY;
 		for (Entity entity1 : getEntities()){
 			time = Math.min(time, entity1.getTimeCollisionBoundary());
+			
 			for (Entity entity2 : getEntities()){
 				if (entity1 != entity2) {
 					if (entity1.overlap(entity2)) return 0;
+					
 					Helper.log("Calculating time to next collision");
 					time = Math.min(time, entity1.getTimeToCollision(entity2));
 				}

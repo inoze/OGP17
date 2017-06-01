@@ -487,8 +487,7 @@ public class Entity {
 		double tY = (mY-edgeY)/velocity[1];
 		
 		//Return the smallest value
-		if (tX <= tY) return tX;
-		else return tY;
+		return Math.min(tX, tY); 
 		
 	}
 
@@ -640,7 +639,7 @@ public class Entity {
                 //throw new IllegalArgumentException("Already overlaps while calling timeToCollision");
             	//Helper.log("Ships already overlap when calling timeToCollision");
             	//return Double.POSITIVE_INFINITY;
-            	return 0;
+            	return Double.POSITIVE_INFINITY;
             }
             //Helper.log("Ships will collide");
             if (dt1 < dt2) return dt1;
