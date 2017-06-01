@@ -219,7 +219,7 @@ public class Ship extends Entity{
     @Basic @Override
 	public void terminate() {
     	bullets = null;
-		this.terminate();
+		super.terminate();
 	}
 
     /**
