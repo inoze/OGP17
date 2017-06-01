@@ -362,7 +362,7 @@ public class Entity {
 		    		}
 		    		else{
 		    			Ship ship = (Ship) this;
-		    			ship.loadBulletOnShip(bullet);
+		    			ship.loadBulletsOnShip(bullet);
 		    		}
 	    		}
 	    	}
@@ -374,7 +374,7 @@ public class Entity {
 	    		}
 	    		else{
 	    			Ship ship = (Ship) entity;
-	    			ship.loadBulletOnShip(bullet);
+	    			ship.loadBulletsOnShip(bullet);
 	    		}
 	    	}
     	/*}
@@ -518,7 +518,7 @@ public class Entity {
 	**/
 	//Defensive
     /**
-     * A method to get the distance between two entities.
+     * A method to get the distance between two centers entities.
      *
      * @param entity
      *         The entity between which and the entity to which the method is invoked
@@ -533,7 +533,7 @@ public class Entity {
      *         to which the method is invoced.
      *         | this == entity
      */
-    public double getDistanceBetween(Entity entity) throws IllegalArgumentException{
+    public double getDistanceBetweenCenter(Entity entity) throws IllegalArgumentException{
         if(this == entity) throw new IllegalArgumentException("this == entity");
         else{
             double diffx = Math.abs(entity.getPosition()[0] - this.getPosition()[0]);
@@ -543,6 +543,24 @@ public class Entity {
         }
     }
    
+    /**
+     *  A method to get the distance between two edges entities.
+     *
+     * @param 	entity
+     *         	The entity between which and the entity to which the method is invoked
+     *         	the distance is measured.
+     * @return	Returns the distance between the two centres minus both entity's radii.
+     * 			| result == getDistanceBetweenCenter(entity) - this.getRadius() - entity.getRadius();
+     * @throws 	IllegalArgumentException
+     * 			Throws an IllegalArgumentException if the given entity is the same entity
+     *         	to which the method is invoced.
+     *         	| this == entity
+     */
+    public double getDistanceBetweenEdge(Entity entity)  throws IllegalArgumentException{
+    	if(this == entity) throw new IllegalArgumentException("this == entity");
+    	return getDistanceBetweenCenter(entity) - this.getRadius() - entity.getRadius();
+    	
+    }
     //Defensive
     /**
      * A method to check whether two entity overlap.
@@ -565,7 +583,7 @@ public class Entity {
     	
     	if (entity == null) throw new IllegalArgumentException("The second entity does not exist.");
 		if (this == entity) return true;
-    	return this.getDistanceBetween(entity) <= (0.99 * (this.getRadius() + entity.getRadius()));
+    	return this.getDistanceBetweenCenter(entity) <= (0.99 * (this.getRadius() + entity.getRadius()));
     	
     }
    
@@ -642,8 +660,7 @@ public class Entity {
             	return Double.POSITIVE_INFINITY;
             }
             //Helper.log("Ships will collide");
-            if (dt1 < dt2) return dt1;
-            else return dt2 ;
+            return Math.min(dt1,dt2); 
         }
        
 }
@@ -769,11 +786,16 @@ public class Entity {
     *  
     * @param   position
     *          The position to check.
-    * @return  True if and only if the given position is a double.
-    *          | result == Helper.isValidDouble(position)
+    * @return  True if and only if the entity is in a world  and the position is a valid double or if and only if the entity isn't 
+    * 		   in a world and the position isn't NaN.
+    *          | result ==
+    *          |	if this.superWorld == null
+    *          |		then 	!Double.isNaN(position)
+    *          |	else		Helper.isValidDouble(position)
     */
    protected boolean isValidPosition(double position){
-       return Helper.isValidDouble(position);
+	   if (this.superWorld == null) return (!Double.isNaN(position));
+	   else return Helper.isValidDouble(position);
    }
    
       

@@ -1,5 +1,6 @@
 package asteroids.facade;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -69,7 +70,7 @@ public class Facade implements IFacade {
 	 */
 	public double getDistanceBetween(Ship ship1, Ship ship2) throws ModelException{
 		try{
-			return ship1.getDistanceBetween(ship2);
+			return ship1.getDistanceBetweenCenter(ship2);
 		}
 		catch( IllegalArgumentException ex){
 			throw new ModelException(ex.getMessage());
@@ -407,7 +408,11 @@ public class Facade implements IFacade {
 	 * Load <code>bullet</code> on <code>ship</code>.
 	 */
 	public void loadBulletOnShip(Ship ship, Bullet bullet) throws ModelException {
-		ship.loadBulletOnShip(bullet);
+		Set<Bullet> bullets = new HashSet<Bullet>();
+		bullets.add(bullet);
+		
+		try{ship.loadBulletsOnShip(bullets);}
+		catch(IllegalArgumentException ex){throw new ModelException(ex.getMessage());}
 	}
 
 	/**
@@ -416,14 +421,16 @@ public class Facade implements IFacade {
 	 * For students working alone, this method must not do anything.
 	 */
 	public void loadBulletsOnShip(Ship ship, Collection<Bullet> bullets) throws ModelException {
-		ship.loadBulletsOnShip(bullets);
+		try{ship.loadBulletsOnShip(bullets);}
+		catch(IllegalArgumentException ex){throw new ModelException(ex.getMessage());}
 	}
 
 	/**
 	 * Remove <code>ship</code> from <code>ship</code>.
 	 */
 	public void removeBulletFromShip(Ship ship, Bullet bullet) throws ModelException {
-		ship.removeBulletFromShip(bullet);
+		try{ship.removeBulletFromShip(bullet);}
+		catch(IllegalArgumentException ex){throw new ModelException(ex.getMessage());}
 	}
 
 	/**

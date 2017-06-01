@@ -17,10 +17,9 @@ import be.kuleuven.cs.som.annotate.*;
  * @invar The total mass of a ship is the mass of the ship added with the mass of all the bullets in the ship.
  *        | isValidTotalMass(getTotalMass)
  *
- * @invar All bullets in the ship aren't in the world.
- *        | for each bullet in bullets
- *        |		 bullet.superWorld == null
- *        
+ * @invar The bullets in the ship are proper bullets for that ship
+ * 		  | this.hasProperBullets()
+ * 
  * @version 2.0
  * @author Brent De Bleser & Jesse Geens
  */
@@ -67,12 +66,13 @@ public class Ship extends Entity{
 	    *         | radius <= MINIMAL_SHIP_RAD
 	    */
 		@Raw
-	    public Ship(double xPosition, double yPosition, double xVelocity, double yVelocity, double radius, double direction, double mass) throws IllegalArgumentException, ModelException {
+	    public Ship(double xPosition, double yPosition, double xVelocity, double yVelocity, double radius, double direction, double mass) throws IllegalArgumentException {
 	    	super(xPosition, yPosition, xVelocity, yVelocity, radius, "Ship");
 	    	
 	    	if (!isValidRadius(getRadius())) throw new IllegalArgumentException("Invalid radius @ ship");
 
-	    	setDirection(direction);
+	    	try {setDirection(direction);} catch(IllegalArgumentException ex){throw new IllegalArgumentException(ex.getMessage());}
+	    	
 	    	setMass(mass);
 	    	setTotalMass(mass);
 	    }
@@ -97,8 +97,8 @@ public class Ship extends Entity{
      * @post  The new direction of the ship is the given direction
      *        | new.direction == direction
      */
-    public void setDirection(double direction) {
-        assert isValidDirection(direction) : "klote";
+    public void setDirection(double direction) throws IllegalArgumentException {
+        if ( !isValidDirection(direction)) throw new IllegalArgumentException("assert setDirection Failed");
         this.direction = direction;
 	}
 
@@ -184,17 +184,140 @@ public class Ship extends Entity{
     
     
     
+    /**
+	 * Check whether this ship has a given bullet in it.
+	 * @param 	bullet
+	 * 			The bulet to be check.
+	 */
+	@Basic @Raw
+	public boolean hasAsBullet(Bullet bullet){
+		return bullets.contains(bullet);
+	}
+	
+	
+	/**
+	 * Checks whether or not this ship has proper bullets in it.
+	 * 
+	 * @return	Returns true if and only if this ship can have each of it's bullets as
+	 * 			bullet in it, if each of these bullets superworld is set to null and if eacg bullet isn't terminated.
+	 * 			| result ==
+	 * 			|	for each entity in 	entities :
+	 * 			|			(canHaveAsBullet(bullet)
+	 * 			|			&&	bullet.getWorld() == null))
+	 * 			|			&&	!bullet.isTerminated()
+	 */
+	@Raw
+	public boolean hasProperBullets(){
+		
+		for (Bullet bullet : bullets){
+			if (this.canHaveAsBullet(bullet) && bullet.getWorld() == null && !bullet.isTerminated) return false;
+		}
+		return true;
+	}
     
-    
+    /**
+	 * Return the set of all bullets loaded on <code>ship</code>.
+	 * 
+	 * For students working alone, this method may return null.
+	 */
+    @Basic
+	public Set<? extends Bullet> getBulletsOnShip() {
+    	Set<Bullet> resultSet = new HashSet<Bullet>(bullets);
+		return resultSet;
+	}
+
+	/**
+	 * Return the number of bullets loaded on theship.
+	 * 
+	 * 
+	 */
+	@Basic
+	public int getNbBulletsOnShip() {
+		return bullets.size();
+	}
+
+	/**
+	 * Load <code>bullet</code> on <code>ship</code>.
+	 * 
+	 * For students working alone, this method must not do anything.
+	 */
+	@Raw
+	public void loadBulletsOnShip(Collection<Bullet> bulletsCol) throws IllegalArgumentException {
+		for(Bullet bullet : bulletsCol){
+			if(canLoadBullet(bullet)){
+				bullets.add(bullet);
+				bullet.setSuperWorld(null);
+				bullet.setSource(this);
+				bullet.bouncesReset();
+				totalMass += bullet.mass;
+			}
+			else throw new IllegalArgumentException("Can't load bullet.");
+		}
+	}
+
+	/**
+	 * Remove a bullet from the ship.
+	 * 
+	 * @param   bullet
+	 *          The bullet to be removed.
+	 * @effect  The bullet is removed from bullets.
+	 *          | bullets.remove(bullet)
+	 */
+	public void removeBulletFromShip(Bullet bullet) throws IllegalArgumentException {
+		if (!hasAsBullet(bullet)) throw new IllegalArgumentException("bullet can't be removed from ship, because it's isn't in the ship.");
+		bullets.remove(bullet);
+		totalMass -= bullet.mass;
+	}
+
+	/**
+	 * Fire a bullet from the ship
+	 * 
+	 * @effect
+	 */
+	@Raw
+	public void fireBullet() {
+		if(bullets.size() > 0){
+			Bullet bullet = bullets.iterator().next();
+			if(canHaveAsBullet(bullet)){
+				this.removeBulletFromShip(bullet);
+				World world = this.superWorld;
+				world.addEntityToWorld(bullet);
+				bullet.setSuperWorld(world);
+				bullet.setPosition(this.bulletSpawnCalculator(bullet.getRadius())[0], this.bulletSpawnCalculator(bullet.getRadius())[1]);
+				bullet.setVelocity(250 * Math.cos(this.getDirection()), 250 * Math.sin(this.getDirection()));
+				Helper.log("Firing a bullet");
+			}
+			else{
+				Helper.log("Trying to fire invalid bullet");
+			}
+		}
+		else{
+			Helper.log("Trying to fire a bullet but you've run out!");
+		}
+	}
+	
+	/**
+     * Checks whether this ship can have a given bullet as a bullet.
+     * 
+     * @param   bullet
+     *          The bullet to check.
+     * @return  True if and only if the bullet isn't terminated.
+     *          | result == (!(bullet.isTerminated()))
+     */
+	@Model @Raw
+    private boolean canHaveAsBullet(Bullet bullet){
+    	return !(bullet.isTerminated() || bullet.getWorld() != null);
+    }
+	
+	
+	private boolean canLoadBullet(Bullet bullet){
+		return (canHaveAsBullet(bullet) && this.getDistanceBetweenCenter(bullet) <= Math.abs(bullet.getRadius() - this.getRadius()));
+	}
+	
     /**
      * Variable set containing all the (references to the) bullets in the ship. 
      */
     private Set<Bullet> bullets = new HashSet<Bullet>();
-    
-    
-    
-    
-    
     
     
     private Program program;   
@@ -315,97 +438,6 @@ public class Ship extends Entity{
         assert Helper.isValidDouble(angle);
         this.setDirection( (direction+ angle) % (2*Math.PI));
     }
-
-
-	/**
-	 * Return the set of all bullets loaded on <code>ship</code>.
-	 * 
-	 * For students working alone, this method may return null.
-	 */
-	public Set<? extends Bullet> getBulletsOnShip() {
-		return bullets;
-	}
-
-	/**
-	 * Return the number of bullets loaded on theship.
-	 * 
-	 * 
-	 */
-	@Basic
-	public int getNbBulletsOnShip() throws ModelException {
-		return bullets.size();
-	}
-
-	/**
-<<<<<<< HEAD
-	 * Load <code>bullet</code> on <code>ship</code>.
-	 * 
-=======
-	 * Loads bullets on ship
->>>>>>> 37ecc355a7ddf604c79b91fd202612f3db20ae47
-	 */
-	@Raw
-	public void loadBulletOnShip(Bullet bullet) {
-		if(isValidBullet(bullet)){
-			bullets.add(bullet);
-			bullet.setSource(this);
-			bullet.bouncesReset();
-			totalMass += bullet.mass;
-		}
-	}
-
-	/**
-	 * Load <code>bullet</code> on <code>ship</code>.
-	 * 
-	 * For students working alone, this method must not do anything.
-	 */
-	@Raw
-	public void loadBulletsOnShip(Collection<Bullet> bulletsCol) {
-		for(Bullet bullet : bulletsCol){
-			loadBulletOnShip(bullet);
-			totalMass += bullet.mass;
-		}
-	}
-
-	/**
-	 * Remove a bullet from the ship.
-	 * 
-	 * @param   bullet
-	 *          The bullet to be removed.
-	 * @effect  The bullet is removed from bullets.
-	 *          | bullets.remove(bullet)
-	 */
-	public void removeBulletFromShip(Bullet bullet) {
-		bullets.remove(bullet);
-		totalMass -= bullet.mass;
-	}
-
-	/**
-	 * Fire a bullet from the ship
-	 * 
-	 * @effect
-	 */
-	@Raw
-	public void fireBullet() {
-		if(bullets.size() > 0){
-			Bullet bullet = bullets.iterator().next();
-			if(isValidBullet(bullet)){
-				this.removeBulletFromShip(bullet);
-				World world = this.superWorld;
-				world.addEntityToWorld(bullet);
-				bullet.setSuperWorld(world);
-				bullet.setPosition(this.bulletSpawnCalculator(bullet.getRadius())[0], this.bulletSpawnCalculator(bullet.getRadius())[1]);
-				bullet.setVelocity(250 * Math.cos(this.getDirection()), 250 * Math.sin(this.getDirection()));
-				Helper.log("Firing a bullet");
-			}
-			else{
-				Helper.log("Trying to fire invalid bullet");
-			}
-		}
-		else{
-			Helper.log("Trying to fire a bullet but you've run out!");
-		}
-	}
 	
     
     /**
@@ -441,19 +473,6 @@ public class Ship extends Entity{
 		super.terminate();
 	}
 
-	/**
-     * Checks whether a given bullet is valid.
-     * 
-     * @param   bullet
-     *          The bullet to check.
-     * @return  True if and only if the bullet isn't terminated.
-     *          | result == (!(bullet.isTerminated()))
-     */
-    private boolean isValidBullet(Bullet bullet){
-    	if(bullet.isTerminated())
-    		return false;
-    	return true;
-    }
     
     private double[] bulletSpawnCalculator(Double bulletRadius){
     	double distance = radius + bulletRadius;

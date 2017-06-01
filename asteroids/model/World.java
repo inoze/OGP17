@@ -156,7 +156,7 @@ public class World {
 	public boolean hasProperEntities(){
 		
 		for (Entity entity : entities){
-			if (!(this.hasAsEntity(entity) && entity.getWorld() == this)) return false;
+			if ( this.canHaveAsEntity(entity) && entity.getWorld() == this) return false;
 		}
 		return true;
 	}
