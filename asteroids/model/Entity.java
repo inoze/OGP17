@@ -1,5 +1,8 @@
 package asteroids.model;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import be.kuleuven.cs.som.annotate.*;
 
 /**
@@ -345,11 +348,71 @@ public class Entity {
     
     
     //TODO comments
-    public void collide(Entity entity){
-    	Helper.log("Colliding entities");
-    	//if(this.getDistanceBetween(entity) > 0.99 * (this.getRadius() + entity.getRadius()) && this.getDistanceBetween(entity) < 1.01 * (this.getRadius() + entity.getRadius())){
-	    	
-    	if(this instanceof Ship){
+    public void collide(Entity entity) throws IllegalArgumentException{
+    	if (this.getWorld() != entity.getWorld())	return;
+    	World world = this.getWorld();
+    	
+    	
+    	if (this instanceof Bullet){
+    		Bullet bullet = (Bullet) this;
+    		
+    		if (entity == bullet.getBulletSource()){
+    			Ship ship = (Ship) entity;
+    			Set<Bullet> bullets = new HashSet<Bullet>();
+    			bullets.add(bullet);
+    			ship.loadBulletsOnShip(bullets);
+    		}
+    		else{
+    			world.removeEntityFromWorld(bullet);
+    			bullet.terminate();
+    			
+    			//if (entity instanceof Planetoid){
+    				
+    			//}
+    			//else{
+    			throw new IllegalArgumentException("neger");
+    				//world.removeEntityFromWorld(entity);
+    			//}
+    		}
+    	}
+    	else if (entity instanceof Bullet){
+    		Bullet bullet = (Bullet) entity;
+    		
+    		if (this == bullet.getBulletSource()){
+    			Ship ship = (Ship) this;
+    			Set<Bullet> bullets = new HashSet<Bullet>();
+    			bullets.add(bullet);
+    			ship.loadBulletsOnShip(bullets);
+    		}
+    		else{
+    			world.removeEntityFromWorld(bullet);
+    			bullet.terminate();
+    			
+    			//if (this instanceof Planetoid){
+    				
+    			//}
+    			//else{
+    			throw new IllegalArgumentException("neger");
+    				//world.removeEntityFromWorld(this);
+    			//}
+    		}
+    	}
+    	
+    	else {
+    		
+    	}
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	/**if(this instanceof Ship){
 	    		if(entity instanceof Ship){
 	    			this.setVelocity(this.getVelocity()[0] * -1, this.getVelocity()[1] * -1);
 	    			entity.setVelocity(entity.getVelocity()[0] * -1, entity.getVelocity()[1] * -1);
@@ -362,7 +425,9 @@ public class Entity {
 		    		}
 		    		else{
 		    			Ship ship = (Ship) this;
-		    			ship.loadBulletsOnShip(bullet);
+		    			Set<Bullet> bullets = new HashSet<Bullet>();
+		    			bullets.add(bullet);
+		    			ship.loadBulletsOnShip(bullets);
 		    		}
 	    		}
 	    	}
@@ -374,21 +439,11 @@ public class Entity {
 	    		}
 	    		else{
 	    			Ship ship = (Ship) entity;
-	    			ship.loadBulletsOnShip(bullet);
+	    			Set<Bullet> bullets = new HashSet<Bullet>();
+	    			bullets.add(bullet);
+	    			ship.loadBulletsOnShip(bullets);
 	    		}
-	    	}
-    	/*}
-    	else{
-    		if(this.overlap(entity)){
-    			Helper.log("overlap detected");
-    			this.terminate();
-    			entity.terminate();
-    		}
-    		else
-    			Helper.log("[ERROR] invalid collision called");
-    			if(this instanceof Ship)
-    				this.terminate();
-    	}*/
+	    	} */
     }
     
     //Total

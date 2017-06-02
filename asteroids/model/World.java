@@ -312,8 +312,7 @@ public class World {
 	 * 			|			|| entity.getPosition()[0]+(entity.getRadius()/100)*99) >= worldWidth
 	 * 			|				|| entity.getPosition()[1]+(entity.getRadius()/100)*99) >= worldHeight
 	 */
-	@Model
-	private boolean entityBoundryOverlap(Entity entity){
+	public boolean entityBoundryOverlap(Entity entity){
 		
 		if ( (entity.getPosition()[0]-(entity.getRadius()/100)*99) <= 0.0 || (entity.getPosition()[1]-(entity.getRadius()/100)*99) <= 0.0) return true;
 		if ( (entity.getPosition()[0]+(entity.getRadius()/100)*99) >= worldWidth || (entity.getPosition()[1]+(entity.getRadius()/100)*99) >= worldHeight) return true;

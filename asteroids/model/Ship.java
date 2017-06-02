@@ -216,9 +216,8 @@ public class Ship extends Entity{
 	}
     
     /**
-	 * Return the set of all bullets loaded on <code>ship</code>.
-	 * 
-	 * For students working alone, this method may return null.
+	 * Return the set of all bullets loaded on ship.
+	 *
 	 */
     @Basic
 	public Set<? extends Bullet> getBulletsOnShip() {
@@ -228,8 +227,6 @@ public class Ship extends Entity{
 
 	/**
 	 * Return the number of bullets loaded on theship.
-	 * 
-	 * 
 	 */
 	@Basic
 	public int getNbBulletsOnShip() {
@@ -237,9 +234,22 @@ public class Ship extends Entity{
 	}
 
 	/**
-	 * Load <code>bullet</code> on <code>ship</code>.
+	 * Loads bullets on the ship.
 	 * 
-	 * For students working alone, this method must not do anything.
+	 * @param	bulletsCol
+	 * 			The collection of bullets which need to be loaded on the ship.
+	 * @post	For each bullet if the bullet can be loaded, the bullet will be added to bullets,
+	 * 			it's superWorld will be set to null, it's source will be set to the ship and it's bounces will be reset.
+	 * 			Also tge total mass of the ship will be increased by the mass of the bullet.
+	 * 			| for each bullet in bulletsCol:
+	 * 			|	if canLoadBulle(bullet)
+	 * 			|		then	bullet.setSuperWorld(null)
+	 * 			|			&&	bullet.setSource(this)
+	 * 			|			&&	bullet.bouncesreset()
+	 * 			|			&& 	new.totalMass += bullet.getMass()
+	 * @throws	IllegalArgumentException
+	 * 			throw IllegalArgumentException if one of the bullets can't be loaded.
+	 * 			| if for some bullet in bulletsCol : !canLoadBullrt(bullet)
 	 */
 	@Raw
 	public void loadBulletsOnShip(Collection<Bullet> bulletsCol) throws IllegalArgumentException {
@@ -268,31 +278,32 @@ public class Ship extends Entity{
 		bullets.remove(bullet);
 		totalMass -= bullet.mass;
 	}
-
-	/**
-	 * Fire a bullet from the ship
-	 * 
-	 * @effect
-	 */
-	@Raw
+	
+	
 	public void fireBullet() {
-		if(bullets.size() > 0){
+		if (getNbBulletsOnShip() > 0 && this.getWorld() != null){
+			
 			Bullet bullet = bullets.iterator().next();
-			if(canHaveAsBullet(bullet)){
+			
+			bullet.setPosition(this.bulletSpawnCalculator(bullet.getRadius())[0], this.bulletSpawnCalculator(bullet.getRadius())[1]);
+			
+			if (!this.getWorld().entityBoundryOverlap(bullet)){
+
+				for (Entity entity : superWorld.getEntities()){
+					if (bullet.overlap(entity))	{
+						bullet.terminate();
+						entity.getWorld().removeEntityFromWorld(entity);
+						entity.terminate();
+						bullet.setSource(this);
+						return;
+					}
+				}
 				this.removeBulletFromShip(bullet);
-				World world = this.superWorld;
-				world.addEntityToWorld(bullet);
-				bullet.setSuperWorld(world);
-				bullet.setPosition(this.bulletSpawnCalculator(bullet.getRadius())[0], this.bulletSpawnCalculator(bullet.getRadius())[1]);
+				superWorld.addEntityToWorld(bullet);
 				bullet.setVelocity(250 * Math.cos(this.getDirection()), 250 * Math.sin(this.getDirection()));
-				Helper.log("Firing a bullet");
-			}
-			else{
-				Helper.log("Trying to fire invalid bullet");
-			}
-		}
-		else{
-			Helper.log("Trying to fire a bullet but you've run out!");
+			} 
+			
+			else bullet.terminate();
 		}
 	}
 	
@@ -475,9 +486,9 @@ public class Ship extends Entity{
 
     
     private double[] bulletSpawnCalculator(Double bulletRadius){
-    	double distance = radius + bulletRadius;
-    	double newy = this.getPosition()[0] + (Math.sin(direction) * distance);
-    	double newx = this.getPosition()[1] + (Math.cos(direction) * distance);
+    	double distance = (radius + bulletRadius) ;
+    	double newx = this.getPosition()[0] + (Math.cos(direction) * distance);
+    	double newy = this.getPosition()[1] + (Math.sin(direction) * distance);
     	double[] coo = {newx,newy};
     	return coo;
     }
