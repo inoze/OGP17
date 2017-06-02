@@ -314,8 +314,8 @@ public class World {
 	 */
 	public boolean entityBoundryOverlap(Entity entity){
 		
-		if ( (entity.getPosition()[0]-(entity.getRadius()/100)*99) <= 0.0 || (entity.getPosition()[1]-(entity.getRadius()/100)*99) <= 0.0) return true;
-		if ( (entity.getPosition()[0]+(entity.getRadius()/100)*99) >= worldWidth || (entity.getPosition()[1]+(entity.getRadius()/100)*99) >= worldHeight) return true;
+		if ( (entity.getPosition()[0]-(entity.getRadius()/100)*99) <= 0.0 || (entity.getPosition()[0]+(entity.getRadius()/100)*99) >= worldWidth) return true;
+		if ( (entity.getPosition()[1]-(entity.getRadius()/100)*99) <= 0.0 || (entity.getPosition()[1]+(entity.getRadius()/100)*99) >= worldHeight) return true;
 		return false;
 	}
 	/**
@@ -372,28 +372,26 @@ public class World {
 	
 	
 	public void evolve(double dt, CollisionListener collisionListener){
+		
 		if(dt < 0 || !(Helper.isValidDouble(dt)))
 			throw new IllegalArgumentException("Time given at evolve is invalid");
 		
-		Helper.log("evolving world");
 		double tC = getTimeToNextCollision();
-		Helper.log("getting tC: " + tC);
+		
 		double[] pos = getNextCollisionPos();
-		Helper.log("Getting pos: " + pos[0] + "; " + pos[1]);
+		
 		Entity[] entities = getNextCollidingEntities();
+		
 		while (tC <= dt){
 			for(Entity entity: getEntities()) entity.move(tC);
 			if(entities[1] == null){
 				if(collisionListener != null) collisionListener.boundaryCollision(entities[0], pos[0], pos[1]);
 				entities[0].collideBoundary();
-				Helper.log("Found boundary collision");
 			}
 			else {
 				if(collisionListener != null) collisionListener.objectCollision(entities[0], entities[1], pos[0], pos[1]);
 				entities[0].collide(entities[1]);
-				Helper.log("Found entity collision");
 				//Helper.log("Collision position: " + pos[0] + "; " + pos[1]);
-				Helper.log("Time to collision: " + tC);
 				
 			}
 			
@@ -418,7 +416,6 @@ public class World {
 				if (entity1 != entity2) {
 					if (entity1.overlap(entity2)) return 0;
 					
-					Helper.log("Calculating time to next collision");
 					time = Math.min(time, entity1.getTimeToCollision(entity2));
 				}
 			}
@@ -428,15 +425,18 @@ public class World {
 	
 	public double[] getNextCollisionPos(){
 		Entity[] nextCollidingEntities = getNextCollidingEntities();
-		if(nextCollidingEntities[0] == null) 
+		if(nextCollidingEntities[0] == null) {
 			return new double[]{Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY};
-		if (nextCollidingEntities[1] == null) 
+			}
+		if (nextCollidingEntities[1] == null) {
 			return nextCollidingEntities[0].getPositionCollisionBoundary();
-		else 
+			}
+		else
 			return nextCollidingEntities[0].getCollisionPosition(nextCollidingEntities[1]);	
 	}
 	
 	public Entity[] getNextCollidingEntities(){
+		
 		Entity[] entities = new Entity[]{null,null};
 		double timeNextCollision = Double.POSITIVE_INFINITY;
 		for (Entity entity1 : getEntities()){
@@ -447,27 +447,15 @@ public class World {
 			for (Entity entity2 : getEntities()){
 				if (entity1 != entity2) {
 					if (entity1.overlap(entity2)) return new Entity[]{entity1,entity2};
-					
 					if (timeNextCollision > entity1.getTimeToCollision(entity2)){
 						timeNextCollision = entity1.getTimeToCollision(entity2);
 						entities = new Entity[]{entity1,entity2};
-						Helper.log("Colliding entities: ");
-						if(entity1 instanceof Ship)
-							Helper.log("1: ship");
-						else
-							Helper.log("1: bullet");
-						if(entity2 instanceof Bullet)
-							Helper.log("2: bullet");
-						else
-							Helper.log("2: Ship");
+						
 					}
 				}
-				
 			}
 		}
 		return entities;
 	}
-
-	
 	
 }

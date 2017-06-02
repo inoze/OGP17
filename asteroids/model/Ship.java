@@ -173,6 +173,7 @@ public class Ship extends Entity{
      * Variable containing the total mass of the ship.
      */
     private double totalMass;
+    
     /**
      * Boolean that determines whether the thruster is active.
      */
@@ -503,7 +504,7 @@ public class Ship extends Entity{
      */
     @Model
     private boolean isValidRadius(double radius){
-    	return (radius > MINIMAL_SHIP_RAD && Helper.isValidDouble(radius));
+    	return (radius >= MINIMAL_SHIP_RAD && Helper.isValidDouble(radius));
     }
     
     /**

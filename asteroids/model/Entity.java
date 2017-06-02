@@ -330,7 +330,7 @@ public class Entity {
     public void move(double dt) throws IllegalArgumentException{
         if (dt < 0.0) {
         	Helper.log(Double.toString(dt));
-            throw new IllegalArgumentException("Invalid time");
+            throw new IllegalArgumentException("Invalid time klote " + dt);
         }
         else{
             try {
@@ -366,13 +366,12 @@ public class Entity {
     			world.removeEntityFromWorld(bullet);
     			bullet.terminate();
     			
-    			//if (entity instanceof Planetoid){
+    			if (entity instanceof Planetoid){
     				
-    			//}
-    			//else{
-    			throw new IllegalArgumentException("neger");
-    				//world.removeEntityFromWorld(entity);
-    			//}
+    			}
+    			else{
+    				world.removeEntityFromWorld(entity);
+    			}
     		}
     	}
     	else if (entity instanceof Bullet){
@@ -388,13 +387,12 @@ public class Entity {
     			world.removeEntityFromWorld(bullet);
     			bullet.terminate();
     			
-    			//if (this instanceof Planetoid){
+    			if (this instanceof Planetoid){
     				
-    			//}
-    			//else{
-    			throw new IllegalArgumentException("neger");
-    				//world.removeEntityFromWorld(this);
-    			//}
+    			}
+    			else{
+    				world.removeEntityFromWorld(this);
+    			}
     		}
     	}
     	
@@ -465,20 +463,24 @@ public class Entity {
     *		  |					bullet.bouncesCounter()	 
     */
     public void collideBoundary(){
-    	if ((position[0] + radius == this.superWorld.getWorldWidth()) || (0.0 == position[0] - radius)){
+    	int bulletBouncer = 0;
+    	if ((this.getPosition()[0]-(this.getRadius()) <= 0.0 || (this.getPosition()[0]+(this.getRadius()) >= this.superWorld.getWorldWidth()))){
     		if (this instanceof Bullet){
-        		Bullet bullet = (Bullet) this;
-        			bullet.bouncesCounter();
+        			bulletBouncer++;
         	}
     		this.velocity[0] = this.velocity[0] * -1;
     	}
-    	if ((position[1] + radius == this.superWorld.getWorldHeight()) || (0.0 == position[1] - radius)){
+    	if ((this.getPosition()[1]-(this.getRadius()) <= 0.0 || (this.getPosition()[1]+(this.getRadius()) >= this.superWorld.getWorldHeight()))){
     		if (this instanceof Bullet){
-        		Bullet bullet = (Bullet) this;
-        			bullet.bouncesCounter();
+        		bulletBouncer++;
         	}
     		this.velocity[1] = this.velocity[1] * -1;
     	} 	
+    	Bullet bullet = (Bullet) this;
+    	for (int i = 0; i < bulletBouncer; i++){
+    		if (!bullet.isTerminated())
+    		bullet.bouncesCounter();
+    	}
     }
     
     //Total
@@ -538,8 +540,15 @@ public class Entity {
 		}
 		else edgeY = position[1] - radius;
 		
-		double tX = (mX-edgeX)/velocity[0];
-		double tY = (mY-edgeY)/velocity[1];
+		double tX  = Double.POSITIVE_INFINITY;
+		double tY  = Double.POSITIVE_INFINITY;
+		
+		if (velocity[0] != 0){
+			tX = (mX-edgeX)/velocity[0];
+		}
+		if (velocity[1] != 0){
+			tY = (mY-edgeY)/velocity[1];
+		}
 		
 		//Return the smallest value
 		return Math.min(tX, tY); 
@@ -552,25 +561,20 @@ public class Entity {
 	 * boundaries of its world.
 	 */
 	public double[] getPositionCollisionBoundary(){
+		if (!Helper.isValidDouble(this.getTimeCollisionBoundary()) || this.superWorld == null) return null;
 		double[] pos = new double[2];
-		pos[0] = this.getPosition()[0] + this.getVelocity()[0] * this.getTimeCollisionBoundary();
-		pos[1] = this.getPosition()[1] + this.getVelocity()[1] * this.getTimeCollisionBoundary();
-		return pos;
-	}
-
-	/**
-	 * TODO comments
-	 * Return the first position at which the first entity will collide with the
-	 * second entity.
-	 */
-	/**public double[] getPositionCollisionEntity(Entity entity) throws ModelException {
-		double[] pos = new double[2];
-		pos[0] = this.getPosition()[0] + this.getVelocity()[0] * this.getTimeToCollision(entity);
-		pos[1] = this.getPosition()[1] + this.getVelocity()[1] * this.getTimeToCollision(entity);
+		pos[0] = this.getPosition()[0] + (this.getVelocity()[0] * this.getTimeCollisionBoundary());
+		pos[1] = this.getPosition()[1] + (this.getVelocity()[1] * this.getTimeCollisionBoundary());
+		
+		if (pos[0] + this.getRadius() >= this.superWorld.getWorldHeight()) pos[0]+= this.getRadius();
+		else if (pos[0] - this.getRadius() >= this.superWorld.getWorldHeight()) pos[0]-= this.getRadius();
+		else if (pos[1] + this.getRadius() >= this.superWorld.getWorldHeight()) pos[1]+= this.getRadius();
+		else	pos[1] -= this.getRadius();
+			
+		
 		return pos;
 	}
 	
-	**/
 	//Defensive
     /**
      * A method to get the distance between two centers entities.
@@ -712,9 +716,8 @@ public class Entity {
                 //throw new IllegalArgumentException("Already overlaps while calling timeToCollision");
             	//Helper.log("Ships already overlap when calling timeToCollision");
             	//return Double.POSITIVE_INFINITY;
-            	return Double.POSITIVE_INFINITY;
+            	return 0;
             }
-            //Helper.log("Ships will collide");
             return Math.min(dt1,dt2); 
         }
        
@@ -754,18 +757,14 @@ public class Entity {
      */
     public double[] getCollisionPosition(Entity entity) throws IllegalArgumentException{
          
-         if(this.overlap(entity)){
-        
-            Helper.log("Entities overlap");
+        /** if(this.overlap(entity)){
             throw new IllegalArgumentException("Entities overlap");
         }
         else{
             if(this.getTimeToCollision(entity) == Double.POSITIVE_INFINITY){
-                Helper.log("Entities will never collide");
                 return null;
             }
             else{
-                Helper.log("Calculating collision position");
                
                 double[] pos = new double[2];
                 double[] cp1 = this.getDistanceTraveled(this.getTimeToCollision(entity));
@@ -791,7 +790,29 @@ public class Entity {
                 return pos;
             }
         }
-        } 
+        }  */
+    	if (entity == null) throw new IllegalArgumentException("getCollisionPosition called with a non-existing circular object!");
+		if (this.overlap(entity)) throw new IllegalArgumentException("These two circular objects overlap!");
+		double timeToCollision = getTimeToCollision(entity);
+			
+		if (timeToCollision == Double.POSITIVE_INFINITY) return null;
+		
+		double[] positionThisShip = this.getPosition();
+		double[] velocityThisShip = this.getVelocity();
+		double[] positionShip2 = entity.getPosition();
+		double[] velocityShip2 = entity.getVelocity();
+		
+		double xPositionCollisionThisShip = positionThisShip[0] + velocityThisShip[0] * timeToCollision;
+		double yPositionCollisionThisShip = positionThisShip[1] + velocityThisShip[1] * timeToCollision;
+		
+		double xPositionCollisionShip2 = positionShip2[0] + velocityShip2[0] * timeToCollision;
+		double yPositionCollisionShip2 = positionShip2[1] + velocityShip2[1] * timeToCollision;
+		
+		double slope = Math.atan2(yPositionCollisionShip2 - yPositionCollisionThisShip, xPositionCollisionShip2 - xPositionCollisionThisShip);
+		
+		
+		return new double[] {xPositionCollisionThisShip + Math.cos(slope) * this.getRadius(), yPositionCollisionThisShip + Math.sin(slope) * this.getRadius()};
+	}
 
  
    
