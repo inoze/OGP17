@@ -25,7 +25,7 @@ public class ShipExpression extends Element implements Expression<Entity> {
 		Ship ship = getProgram().getShip();
 		if (ship.getWorld() == null) return null;
 		ships = ship.getWorld().getEntitiesOfTheClass("Ship");
-		Optional<? extends Entity> closestShip = ships.stream().reduce((s1, s2) -> (ship.getDistanceBetween(s1) < ship.getDistanceBetween(s2) ? s1 : s2));
+		Optional<? extends Entity> closestShip = ships.stream().reduce((s1, s2) -> (ship.getDistanceBetweenCenter(s1) < ship.getDistanceBetweenCenter(s2) ? s1 : s2));
 		if (closestShip.isPresent()) return (Ship)closestShip.get();
 		return null;
 	}

@@ -738,13 +738,15 @@ public class Facade implements IFacade {
 	 * Return the program loaded on the given ship.
 	 */
 	public Program getShipProgram(Ship ship) throws ModelException{
-		return null;
+		return ship.getProgram();
 	}
 
 	/**
 	 * Load the given program on the given ship.
 	 */
-	public void loadProgramOnShip(Ship ship, Program program) throws ModelException{}
+	public void loadProgramOnShip(Ship ship, Program program) throws ModelException{
+		ship.setProgram(program);	
+	}
 
 	/**
 	 * Execute the program loaded on the given ship during the given period of
@@ -753,14 +755,15 @@ public class Facade implements IFacade {
 	 * printed.
 	 */
 	public List<Object> executeProgram(Ship ship, double dt) throws ModelException{
-		return null;
+		return ship.getProgram().execute(dt);
 	}
 
 	/**
 	 * Creates a new program factory.
 	 */
 	public IProgramFactory<?, ?, ?, ? extends Program> createProgramFactory() throws ModelException{
-		return null;
+		ProgramFactory programFactory = new ProgramFactory();
+		return programFactory;
 	}
 }
 

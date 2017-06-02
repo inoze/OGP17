@@ -32,7 +32,7 @@ public class AnyExpression extends Element implements Expression<Entity>{
 
 	@Override
 	public Entity calculate(Object[] actualArgs, Set<Variable> localVars) throws IllegalArgumentException {
-		return calculate();
+		return this.calculate();
 	}
 
 

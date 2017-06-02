@@ -27,7 +27,7 @@ public class AsteroidExpression extends Element implements Expression<Entity> {
 		Ship ship = getProgram().getShip();
 		if (ship.getWorld() == null) return null;
 		asteroids = ship.getWorld().getEntitiesOfTheClass("Asteroid");
-		Optional<? extends Entity> closestAsteroid = asteroids.stream().reduce((a1, a2) -> (ship.getDistanceBetween(a1) < ship.getDistanceBetween(a2) ? a1 : a2));
+		Optional<? extends Entity> closestAsteroid = asteroids.stream().reduce((a1, a2) -> (ship.getDistanceBetweenCenter(a1) < ship.getDistanceBetweenCenter(a2) ? a1 : a2));
 		if (closestAsteroid.isPresent()) return (Asteroid)closestAsteroid.get();
 		return null;
 	}

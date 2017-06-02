@@ -32,7 +32,8 @@ public class Program {
 			results = null;
 			return resultsToThrow;
 		}
-		return null;
+		
+		//return null;
 	}
 
 	public void setShip(Ship ship) {
