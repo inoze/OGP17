@@ -30,13 +30,11 @@ public class PrintStatement extends  Element implements Statement{
 
 	@Override
 	public boolean consumesTime() {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
 	public boolean hasBreak() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 }

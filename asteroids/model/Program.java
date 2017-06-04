@@ -32,6 +32,7 @@ public class Program {
 			results = null;
 			return resultsToThrow;
 		}
+		throw new IllegalArgumentException("body doesnt consume time");
 		
 		//return null;
 	}

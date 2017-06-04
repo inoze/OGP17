@@ -1,12 +1,8 @@
 package asteroids.model.program.statement;
 
-import java.util.Optional;
-import java.util.Set;
-
 import asteroids.model.program.Element;
 import asteroids.model.program.Expression;
 import asteroids.model.program.Statement;
-import asteroids.model.program.Variable;
 import asteroids.part3.programs.SourceLocation;
 
 public class IfStatement extends  Element implements Statement{
@@ -19,7 +15,7 @@ public class IfStatement extends  Element implements Statement{
 	private boolean consumesTime;
 	private boolean hasBreak;
 
-	public IfStatement(SourceLocation sourceLocation, Expression condition, Statement ifBody, Statement elseBody) {
+	public IfStatement(SourceLocation sourceLocation, Expression<Boolean> condition, Statement ifBody, Statement elseBody) {
 		super(sourceLocation);
 		setCondition(condition);
 		setIfBody(ifBody);

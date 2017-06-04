@@ -1,9 +1,6 @@
 package asteroids.model.program;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 import java.util.Set;
 
 import asteroids.model.Program;
@@ -45,6 +42,10 @@ public class Function {
 		this.sourceLocation = sourceLocation;
 	}
 
+	public Program getProgram(){
+		return this.program;
+	}
+	
 	private void setHasBreak(boolean b) {
 		this.hasBreak = b;
 	}
