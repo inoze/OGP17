@@ -61,8 +61,6 @@ public class Bullet extends Entity{
 	/**
 	 * Return the ship that fired the bullet.
 	 * 
-	 * @return  Returns source of the bullet.
-	 *          | resutl == source
 	 * @note    If the bullet isn't fired source contains null by default.
 	 */
 	@Basic @Raw
@@ -119,9 +117,17 @@ public class Bullet extends Entity{
 	/**
 	 * Variable containing the source ship of the bullet.
 	 * 
-	 * @note  If the bullet isn't fired source contains null.
+	 * @note  If the bullet isn't fired source contains the ship on which it is loaded.
 	 */
 	private Ship source = null;
+	
+	/**
+	 * Returns the amount of bounces the bullet has done.
+	 */
+	@Basic @Raw
+	public int getBounces(){
+		return bounces;
+	}
 	
 	/**
 	 * A method which deals with bounces of a bullet.
@@ -147,7 +153,7 @@ public class Bullet extends Entity{
 	public void bouncesReset(){
 		this.bounces = 0;
 	}
-	
+
 	/**
 	 * Variable containing the amount of bounces the bullet has done.
 	 */
@@ -172,19 +178,18 @@ public class Bullet extends Entity{
 	 * 		   |	then 	source.removeBulletFromShip(this)
 	 * 
 	 */
-	@Override
+	@Override @Raw
 	public void terminate() {
 		
 		if(getWorld() != null){
 			getWorld().removeEntityFromWorld((Bullet) this);
 			setSuperWorld(null);
 		}
-		else {
+		else if (source != null){
 			source.removeBulletFromShip(this);
 		}
 		
 		this.source = null;
-		
 		this.isTerminated = true;
 		
 	}

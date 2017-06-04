@@ -471,7 +471,7 @@ public class Facade implements IFacade {
 	 * second entity.
 	 */
 	public double getTimeCollisionEntity(Object entity1, Object entity2) throws ModelException {
-		return 0;
+		return ((Entity) entity1).getTimeToCollision((Entity) entity2);
 	}
 
 	/**
@@ -479,7 +479,7 @@ public class Facade implements IFacade {
 	 * second entity.
 	 */
 	public double[] getPositionCollisionEntity(Object entity1, Object entity2) throws ModelException {
-		return null;
+		return ((Entity) entity1).getCollisionPosition((Entity) entity2);
 	}
 
 	/**
@@ -488,7 +488,7 @@ public class Facade implements IFacade {
 	 * returned if no collision will occur.
 	 */
 	public double getTimeNextCollision(World world) throws ModelException {
-		return 0;
+		return world.getTimeToNextCollision();
 	}
 
 	/**
@@ -497,7 +497,7 @@ public class Facade implements IFacade {
 	 * will occur.
 	 */
 	public double[] getPositionNextCollision(World world) throws ModelException {
-		return null;
+		return world.getNextCollisionPos();
 	}
 
 	/**
@@ -510,11 +510,11 @@ public class Facade implements IFacade {
 	 * notify methods.
 	 */
 	public void evolve(World world, double dt, CollisionListener collisionListener) throws ModelException {
-		try{
+		/**try{
 			world.evolve(dt, collisionListener);
 		}catch(IllegalArgumentException ex){
 			throw new ModelException(ex.getMessage());
-		}
+		}*/
 	}
 
 	/**
