@@ -1,6 +1,12 @@
 package asteroids.model;
 
-public class Asteroid extends Entity{
+public class Asteroid extends MinorPlanet{
+	
+	/**
+	 * Constant containing the density of asteroids.
+	 */
+	private final double ASTEROID_DENSITY = 2.65E12;
+	
 	/**
 	 * Create a new non-null asteroid with the given position, velocity and
 	 * radius.

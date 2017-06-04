@@ -8,94 +8,24 @@ import be.kuleuven.cs.som.annotate.*;
 /**
  * 
  * @invar The velocity of each entity must be a valid velocity for a entity.
- *        | isValidVelocity(getVelocity()[0]) && isValidVelocity(getVelocity()[1])
+ *        | this.isValidVelocity(this.getVelocity()[0]) && this.isValidVelocity(this.getVelocity()[1])
  *
  * @invar The position of each entity must be a valid position for a entity.
- *        | isValidPosition(getPosition()[0]) && isValidPosition(getPosition()[1])
+ *        | this.isValidPosition(this.getPosition()[0]) && this.isValidPosition(this.getPosition()[1])
  *
- * @invar The maximum speed of each entity must be between 0 and 300 000
- *        | getMaxVelocity > 0 && getMaxVelocity < 300000
+ * @invar The radius of an entity must be a valid double.
+ *        | Helper.isValidDouble(this.getRadius())
  *
  *
  * @author Brent De Bleser & Jesse Geens
  * @version 2.92
  */
-public class Entity {
+abstract class Entity {
 	
 	/**
 	 * Cnstant containing the speed of light.
 	 */
-	protected final double SPEED_OF_LIGHT =  300000;
-	
-	/**
-	 * Constant containing the density of asteroids.
-	 */
-	protected final double ASTEROID_DENSITY = 2.65E12;
-	/**
-	 * Constant containing the density of planetoids.
-	 */
-	protected final double PLANETOID_DENSITY = 0.917E12;
-	
-	/**
-	 * constant containing the minimal radius of a ship.
-	 */
-	protected final double MINIMAL_ASTEROID_RAD = 5;
-	/**
-	 * constant containing the minimal radius of an asteroid.
-	 */
-	protected final double MINIMAL_PLANETOID_RAD = 5;
-	/**
-     * Variable containing the coordinates of the ship in the form of an array with length 2.
-     */
-    protected double[] position = new double[2];
-    /**
-     * variable containing the velocity on the x and y axis as an array of length 2.
-     */
-    protected double[] velocity = new double[2];
-    /**
-     * Variable containing the maximum velocity of the entity in km/s.
-     */
-    protected double maxVelocity = SPEED_OF_LIGHT;
-    /**
-     * Variable containing the radius of the entity.
-     */
-    protected final double radius;
-    
-	/**
-	 * Return the world of the entity.
-	 */
-    @Basic
-	public World getWorld() {
-		return this.superWorld;
-	}
-    
-    /**
-     * Variable containing the world in which the entity is positioned.
-     * 
-     * @note If the entity isn't in a world superWorld conatins null.
-     */
-    protected World superWorld = null;
-    /**
-     * Variable containing whether the entity is terminated.
-     */
-    protected boolean isTerminated = false;
-    
-    /**
-     * This method sets the mass of a entity.
-     * 
-     * @param 	mass
-     * 			The mass to be set.
-     * @post	The mass is set to the given mass.
-     * 			| new.mass == mass
-     */
-    protected void setMass(double mass){
-    	this.mass = mass;
-    }
-    
-    /**
-     * Variable containing the individual mass of the entity.
-     */
-	protected double mass;
+	private final double SPEED_OF_LIGHT =  300000;
 	
 	/**
 	 * 
@@ -149,14 +79,63 @@ public class Entity {
         
 	}
 	
-	//Getters  
-    /**
-     * Returns the position of the entity.
+	/**
+    * Returns the position of the entity.
+    */
+   @Basic
+   public double[] getPosition(){
+       return this.position;
+   }
+   
+   /**
+    * Set the position on the X-axis to xPosition.
+    * Set the position on the Y-axis to yPosition.
+    *
+    * @param  xPosition
+    *         The x coordinate of the new position.
+    * @param  yPosition
+    *         The y coordinate of the new position;
+    * @post   The arguments xPosition and yPosition become the X- and Y-coordinates respectively.
+    *         | new.position[0] = xPosition;
+    *         | new.position[1] = yPosition;
+    * @throws IllegalArgumentException
+    *         xPosition isn't valid.
+    *         | (!isValidPosition(xPosition))
+    * @throws IllegalArgumentException
+    *         yPosition isn't valid.
+    *         | (!isValidPosition(yPosition)
+    */
+   protected void setPosition(double xPosition, double yPosition) throws IllegalArgumentException {
+       if ( (!isValidPosition(xPosition)) || (!isValidPosition(yPosition))) throw new IllegalArgumentException("Invalid position");
+       else {
+           this.position[0] = xPosition;
+           this.position[1] = yPosition;
+       }
+   }
+	
+   /**
+    * Check whether the given position is a valid position for
+    * a entity.
+    *  
+    * @param   position
+    *          The position to check.
+    * @return  True if and only if the entity is in a world  and the position is a valid double or if and only if the entity isn't 
+    * 		   in a world and the position isn't NaN.
+    *          | result ==
+    *          |	if this.superWorld == null
+    *          |		then 	!Double.isNaN(position)
+    *          |	else		Helper.isValidDouble(position)
+    */
+   private boolean isValidPosition(double position){
+	   if (this.superWorld == null) return (!Double.isNaN(position));
+	   else return Helper.isValidDouble(position);
+   }
+   
+	/**
+     * Variable containing the coordinates of the ship in the form of an array with length 2.
      */
-    @Basic
-    public double[] getPosition(){
-        return this.position;
-    }
+    private double[] position = new double[2];
+    
     /**
      *Returns the velocity of the entity.
      */
@@ -164,66 +143,7 @@ public class Entity {
     public double[] getVelocity(){
         return this.velocity;
     }
-    /**
-     * Returns the maximum velocity of the entity.
-     */
-    @Basic
-    public double getMaxVelocity(){
-        return this.maxVelocity;
-    }
-    /**
-     * Returns the radius of entity.
-     */
-    @Immutable
-    @Basic
-    public double getRadius(){
-        return this.radius;
-    }
-    /**
-     * returns the mass of the entity.
-     */
-    @Basic
-    public double getMass(){
-    	return this.mass;
-    }
-
-    /**
-     * Returns whether the entity is terminated.
-     */
-    @Basic @Raw
-    public boolean isTerminated(){
-    	return this.isTerminated;
-    }
-   
-
-    //Defensive
-    /**
-     * Set the position on the X-axis to xPosition.
-     * Set the position on the Y-axis to yPosition.
-     *
-     * @param  xPosition
-     *         The x coordinate of the new position.
-     * @param  yPosition
-     *         The y coordinate of the new position;
-     * @post   The arguments xPosition and yPosition become the X- and Y-coordinates respectively.
-     *         | new.position[0] = xPosition;
-     *         | new.position[1] = yPosition;
-     * @throws IllegalArgumentException
-     *         xPosition isn't valid.
-     *         | (!isValidPosition(xPosition))
-     * @throws IllegalArgumentException
-     *         yPosition isn't valid.
-     *         | (!isValidPosition(yPosition)
-     */
-    protected void setPosition(double xPosition, double yPosition) throws IllegalArgumentException {
-        if ( (!isValidPosition(xPosition)) || (!isValidPosition(yPosition))) throw new IllegalArgumentException("Invalid position");
-        else {
-            this.position[0] = xPosition;
-            this.position[1] = yPosition;
-        }
-    }
-   
-    //Total
+    
     /**
      * Set the velocity on the X-axis to xVelocity and
      * set the velocity on the Y_axis to yVelocity.
@@ -256,26 +176,61 @@ public class Entity {
     }
     
     /**
-     * Set the mass of a entity to a given mass.
-     * 
-     * @param mass
-     *        The new mass of the entity.
-     * @post  If the mass is a valid mass and the entity is an instance of ship
-     *        the new mass of the ship will be mass.
-     *        | If 	isValidMass(mass) && this instanceof Ship
-     *        | 	then new.mass = mass
-     * @post  If the mass isn't valid and the entity is an instance of ship the new 
-     *        mass of the ship will be the mass according to it's radius.
-     *        | If !(isValidMass(mass) && this instanceof Ship) 
-     *        | 	then 	this.mass = (4/3)*Math.PI*Math.pow(radius, 3)*SHIP_DENSITY
-     * @post  If the entity isn't an instance of ship the method does nothing.
+     * Check whether the given velocities are a valid velocities for
+     * a entity.
+     *
+     * @param   	velocityX
+     *          	The velocity on the X-axis to check.
+     * @param	velocitY
+     * 			The velocity on the Y-axis to check.
+     * @return  	True if and only if the given velocities is a double isn't negative and the total velocity isn't faster then maxVelocity.
+     *         	| result == ( ( Math.sqrt(Helper.square(velocityX) + Helper.square(velocityY)) <= maxVelocity && Helper.isValidDouble(velocityX) && Helper.isValidDouble(velocityY))
      */
-   /** protected void setMass(double mass){
-    	if(isValidMass(mass) && (this instanceof Ship))		 this.mass = mass;
-    	else if  (this instanceof Ship) 	 this.mass = (4/3)*Math.PI*Math.pow(radius, 3)*SHIP_DENSITY;
-    }*/
+    private boolean isValidVelocity(double velocityX, double velocityY){
+        return ( Math.sqrt(Helper.square(velocityX) + Helper.square(velocityY)) <= maxVelocity && Helper.isValidDouble(velocityX) && Helper.isValidDouble(velocityY));
+    }  
     
-    //Defensive
+    /**
+     * variable containing the velocity on the x and y axis as an array of length 2.
+     */
+    private double[] velocity = new double[2];
+    
+    /**
+     * Returns the maximum velocity of the entity.
+     */
+    @Basic
+    public double getMaxVelocity(){
+        return this.maxVelocity;
+    }
+    
+    /**
+     * Variable containing the maximum velocity of the entity in km/s.
+     */
+    
+    private double maxVelocity = SPEED_OF_LIGHT;
+    
+    /**
+     * Returns the radius of entity.
+     */
+    @Basic
+    public double getRadius(){
+        return this.radius;
+    }
+    
+    /**
+     * Variable containing the radius of the entity.
+     */
+    
+    private final double radius;
+    
+	/**
+	 * Return the world of the entity.
+	 */
+    @Basic
+	public World getSuperWorld() {
+		return this.superWorld;
+	}
+    
     /**
      * Set the superWorld of an entity to the given world.
      * 
@@ -289,8 +244,37 @@ public class Entity {
      *         | !(isValidWorld(world))
      */
     protected void setSuperWorld(World world) throws IllegalArgumentException{
-    	if(world == null || isValidWorld(world))		this.superWorld = world;
+    	if(world == null || isValidSuperWorld(world))		this.superWorld = world;
     	else throw new IllegalArgumentException("Isn't a valid world");
+    }
+    
+    /**
+     * Check whether the given world is a valid world for
+     * a entity.
+     * 
+     * @param   world
+     *          The world to be checked.
+     * @return  The method returns whether or not the world is terminated.
+     *          |  result ==  world.isTerminatedWorld()
+     */ 
+    private boolean isValidSuperWorld(World world){
+ 	   if (world == null) return true;
+ 	   return !(world.isTerminatedWorld());
+    }
+    
+    /**
+     * Variable containing the world in which the entity is positioned.
+     * 
+     * @note If the entity isn't in a world superWorld conatins null.
+     */
+    private World superWorld = null;
+    
+    /**
+     * Returns whether the entity is terminated.
+     */
+    @Basic @Raw
+    public boolean isTerminated(){
+    	return this.isTerminated;
     }
     
     /**
@@ -314,6 +298,90 @@ public class Entity {
 		this.superWorld = null;
 		this.isTerminated = true;
 	}
+    
+    /**
+     * Variable containing whether the entity is terminated.
+     */
+    protected boolean isTerminated = false;
+    
+    /**
+     * returns the mass of the entity.
+     */
+    @Basic
+    public double getMass(){
+    	return this.mass;
+    }
+    
+    /**
+     * This method sets the mass of a entity.
+     * 
+     * @param 	mass
+     * 			The mass to be set.
+     * @post	The mass is set to the given mass.
+     * 			| new.mass == mass
+     */
+    protected void setMass(double mass){
+    	this.mass = mass;
+    }
+    
+    /**
+     * Variable containing the individual mass of the entity.
+     */
+	private double mass;
+	
+	
+	/**
+	    * returns in String form which type of Entity this is.
+	    * 
+	    * @return returns the typeName of this entity.
+	    * 		  | result ==  typeName
+	    */
+	   @Basic @Immutable
+	   public String getTypeName() {
+		   return typeName;
+	   }
+	  /**
+	   * A string representation of the type of the entity.
+	   */
+	   private final String typeName;
+
+
+    
+
+
+    
+   
+
+    //Defensive
+    
+   
+    //Total
+   
+    
+    /**
+     * Set the mass of a entity to a given mass.
+     * 
+     * @param mass
+     *        The new mass of the entity.
+     * @post  If the mass is a valid mass and the entity is an instance of ship
+     *        the new mass of the ship will be mass.
+     *        | If 	isValidMass(mass) && this instanceof Ship
+     *        | 	then new.mass = mass
+     * @post  If the mass isn't valid and the entity is an instance of ship the new 
+     *        mass of the ship will be the mass according to it's radius.
+     *        | If !(isValidMass(mass) && this instanceof Ship) 
+     *        | 	then 	this.mass = (4/3)*Math.PI*Math.pow(radius, 3)*SHIP_DENSITY
+     * @post  If the entity isn't an instance of ship the method does nothing.
+     */
+   /** protected void setMass(double mass){
+    	if(isValidMass(mass) && (this instanceof Ship))		 this.mass = mass;
+    	else if  (this instanceof Ship) 	 this.mass = (4/3)*Math.PI*Math.pow(radius, 3)*SHIP_DENSITY;
+    }*/
+    
+    //Defensive
+    
+    
+    
 	
 	//defensive
     /**
@@ -349,8 +417,8 @@ public class Entity {
     
     //TODO comments
     public void collide(Entity entity) throws IllegalArgumentException{
-    	if (this.getWorld() != entity.getWorld())	return;
-    	World world = this.getWorld();
+    	if (this.getSuperWorld() != entity.getSuperWorld())	return;
+    	World world = this.getSuperWorld();
     	
     	
     	if (this instanceof Bullet){
@@ -399,49 +467,6 @@ public class Entity {
     	else {
     		
     	}
-    	
-    	
-    	
-    	
-    	
-    	
-    	
-    	
-    	
-    	
-    	
-    	/**if(this instanceof Ship){
-	    		if(entity instanceof Ship){
-	    			this.setVelocity(this.getVelocity()[0] * -1, this.getVelocity()[1] * -1);
-	    			entity.setVelocity(entity.getVelocity()[0] * -1, entity.getVelocity()[1] * -1);
-	    		}
-	    		if(entity instanceof Bullet){
-	    			Bullet bullet = (Bullet) entity;
-		    		if(bullet.getBulletSource() != entity){
-		    			this.terminate();
-		    			entity.terminate();
-		    		}
-		    		else{
-		    			Ship ship = (Ship) this;
-		    			Set<Bullet> bullets = new HashSet<Bullet>();
-		    			bullets.add(bullet);
-		    			ship.loadBulletsOnShip(bullets);
-		    		}
-	    		}
-	    	}
-	    	if(this instanceof Bullet){
-	    		Bullet bullet = (Bullet) this;
-	    		if(bullet.getBulletSource() != entity){
-	    			this.terminate();
-	    			entity.terminate();
-	    		}
-	    		else{
-	    			Ship ship = (Ship) entity;
-	    			Set<Bullet> bullets = new HashSet<Bullet>();
-	    			bullets.add(bullet);
-	    			ship.loadBulletsOnShip(bullets);
-	    		}
-	    	} */
     }
     
     //Total
@@ -838,69 +863,5 @@ public class Entity {
         pos[1] = this.getPosition()[1] + this.getVelocity()[1] * time;
         return pos;
     }
-	
-	//Total
-    /**
-    * Check whether the given velocities are a valid velocities for
-    * a entity.
-    *
-    * @param   	velocityX
-    *          	The velocity on the X-axis to check.
-    * @param	velocitY
-    * 			The velocity on the Y-axis to check.
-    * @return  	True if and only if the given velocities is a double isn't negative and the total velocity isn't faster then maxVelocity.
-    *         	| result == ( ( Math.sqrt(Helper.square(velocityX) + Helper.square(velocityY)) <= maxVelocity && Helper.isValidDouble(velocityX) && Helper.isValidDouble(velocityY))
-    */
-   protected boolean isValidVelocity(double velocityX, double velocityY){
-       return ( Math.sqrt(Helper.square(velocityX) + Helper.square(velocityY)) <= maxVelocity && Helper.isValidDouble(velocityX) && Helper.isValidDouble(velocityY));
-   }  
-   
-    //defensive
-   /**
-    * Check whether the given position is a valid position for
-    * a entity.
-    *  
-    * @param   position
-    *          The position to check.
-    * @return  True if and only if the entity is in a world  and the position is a valid double or if and only if the entity isn't 
-    * 		   in a world and the position isn't NaN.
-    *          | result ==
-    *          |	if this.superWorld == null
-    *          |		then 	!Double.isNaN(position)
-    *          |	else		Helper.isValidDouble(position)
-    */
-   protected boolean isValidPosition(double position){
-	   if (this.superWorld == null) return (!Double.isNaN(position));
-	   else return Helper.isValidDouble(position);
-   }
-   
-      
-   /**
-    * Check whether the given world is a valid world for
-    * a entity.
-    * 
-    * @param   world
-    *          The world to be checked.
-    * @return  The method returns whether or not the world is terminated.
-    *          |  result ==  world.isTerminatedWorld()
-    */ 
-   protected boolean isValidWorld(World world){
 
-	   return !(world.isTerminatedWorld());
-   }
-  
-   /**
-    * returns in String form which type of Entity this is.
-    * 
-    * @return returns the typeName of this entity.
-    * 		  | result ==  typeName
-    */
-   @Basic @Immutable
-   public String getTypeName() {
-	   return typeName;
-   }
-  /**
-   * A string representation of the type of the entity.
-   */
-   private final String typeName;
 }

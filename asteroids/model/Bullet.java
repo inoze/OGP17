@@ -76,7 +76,7 @@ public class Bullet extends Entity{
 	 */
 	@Basic @Raw
 	public Ship getBulletShip() {
-		if(this.getWorld() == null)
+		if(this.getSuperWorld() == null)
 			return this.getBulletSource();
 		else
 			return null;

@@ -166,7 +166,7 @@ public class Ship extends Entity{
     @Model
     private boolean isValidTotalMass(double mass){
     	if (!Helper.isValidDouble(mass)) return false;
-    	return (mass == (bullets.isEmpty() ? this.mass : this.mass + bullets.stream().map(bullet -> bullet.getMass()).reduce((u, t) -> u + t).get()));
+    	return (mass == (bullets.isEmpty() ? this.getMass() : this.getMass() + bullets.stream().map(bullet -> bullet.getMass()).reduce((u, t) -> u + t).get()));
     }
     
     /**
@@ -211,7 +211,7 @@ public class Ship extends Entity{
 	public boolean hasProperBullets(){
 		
 		for (Bullet bullet : bullets){
-			if (this.canHaveAsBullet(bullet) && bullet.getWorld() == null && !bullet.isTerminated) return false;
+			if (this.canHaveAsBullet(bullet) && bullet.getSuperWorld() == null && !bullet.isTerminated) return false;
 		}
 		return true;
 	}
@@ -260,7 +260,7 @@ public class Ship extends Entity{
 				bullet.setSuperWorld(null);
 				bullet.setSource(this);
 				bullet.bouncesReset();
-				totalMass += bullet.mass;
+				totalMass += bullet.getMass();
 			}
 			else throw new IllegalArgumentException("Can't load bullet.");
 		}
@@ -277,30 +277,30 @@ public class Ship extends Entity{
 	public void removeBulletFromShip(Bullet bullet) throws IllegalArgumentException {
 		if (!hasAsBullet(bullet)) throw new IllegalArgumentException("bullet can't be removed from ship, because it's isn't in the ship.");
 		bullets.remove(bullet);
-		totalMass -= bullet.mass;
+		totalMass -= bullet.getMass();
 	}
 	
 	
 	public void fireBullet() {
-		if (getNbBulletsOnShip() > 0 && this.getWorld() != null){
+		if (getNbBulletsOnShip() > 0 && this.getSuperWorld() != null){
 			
 			Bullet bullet = bullets.iterator().next();
 			
 			bullet.setPosition(this.bulletSpawnCalculator(bullet.getRadius())[0], this.bulletSpawnCalculator(bullet.getRadius())[1]);
 			
-			if (!this.getWorld().entityBoundryOverlap(bullet)){
+			if (!this.getSuperWorld().entityBoundryOverlap(bullet)){
 
-				for (Entity entity : superWorld.getEntities()){
+				for (Entity entity : getSuperWorld().getEntities()){
 					if (bullet.overlap(entity))	{
 						bullet.terminate();
-						entity.getWorld().removeEntityFromWorld(entity);
+						entity.getSuperWorld().removeEntityFromWorld(entity);
 						entity.terminate();
 						bullet.setSource(this);
 						return;
 					}
 				}
 				this.removeBulletFromShip(bullet);
-				superWorld.addEntityToWorld(bullet);
+				getSuperWorld().addEntityToWorld(bullet);
 				bullet.setVelocity(250 * Math.cos(this.getDirection()), 250 * Math.sin(this.getDirection()));
 			} 
 			
@@ -318,7 +318,7 @@ public class Ship extends Entity{
      */
 	@Model @Raw
     private boolean canHaveAsBullet(Bullet bullet){
-    	return !(bullet.isTerminated() || bullet.getWorld() != null);
+    	return !(bullet.isTerminated() || bullet.getSuperWorld() != null);
     }
 	
 	
@@ -487,7 +487,7 @@ public class Ship extends Entity{
 
     
     private double[] bulletSpawnCalculator(Double bulletRadius){
-    	double distance = (radius + bulletRadius) ;
+    	double distance = (getRadius() + bulletRadius) ;
     	double newx = this.getPosition()[0] + (Math.cos(direction) * distance);
     	double newy = this.getPosition()[1] + (Math.sin(direction) * distance);
     	double[] coo = {newx,newy};
@@ -518,7 +518,7 @@ public class Ship extends Entity{
      */
     @Model
     protected boolean isValidMass(double mass){
-    	return (mass >= 4.0*Math.PI*Math.pow(radius, 3)*SHIP_DENSITY / 3.0 && Helper.isValidDouble(mass));
+    	return (mass >= 4.0*Math.PI*Math.pow(getRadius(), 3)*SHIP_DENSITY / 3.0 && Helper.isValidDouble(mass));
     }
 
 }
