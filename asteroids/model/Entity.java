@@ -20,7 +20,7 @@ import be.kuleuven.cs.som.annotate.*;
  * @author Brent De Bleser & Jesse Geens
  * @version 2.92
  */
-abstract class Entity {
+public abstract class Entity {
 	
 	/**
 	 * Cnstant containing the speed of light.
@@ -74,8 +74,8 @@ abstract class Entity {
             //Set the typeName of the entity.
             this.typeName = typeName;
             //Set the mass of the entity.
-            if(this instanceof Asteroid){this.mass = (4/3)*Math.PI*Math.pow(radius, 3)*ASTEROID_DENSITY;}
-            if(this instanceof Planetoid){this.mass = (4/3)*Math.PI*Math.pow(radius, 3)*PLANETOID_DENSITY;}            
+            //if(this instanceof Asteroid){this.mass = (4/3)*Math.PI*Math.pow(radius, 3)*ASTEROID_DENSITY;}
+            //if(this instanceof Planetoid){this.mass = (4/3)*Math.PI*Math.pow(radius, 3)*PLANETOID_DENSITY;}            
         
 	}
 	

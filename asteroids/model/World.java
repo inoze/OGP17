@@ -156,7 +156,7 @@ public class World {
 	public boolean hasProperEntities(){
 		
 		for (Entity entity : entities){
-			if ( this.canHaveAsEntity(entity) && entity.getWorld() == this) return false;
+			if ( this.canHaveAsEntity(entity) && entity.getSuperWorld() == this) return false;
 		}
 		return true;
 	}
@@ -290,7 +290,7 @@ public class World {
 	@Model @Raw
 	private boolean canHaveAsEntity(Entity entity) throws IllegalArgumentException{
 		if(!(entity.isTerminated())){
-			if(entity.getWorld() != null){
+			if(entity.getSuperWorld() != null){
 				return false;
 		}
 			return !(entityOverlap(entity) || entityBoundryOverlap(entity));

@@ -181,8 +181,8 @@ public class Bullet extends Entity{
 	@Override @Raw
 	public void terminate() {
 		
-		if(getWorld() != null){
-			getWorld().removeEntityFromWorld((Bullet) this);
+		if(getSuperWorld() != null){
+			getSuperWorld().removeEntityFromWorld((Bullet) this);
 			setSuperWorld(null);
 		}
 		else if (source != null){
