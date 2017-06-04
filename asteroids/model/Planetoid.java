@@ -44,7 +44,8 @@ public class Planetoid extends MinorPlanet{
 	
 	@Override
 	public double getRadius(){
-		return radius-(0.000001*getTotalDistanceTraveled());
+		//return radius-(0.000001*getTotalDistanceTraveled());
+		return 0.0;
 	}
 	
 	/**
@@ -60,7 +61,7 @@ public class Planetoid extends MinorPlanet{
  	@Override
  	public void terminate() {
  		if (getRadius() >= 30 && getSuperWorld() != null) {
- 			spawnAsteroids(getSuperWorld());
+ 			//spawnAsteroids(getSuperWorld());
 		}
 		super.terminate();
  	}

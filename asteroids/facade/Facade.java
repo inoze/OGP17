@@ -148,7 +148,7 @@ public class Facade implements IFacade {
 	 */
 	public World getShipWorld(Ship ship) throws ModelException {
 		//return ship.getShipWorld();
-		return ship.getWorld();
+		return ship.getSuperWorld();
 	}
 	/**
 	 * Return the total mass of <code>ship</code> (i.e., including bullets
@@ -267,7 +267,7 @@ public class Facade implements IFacade {
 	 * if it is positioned on a ship.
 	 */
 	public World getBulletWorld(Bullet bullet) throws ModelException {
-		return bullet.getWorld();
+		return bullet.getSuperWorld();
 	}
 
 	/**
@@ -649,7 +649,7 @@ public class Facade implements IFacade {
 	 * Return the world in which <code>asteroid</code> is positioned.
 	 */
 	public World getAsteroidWorld(Asteroid asteroid) throws ModelException{
-		return asteroid.getWorld();
+		return asteroid.getSuperWorld();
 	}
 
 	/**************
@@ -727,7 +727,7 @@ public class Facade implements IFacade {
 	 * Return the world in which <code>planetoid</code> is positioned.
 	 */
 	public World getPlanetoidWorld(Planetoid planetoid) throws ModelException{
-		return planetoid.getWorld();
+		return planetoid.getSuperWorld();
 	}
 
 	/**********
