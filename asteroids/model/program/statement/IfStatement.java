@@ -5,7 +5,7 @@ import asteroids.model.program.Expression;
 import asteroids.model.program.Statement;
 import asteroids.part3.programs.SourceLocation;
 
-public class IfStatement extends  Element implements Statement{
+public class IfStatement extends Statement{
 	
 	private Expression<? extends Boolean> condition;
 	private Statement ifBody;

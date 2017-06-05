@@ -5,7 +5,7 @@ import asteroids.model.program.Expression;
 import asteroids.model.program.Statement;
 import asteroids.part3.programs.SourceLocation;
 
-public class PrintStatement extends  Element implements Statement{
+public class PrintStatement extends Statement{
 	
 	private Expression expression;
 
@@ -30,15 +30,5 @@ public class PrintStatement extends  Element implements Statement{
 		}catch(Exception ex){
 			throw new Exception("print cant execute");
 		}
-	}
-
-	@Override
-	public boolean consumesTime() {
-		return true;
-	}
-
-	@Override
-	public boolean hasBreak() {
-		return false;
 	}
 }

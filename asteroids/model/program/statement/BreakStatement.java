@@ -4,7 +4,7 @@ import asteroids.model.program.Element;
 import asteroids.model.program.Statement;
 import asteroids.part3.programs.SourceLocation;
 
-public class BreakStatement extends  Element implements Statement{
+public class BreakStatement extends Statement{
 
 	public Statement whileBreaks;
 	
@@ -23,11 +23,5 @@ public class BreakStatement extends  Element implements Statement{
 	@Override
 	public void execute() {
 		return;	
-	}
-
-	@Override
-	public boolean consumesTime() {
-		// TODO Auto-generated method stub
-		return false;
 	}
 }

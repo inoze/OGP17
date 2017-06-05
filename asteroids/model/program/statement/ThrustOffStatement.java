@@ -4,7 +4,7 @@ import asteroids.model.program.Element;
 import asteroids.model.program.Statement;
 import asteroids.part3.programs.SourceLocation;
 
-public class ThrustOffStatement extends Element implements Statement {
+public class ThrustOffStatement extends Statement {
 	private boolean consumesTime;
 	
 	public ThrustOffStatement(SourceLocation sourceLocation) {
@@ -31,12 +31,6 @@ public class ThrustOffStatement extends Element implements Statement {
 		}
 		this.getProgram().getShip().thrustOff();
 		this.getProgram().advanceTime();		
-	}
-
-	@Override
-	public boolean hasBreak() {
-		// TODO Auto-generated method stub
-		return false;
 	}
 
 }

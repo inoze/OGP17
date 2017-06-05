@@ -4,7 +4,7 @@ import asteroids.model.program.Element;
 import asteroids.model.program.Statement;
 import asteroids.part3.programs.SourceLocation;
 
-public class FireStatement extends Element implements Statement{
+public class FireStatement extends Statement{
 	private boolean consumesTime;
 
 	public FireStatement(SourceLocation sourceLocation) {
@@ -34,11 +34,4 @@ public class FireStatement extends Element implements Statement{
 			throw new Exception("Firestatement cant execute");
 		}
 	}
-
-
-	@Override
-	public boolean hasBreak() {
-		// TODO Auto-generated method stub
-		return false;
-	}	
 }

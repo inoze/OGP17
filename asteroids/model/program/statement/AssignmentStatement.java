@@ -6,7 +6,7 @@ import java.util.Set;
 import asteroids.model.program.*;
 import asteroids.part3.programs.SourceLocation;
 
-public class AssignmentStatement extends  Element implements Statement{
+public class AssignmentStatement extends Statement{
 
 	public AssignmentStatement(SourceLocation sourceLocation) {
 		super(sourceLocation);
@@ -62,12 +62,6 @@ public class AssignmentStatement extends  Element implements Statement{
 		}catch(Exception ex){
 			throw new Exception("assignmentStatement cant execute");
 		}
-	}
-
-	@Override
-	public boolean consumesTime() {
-		// TODO Auto-generated method stub
-		return false;
 	}
 
 	@Override

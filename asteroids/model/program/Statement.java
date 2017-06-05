@@ -1,21 +1,25 @@
 package asteroids.model.program;
 
-import asteroids.model.Program;
 import asteroids.part3.programs.SourceLocation;
 
 
-public interface Statement {
+public abstract class Statement extends Element {
 
-	public void execute() throws Exception;
-	
-	void setProgram(Program program);
-	
-	boolean consumesTime();
-	
-	boolean hasBreak();
-	
-	Program getProgram();
+	protected Statement(SourceLocation sourceLocation) {
+		super(sourceLocation);
+	}
 
-	SourceLocation getSourceLocation();
+		//Break discovered in code
+		public boolean hasBreak() {
+			return false;
+		}
+
+		//Used time when running
+		public boolean consumesTime(){
+			return false;
+		}
+		
+		public void execute() throws Exception{
+			throw new Exception("Execute in abstract class has to be overridden");
+		}
 }
-

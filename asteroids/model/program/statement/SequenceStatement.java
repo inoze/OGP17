@@ -9,7 +9,7 @@ import asteroids.model.program.Statement;
 import asteroids.model.program.Variable;
 import asteroids.part3.programs.SourceLocation;
 
-public class SequenceStatement extends  Element implements Statement{
+public class SequenceStatement extends Statement{
 
 	private List<Statement> statements;
 	private boolean consumesTime;

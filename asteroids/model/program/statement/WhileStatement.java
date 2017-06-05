@@ -3,7 +3,7 @@ package asteroids.model.program.statement;
 import asteroids.model.program.*;
 import asteroids.part3.programs.SourceLocation;
 
-public class WhileStatement extends Element implements Statement{
+public class WhileStatement extends Statement{
 
 	public WhileStatement(SourceLocation sourceLocation, Expression<Boolean> condition, Statement body) {
 		super(sourceLocation);

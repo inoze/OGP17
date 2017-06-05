@@ -1,11 +1,10 @@
 package asteroids.model.program.statement;
 
-import asteroids.model.program.Element;
 import asteroids.model.program.Expression;
 import asteroids.model.program.Statement;
 import asteroids.part3.programs.SourceLocation;
 
-public class TurnStatement extends Element implements Statement {
+public class TurnStatement extends Statement {
 	
 	private Expression angle;
 	private boolean consumesTime;
@@ -42,11 +41,6 @@ public class TurnStatement extends Element implements Statement {
 		}
 		getProgram().getShip().turn((Double)angle.calculate());
 		getProgram().advanceTime();		
-	}
-
-	@Override
-	public boolean hasBreak() {
-		return false;
 	}
 
 }

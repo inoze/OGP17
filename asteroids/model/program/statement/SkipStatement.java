@@ -4,7 +4,7 @@ import asteroids.model.program.Element;
 import asteroids.model.program.Statement;
 import asteroids.part3.programs.SourceLocation;
 
-public class SkipStatement extends Element implements Statement {
+public class SkipStatement extends Statement {
 	
 	private boolean consumesTime;
 
@@ -33,12 +33,6 @@ public class SkipStatement extends Element implements Statement {
 	@Override
 	public boolean consumesTime() {
 		return this.consumesTime;
-	}
-
-	@Override
-	public boolean hasBreak() {
-		// TODO Auto-generated method stub
-		return false;
 	}
 
 }
