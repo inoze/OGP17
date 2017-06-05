@@ -5,22 +5,34 @@ import asteroids.model.program.Statement;
 import asteroids.part3.programs.SourceLocation;
 
 public class SkipStatement extends Element implements Statement {
+	
+	private boolean consumesTime;
 
 	public SkipStatement(SourceLocation sourceLocation) {
 		super(sourceLocation);
 		// TODO Auto-generated constructor stub
 	}
+	
+	public void setConsumesTime(boolean b){
+		this.consumesTime = b;
+	}
 
 	@Override
 	public void execute() {
-		// TODO Auto-generated method stub
+		this.setConsumesTime(false);
+		this.getProgram().setSourceLocation(getSourceLocation());
+		if (this.getProgram().getTime() <= 0.2) {
+			setConsumesTime(true);
+			this.getProgram().setSkip(true);
+			return;
+		}
+		this.getProgram().advanceTime();
 		
 	}
 
 	@Override
 	public boolean consumesTime() {
-		// TODO Auto-generated method stub
-		return false;
+		return this.consumesTime;
 	}
 
 	@Override

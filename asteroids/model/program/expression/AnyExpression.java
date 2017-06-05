@@ -1,7 +1,6 @@
 package asteroids.model.program.expression;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -21,9 +20,9 @@ public class AnyExpression extends Element implements Expression<Entity>{
 	@Override
 	public Entity calculate() {
 		Ship ship = getProgram().getShip();
-		if (ship.getWorld() == null) return null;
+		if (ship.getSuperWorld() == null) return null;
 		Set<Entity> entities = new HashSet<Entity>();
-		entities.addAll(ship.getWorld().getEntities());
+		entities.addAll(ship.getSuperWorld().getEntities());
 		Optional<Entity> entity = entities.stream().findAny();
 		if (entity.isPresent()) return entity.get();
 		return null;

@@ -25,8 +25,8 @@ public class BulletExpression extends Element implements Expression<Entity> {
 	@Override
 	public Bullet calculate() {
 		Ship ship = getProgram().getShip();
-		if (ship.getWorld() == null) return null;
-		bullets = ship.getWorld().getEntitiesOfTheClass("Bullet");
+		if (ship.getSuperWorld() == null) return null;
+		bullets = ship.getSuperWorld().getEntitiesOfTheClass("Bullet");
 		Optional<? extends Entity> closestBullet = bullets.stream().reduce((p1, p2) -> (ship.getDistanceBetweenCenter(p1) < ship.getDistanceBetweenCenter(p2) ? p1 : p2));
 		if (closestBullet.isPresent()) return (Bullet)closestBullet.get();
 		return null;

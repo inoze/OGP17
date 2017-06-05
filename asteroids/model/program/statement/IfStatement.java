@@ -82,7 +82,7 @@ public class IfStatement extends  Element implements Statement{
 	}
 
 	@Override
-	public void execute() {
+	public void execute() throws Exception{
 		setConsumesTime(true);
 		setHasBreak(false);
 		if(!hasIf() && !hasElse()){
@@ -94,7 +94,7 @@ public class IfStatement extends  Element implements Statement{
 		}
 
 		if(hasIf()){
-			ifBody.execute();
+			try{ifBody.execute();}catch(Exception ex){throw new Exception("ifBody cant execute: " + ex.getMessage());}
 			if(!ifBody.consumesTime()){
 				setConsumesTime(false);
 				return;
@@ -108,7 +108,7 @@ public class IfStatement extends  Element implements Statement{
 		}
 				
 		if(hasElse()){
-		elseBody.execute();
+			try{elseBody.execute();}catch(Exception ex){throw new Exception("elseBody cant execute: " + ex.getMessage());}
 			if (!elseBody.consumesTime()){
 			setConsumesTime(false);	
 			return;

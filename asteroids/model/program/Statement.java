@@ -6,7 +6,7 @@ import asteroids.part3.programs.SourceLocation;
 
 public interface Statement {
 
-	public void execute();
+	public void execute() throws Exception;
 	
 	void setProgram(Program program);
 	

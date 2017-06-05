@@ -1,8 +1,5 @@
 package asteroids.model.program.statement;
 
-import java.util.Optional;
-import java.util.Set;
-
 import asteroids.model.program.*;
 import asteroids.part3.programs.SourceLocation;
 
@@ -18,10 +15,11 @@ public class WhileStatement extends Element implements Statement{
 	private Statement body;
 	private boolean executingBody;
 	private boolean hasBreak;
+	private boolean consumesTime;
 
 	@Override
 	public boolean consumesTime() {
-		return false;
+		return this.consumesTime;
 	}
 
 	@Override
@@ -37,6 +35,10 @@ public class WhileStatement extends Element implements Statement{
 		return this.condition;
 	}
 
+	public void setConsumesTime(boolean b){
+		this.consumesTime = b;
+	}
+	
 	public boolean isExecutingBody() {
 		return this.executingBody;
 	}
@@ -54,7 +56,28 @@ public class WhileStatement extends Element implements Statement{
 	}
 	
 	@Override
-	public void execute() {
-		
+	public void execute() throws Exception {
+		this.setConsumesTime(false);
+		//Look if condition is true to start running the body, if not, do nothing
+		if(!this.isExecutingBody()){
+			if(this.getCondition().calculate()) this.setExecutingBody(true);
+			else return;
+		}
+		//Load body
+		body.execute();
+		if (body.consumesTime()){
+			this.setConsumesTime(true);
+			return;
+		}
+		//Check if we can run again
+		while(this.getCondition().calculate() && !body.hasBreak()){
+			getProgram().setSourceLocation(this.getSourceLocation());
+			body.execute();
+			if (body.consumesTime()){
+				this.setConsumesTime(true);
+				return;
+			}
+		}
+		this.setExecutingBody(false);
 	}
 }

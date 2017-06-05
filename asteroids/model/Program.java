@@ -14,20 +14,31 @@ public class Program {
 	private double timeRemaining;
 	private SourceLocation location = new SourceLocation(0, 0);
 	private Ship ship;
+	private boolean skip;
 	
 	public Program(List<Function> functions, Statement main) {
 		this.functions = functions;
-		main.setProgram(this);
-		for(Function function: functions) function.setProgram(this);
+		//main.setProgram(this);
+		//for(Function function: functions) function.setProgram(this);
 		timeRemaining = 0;
 	}
 	
+	public boolean hasSkip() {
+		return skip;
+	}
+
+	public void setSkip(boolean skip) {
+		this.skip = skip;
+	}
+
 	public List<Object> execute(double dt) throws IllegalArgumentException {
 		timeRemaining += dt;
-		body.execute();
+		try{body.execute();}catch(Exception ex){throw new IllegalArgumentException("body cant execute: " + ex.getMessage());}
+		if(hasSkip()) return null;
 		if (body.consumesTime()) { //!Important - not sure if negation is correct
 			if(body.hasBreak()) throw new IllegalArgumentException("Break statements cannot occur outside function bodies");
 			location = new SourceLocation(0, 0);
+			if(results == null){throw new IllegalArgumentException("results is null");}
 			List<Object> resultsToThrow = results; 
 			results = null;
 			return resultsToThrow;
