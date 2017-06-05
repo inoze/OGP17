@@ -20,15 +20,19 @@ public class FireStatement extends Element implements Statement{
 	}
 
 	@Override
-	public void execute() {
-		setConsumesTime(true);
-		getProgram().setSourceLocation(getSourceLocation());
-		if (getProgram().getTime() <= 0.2) {
-			setConsumesTime(false);
-			return;
+	public void execute() throws Exception{
+		try{
+			setConsumesTime(true);
+			getProgram().setSourceLocation(getSourceLocation());
+			if (getProgram().getTime() <= 0.2) {
+				setConsumesTime(false);
+				return;
+			}
+			getProgram().getShip().fireBullet();
+			getProgram().advanceTime();
+		}catch(Exception ex){
+			throw new Exception("Firestatement cant execute");
 		}
-		getProgram().getShip().fireBullet();
-		getProgram().advanceTime();
 	}
 
 

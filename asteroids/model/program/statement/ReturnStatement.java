@@ -1,7 +1,9 @@
 package asteroids.model.program.statement;
 
+import asteroids.model.Ship;
 import asteroids.model.program.Element;
 import asteroids.model.program.Expression;
+import asteroids.model.program.Function;
 import asteroids.model.program.Statement;
 import asteroids.part3.programs.SourceLocation;
 
@@ -23,8 +25,14 @@ public class ReturnStatement extends  Element implements Statement{
 	}
 
 	@Override
-	public void execute() throws IllegalArgumentException{
-		throw new IllegalArgumentException("Invalid run @ ReturnStatement");
+	public void execute() throws Exception{
+		try{
+			if (!this.getProgram().hasTimeLeft()) {
+	            return;
+	        }
+		}catch(Exception ex){
+			throw new Exception("return statement doesnt work");
+		}
 	}
 
 	@Override

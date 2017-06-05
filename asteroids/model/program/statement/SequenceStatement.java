@@ -46,6 +46,7 @@ public class SequenceStatement extends  Element implements Statement{
 
 	@Override
 	public void execute() throws Exception {
+		try{
 		setConsumesTime(false);
 		setHasBreak(false);
 		SourceLocation curLocation = getProgram().getSourceLocation();
@@ -70,5 +71,8 @@ public class SequenceStatement extends  Element implements Statement{
 			}
 		}
 		
+	}catch(Exception ex){
+		throw new Exception("sequenceStatement doesnt work");
+	}
 	}
 }

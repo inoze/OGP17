@@ -83,6 +83,7 @@ public class IfStatement extends  Element implements Statement{
 
 	@Override
 	public void execute() throws Exception{
+		try{
 		setConsumesTime(true);
 		setHasBreak(false);
 		if(!hasIf() && !hasElse()){
@@ -120,7 +121,9 @@ public class IfStatement extends  Element implements Statement{
 			}
 		}
 		return;
-				
+		}catch(Exception ex){
+			throw new Exception("ifstatement cant exec");
+		}
 		
 	}
 

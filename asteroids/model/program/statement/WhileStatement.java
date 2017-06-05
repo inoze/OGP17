@@ -57,27 +57,31 @@ public class WhileStatement extends Element implements Statement{
 	
 	@Override
 	public void execute() throws Exception {
-		this.setConsumesTime(false);
-		//Look if condition is true to start running the body, if not, do nothing
-		if(!this.isExecutingBody()){
-			if(this.getCondition().calculate()) this.setExecutingBody(true);
-			else return;
-		}
-		//Load body
-		body.execute();
-		if (body.consumesTime()){
-			this.setConsumesTime(true);
-			return;
-		}
-		//Check if we can run again
-		while(this.getCondition().calculate() && !body.hasBreak()){
-			getProgram().setSourceLocation(this.getSourceLocation());
+		try{
+			this.setConsumesTime(false);
+			//Look if condition is true to start running the body, if not, do nothing
+			if(!this.isExecutingBody()){
+				if(this.getCondition().calculate()) this.setExecutingBody(true);
+				else return;
+			}
+			//Load body
 			body.execute();
 			if (body.consumesTime()){
 				this.setConsumesTime(true);
 				return;
 			}
+			//Check if we can run again
+			while(this.getCondition().calculate() && !body.hasBreak()){
+				getProgram().setSourceLocation(this.getSourceLocation());
+				body.execute();
+				if (body.consumesTime()){
+					this.setConsumesTime(true);
+					return;
+				}
+			}
+			this.setExecutingBody(false);
+		}catch(Exception ex){
+			throw new Exception("whileStatement doesnt work");
 		}
-		this.setExecutingBody(false);
 	}
 }

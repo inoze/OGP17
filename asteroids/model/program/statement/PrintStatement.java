@@ -23,9 +23,13 @@ public class PrintStatement extends  Element implements Statement{
 	}
 
 	@Override
-	public void execute() {
-		Object eval = getExpression().calculate();
-		getProgram().addResult(eval);
+	public void execute() throws Exception{
+		try{
+			Object eval = getExpression().calculate();
+			getProgram().addResult(eval);
+		}catch(Exception ex){
+			throw new Exception("print cant execute");
+		}
 	}
 
 	@Override

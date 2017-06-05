@@ -18,8 +18,8 @@ public class Program {
 	
 	public Program(List<Function> functions, Statement main) {
 		this.functions = functions;
-		//main.setProgram(this);
-		//for(Function function: functions) function.setProgram(this);
+		main.setProgram(this);
+		for(Function function: functions) function.setProgram(this);
 		timeRemaining = 0;
 	}
 	
@@ -77,6 +77,9 @@ public class Program {
 		return this.timeRemaining;
 	}
 
+	public boolean hasTimeLeft(){
+		return this.timeRemaining >= 0.2;
+	}
 	public void addResult(Object result) {
 		results.add(result);
 	}

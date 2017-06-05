@@ -34,7 +34,8 @@ public class AssignmentStatement extends  Element implements Statement{
 	}
 
 	@Override
-	public void execute() {
+	public void execute() throws Exception{
+		try{
 		setHasBreak(false);
 		//Situation 1: Look up for functions, if name of the variable already exists as a function, nothing will happen.
 		try{
@@ -56,7 +57,10 @@ public class AssignmentStatement extends  Element implements Statement{
 			//Set break if needed
 			if (value instanceof Function && ((Function)value).hasBreak()) setHasBreak(true);
 		}catch(Exception ex){
-			throw new IllegalArgumentException("Error on assignmentStatemen: "+ex.getMessage());
+			throw new Exception("Error on assignmentStatemen: " + ex.getMessage());
+		}
+		}catch(Exception ex){
+			throw new Exception("assignmentStatement cant execute");
 		}
 	}
 

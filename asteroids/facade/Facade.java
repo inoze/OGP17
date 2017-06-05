@@ -757,9 +757,13 @@ public class Facade implements IFacade {
 	public List<Object> executeProgram(Ship ship, double dt) throws ModelException{
 		try{
 			ship.getProgram().execute(dt);
+		}catch(Exception ex){
+			throw new ModelException("r: (execute) " + ex.getMessage());
+		}
+		try{
 			return ship.getProgram().getResults();
 		}catch(Exception ex){
-			throw new ModelException("r: " + ex.getMessage());
+			throw new ModelException("r: (getResults) " + ex.getMessage());
 		}
 	}
 
