@@ -510,11 +510,11 @@ public class Facade implements IFacade {
 	 * notify methods.
 	 */
 	public void evolve(World world, double dt, CollisionListener collisionListener) throws ModelException {
-		/**try{
+		try{
 			world.evolve(dt, collisionListener);
 		}catch(IllegalArgumentException ex){
 			throw new ModelException(ex.getMessage());
-		}*/
+		}
 	}
 
 	/**

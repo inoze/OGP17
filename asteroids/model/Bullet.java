@@ -224,7 +224,10 @@ public class Bullet extends Entity{
 			getSuperWorld().removeEntityFromWorld(this);
 			this.terminate();
 			getSuperWorld().removeEntityFromWorld(entity);
-			entity.terminate();
+			if (entity instanceof Planetoid) {Planetoid planetoid = (Planetoid) entity; planetoid.terminate();}
+			if (entity instanceof Ship) {Ship ship = (Ship) entity; ship.terminate();}
+			if (entity instanceof Bullet) {Bullet bullet = (Bullet) entity; bullet.terminate();}
+			else {entity.terminate();}
 			}
 		}
 

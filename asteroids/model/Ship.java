@@ -550,5 +550,36 @@ public class Ship extends Entity{
     private boolean isValidMass(double mass){
     	return (mass >= 4.0*Math.PI*Math.pow(getRadius(), 3)*SHIP_DENSITY / 3.0 && Helper.isValidDouble(mass));
     }
+<<<<<<< HEAD
+=======
+
+    
+    public void shipCollide(Ship ship){
+		double deltaPosX = this.getPosition()[0] - ship.getPosition()[0];
+		double deltaPosY = this.getPosition()[1] - ship.getPosition()[1];
+
+		double deltaVelX = this.getVelocity()[0] - ship.getVelocity()[0];
+		double deltaVelY = this.getVelocity()[1] - ship.getVelocity()[1];
+		
+		double deltaVR = (deltaVelX*deltaPosX)  + (deltaVelY*deltaPosY);
+		
+		double radiusSum = ship.getRadius() + this.getRadius();
+		double J = (2 * ship.getMass() * this.getMass() * deltaVR) / ((ship.getMass() + this.getMass()) * radiusSum);
+		
+		double Jx = (J*deltaPosX)/(radiusSum);	
+		double Jy = (J*deltaPosY)/(radiusSum);
+		
+		double newVelocityX1 = ship.getVelocity()[1] + (Jx/ship.getMass());
+		double newVelocityY1 = ship.getVelocity()[0] + (Jy/ship.getMass());
+		
+		double newVelocityX2 = this.getVelocity()[0] - (Jx/this.getMass());
+		double newVelocityY2 = this.getVelocity()[1] - (Jy/this.getMass());
+		
+		ship.setVelocity(newVelocityX1, newVelocityY1);
+		this.setVelocity(newVelocityX2, newVelocityY2);
+		
+	}
+	
+>>>>>>> 29e2a72cb7476d530c4ff4e11a6003b632ca7d1a
 }
 
