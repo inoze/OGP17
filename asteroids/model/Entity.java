@@ -368,67 +368,35 @@ public class Entity {
 	   
 	   public void collide(Entity entity) throws IllegalArgumentException{
 	 
-    	if (this instanceof Ship && entity instanceof Ship);
-    	if (this instanceof MinorPlanet && entity instanceof MinorPlanet);
+    	if (this instanceof Ship && entity instanceof Ship) {Ship ship1 = (Ship) this; Ship ship2 = (Ship) entity; ship1.shipCollide(ship2);}
+    	if (this instanceof MinorPlanet && entity instanceof MinorPlanet) {MinorPlanet minorPlanet1 = (MinorPlanet) this; MinorPlanet minorPlanet2 = (MinorPlanet) entity; minorPlanet1.minorPlanetCollide(minorPlanet2);}
     	if ((entity instanceof Bullet) ||  (this instanceof Bullet)){Bullet bullet = (Bullet) this; bullet.bulletCollide(entity);}
-    	if ((this instanceof Ship && entity instanceof Asteroid) || (entity instanceof Ship && this instanceof Asteroid));
-    	if ((this instanceof Ship && entity instanceof Planetoid) || (entity instanceof Ship && this instanceof Planetoid));
     	
-		   
-		   
-		   
-		   
-		   
-		   
-		   
-    	
-    	if (this instanceof Bullet){
-    		Bullet bullet = (Bullet) this;
-    		
-    		if (entity == bullet.getBulletSource()){
-    			Ship ship = (Ship) entity;
-    			Set<Bullet> bullets = new HashSet<Bullet>();
-    			bullets.add(bullet);
-    			ship.loadBulletsOnShip(bullets);
+    	if ((this instanceof Ship && entity instanceof Asteroid) || (entity instanceof Ship && this instanceof Asteroid)){
+    		Ship ship = null;
+    		if (this instanceof Ship){
+    			ship = (Ship) this;
+    		} else {
+    			ship = (Ship) entity;
     		}
-    		else{
-    			world.removeEntityFromWorld(bullet);
-    			bullet.terminate();
-    			this.terminate();
-    			
-    			if (entity instanceof Planetoid){
-    				
-    			}
-    			else{
-    				world.removeEntityFromWorld(entity);
-    			}
-    		}
-    	}
-    	else if (entity instanceof Bullet){
-    		Bullet bullet = (Bullet) entity;
-    		
-    		if (this == bullet.getBulletSource()){
-    			Ship ship = (Ship) this;
-    			Set<Bullet> bullets = new HashSet<Bullet>();
-    			bullets.add(bullet);
-    			ship.loadBulletsOnShip(bullets);
-    		}
-    		else{
-    			world.removeEntityFromWorld(bullet);
-    			bullet.terminate();
-    			
-    			if (this instanceof Planetoid){
-    				
-    			}
-    			else{
-    				world.removeEntityFromWorld(this);
-    			}
-    		}
+    		ship.getSuperWorld().removeEntityFromWorld(ship);
+    		ship.terminate();
     	}
     	
-    	else {
-    		
+    	if ((this instanceof Ship && entity instanceof Planetoid) || (entity instanceof Ship && this instanceof Planetoid)){
+    		Ship ship = null;
+    		if (this instanceof Ship){
+    			ship = (Ship) this;
+    		} else {
+    			ship = (Ship) entity;
+    		}
+    		World world = ship.getSuperWorld();
+    		double xnew = ship.getRadius() + (Math.random() * (world.getWorldHeight() - ship.getRadius() * 2));
+    		double ynew = ship.getRadius() + (Math.random() * (world.getWorldWidth() - ship.getRadius() * 2));
+    		ship.setPosition(xnew, ynew);
     	}
+	    	
+    	
     }
     
     //Total

@@ -552,23 +552,31 @@ public class Ship extends Entity{
     }
 
     
-    public void collide(Entity entity){
-    	if (entity instanceof Bullet){
-    		Bullet bullet = (Bullet) entity;
-    		
-    		if (this == bullet.getBulletSource()){
-    			Set<Bullet> bullets = new HashSet<Bullet>();
-    			bullets.add(bullet);
-    			this.loadBulletsOnShip(bullets);
-    		}
-    		else{
-    			getSuperWorld().removeEntityFromWorld(bullet);
-    			bullet.terminate();
-    			getSuperWorld().removeEntityFromWorld(this);
-    			}
-    	}
-    	else if(entity instanceof )
-    	}
-    }
+    public void shipCollide(Ship ship){
+		double deltaPosX = this.getPosition()[0] - ship.getPosition()[0];
+		double deltaPosY = this.getPosition()[1] - ship.getPosition()[1];
+
+		double deltaVelX = this.getVelocity()[0] - ship.getVelocity()[0];
+		double deltaVelY = this.getVelocity()[1] - ship.getVelocity()[1];
+		
+		double deltaVR = (deltaVelX*deltaPosX)  + (deltaVelY*deltaPosY);
+		
+		double radiusSum = ship.getRadius() + this.getRadius();
+		double J = (2 * ship.getMass() * this.getMass() * deltaVR) / ((ship.getMass() + this.getMass()) * radiusSum);
+		
+		double Jx = (J*deltaPosX)/(radiusSum);	
+		double Jy = (J*deltaPosY)/(radiusSum);
+		
+		double newVelocityX1 = ship.getVelocity()[1] + (Jx/ship.getMass());
+		double newVelocityY1 = ship.getVelocity()[0] + (Jy/ship.getMass());
+		
+		double newVelocityX2 = this.getVelocity()[0] - (Jx/this.getMass());
+		double newVelocityY2 = this.getVelocity()[1] - (Jy/this.getMass());
+		
+		ship.setVelocity(newVelocityX1, newVelocityY1);
+		this.setVelocity(newVelocityX2, newVelocityY2);
+		
+	}
+	
 }
 

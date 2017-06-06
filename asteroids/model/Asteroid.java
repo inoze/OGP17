@@ -19,4 +19,5 @@ public class Asteroid extends MinorPlanet{
 		if (!isValidRadius(getRadius())) throw new IllegalArgumentException("Invalid radius @ bullet");
 		setMass(4.0*Math.PI*Math.pow(getRadius(), 3)*ASTEROID_DENSITY / 3.0);
 	}
+	
 }
