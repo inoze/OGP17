@@ -65,7 +65,6 @@ public class Ship extends Entity{
 	    *         Throws an IllegalArgumentException if the given radius is invalid.
 	    *         | radius <= MINIMAL_SHIP_RAD
 	    */
-		@Raw
 	    public Ship(double xPosition, double yPosition, double xVelocity, double yVelocity, double radius, double direction, double mass) throws IllegalArgumentException {
 	    	super(xPosition, yPosition, xVelocity, yVelocity, radius, "Ship");
 	    	
@@ -111,7 +110,7 @@ public class Ship extends Entity{
      * @return  True if and only if the given direction is bigger or equal to zero and smaller or equal to 2*pi.
      *         | result == ((direction >= 0) && (direction <= (2*Math.PI) && Helepr.isValidDouble(direction)
      */
-	@Model
+	@Model @Raw
     private boolean isValidDirection(double direction){
         return ((direction >= 0) && (direction < 2*Math.PI) && Helper.isValidDouble(direction));
 	}
@@ -125,7 +124,7 @@ public class Ship extends Entity{
 	 * Return the total mass of ship (i.e., including bullets
 	 * loaded onto the ship).
 	 */
-    @Basic
+    @Basic @Raw
 	public double getTotalMass() {
 		return this.totalMass;
 	}
@@ -144,6 +143,7 @@ public class Ship extends Entity{
      * 			| if !isValidTotalMass(mass)
      * 			|	then new.totalMass == (Math.pow(this.getRadius(), 3) * Math.PI * (4/3) * SHIP_DENSITY)
      */
+    @Raw
     public void setTotalMass(double mass){
     	if (isValidTotalMass(mass)) this.totalMass = mass;
     	else totalMass = (Math.pow(this.getRadius(), 3) * Math.PI * 4.0 * SHIP_DENSITY / 3.0);
@@ -163,7 +163,7 @@ public class Ship extends Entity{
      * 			| i =+ this.getMass()
      * 			| result ==  (mass == i) 
      */
-    @Model
+    @Model @Raw
     private boolean isValidTotalMass(double mass){
     	if (!Helper.isValidDouble(mass)) return false;
     	return (mass == (bullets.isEmpty() ? this.getMass() : this.getMass() + bullets.stream().map(bullet -> bullet.getMass()).reduce((u, t) -> u + t).get()));
@@ -485,6 +485,36 @@ public class Ship extends Entity{
 		super.terminate();
 	}
 
+    /**
+     * Moves the ship to a new position and set a neww velocity  during a timespan of dt.
+     *
+     * @param   dt
+     *          The time over which the ship is moving.
+     * @throws  IllegalArgumentException
+     *          Throws an IllegalArgumentException if dt is infinity or is smaller then zero.
+     *         	|  ((dt < 0.0) && ( Double.isInfinite(dt)))
+     * @effect  The x and y velocity is set to propet velocity for the acceleration over the time.
+     * 			| this.setVelocity(
+     * 			|	this.getVelocity()[0] + this.getAcceleration() * Math.cos(this.getDirection()) * dt,
+     * 			|		 this.getVelocity()[1] + this.getAcceleration() * Math.sin(this.getDirection())* dt)
+     * @effect 	The super move method is called.
+     * 			| super.move(dt)
+     */
+    @Override
+    public void move(double dt) throws IllegalArgumentException{
+        if (dt < 0.0) {
+            throw new IllegalArgumentException("Invalid time");
+        }
+        else{
+            try {
+            	super.move(dt);
+                this.setVelocity(this.getVelocity()[0] + this.getAcceleration() * Math.cos(this.getDirection()) * dt, this.getVelocity()[1] + this.getAcceleration() * Math.sin(this.getDirection())* dt);
+                }
+            catch (IllegalArgumentException ex){
+                throw new IllegalArgumentException(ex.getMessage());
+                }
+            }    
+    }
     
     private double[] bulletSpawnCalculator(Double bulletRadius){
     	double distance = (getRadius() + bulletRadius) ;
@@ -517,9 +547,28 @@ public class Ship extends Entity{
      * 			| result ==  (mass >= (4/3)*Math.PI*Math.pow(radius, 3)*SHIP_DENSITY && Helper.isValidDouble(mass))
      */
     @Model
-    protected boolean isValidMass(double mass){
+    private boolean isValidMass(double mass){
     	return (mass >= 4.0*Math.PI*Math.pow(getRadius(), 3)*SHIP_DENSITY / 3.0 && Helper.isValidDouble(mass));
     }
 
+    
+    public void collide(Entity entity){
+    	if (entity instanceof Bullet){
+    		Bullet bullet = (Bullet) entity;
+    		
+    		if (this == bullet.getBulletSource()){
+    			Set<Bullet> bullets = new HashSet<Bullet>();
+    			bullets.add(bullet);
+    			this.loadBulletsOnShip(bullets);
+    		}
+    		else{
+    			getSuperWorld().removeEntityFromWorld(bullet);
+    			bullet.terminate();
+    			getSuperWorld().removeEntityFromWorld(this);
+    			}
+    	}
+    	else if(entity instanceof )
+    	}
+    }
 }
 

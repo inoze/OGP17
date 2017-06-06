@@ -50,7 +50,6 @@ public class World {
 	 *          |				then	new.height = 0.0
 	 *          |			else	new.height = UPPPER_BOUND_WORLD
 	 */
-	@Raw
 	public World(double width, double height){
 		
 		if(isValidDimension(width))

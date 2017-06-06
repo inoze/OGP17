@@ -1,4 +1,7 @@
 package asteroids.model;
+import java.util.HashSet;
+import java.util.Set;
+
 import be.kuleuven.cs.som.annotate.*;
 //import asteroids.util.ModelException;
 
@@ -208,4 +211,21 @@ public class Bullet extends Entity{
     	return (radius > MINIMAL_BULLET_RAD && Helper.isValidDouble(radius));
     }
     
+    
+    
+    public void bulletCollide(Entity entity){
+    	if (entity == this.getBulletSource()){
+			Ship ship = (Ship) entity;
+			Set<Bullet> bullets = new HashSet<Bullet>();
+			bullets.add(this);
+			ship.loadBulletsOnShip(bullets);
+		}
+		else{
+			getSuperWorld().removeEntityFromWorld(this);
+			this.terminate();
+			getSuperWorld().removeEntityFromWorld(entity);
+			entity.terminate();
+			}
+		}
+
 }

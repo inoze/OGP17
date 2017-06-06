@@ -16,4 +16,17 @@ abstract class MinorPlanet extends Entity{
 	public MinorPlanet(double x, double y, double xVelocity, double yVelocity, double radius, String type){
 		super(x, y, xVelocity, yVelocity, radius, type);
 	}
+	
+	
+	/**
+     * Checks whether or not a radius is valid for a Minor Planet.
+     * 
+     * @param 	radius
+     * 			The radius to check.
+     * @return	True if and only if radis is bigger than the minimal radius for a Minor Planer and if radius is a valid double.
+     * 			| result == (radius > MINIMAL_MINORPLANET_RAD && Helper.isValidDouble(radius))
+     */
+    protected boolean isValidRadius(double radius){
+    	return (radius >= MINIMAL_MINORPLANET_RAD && Helper.isValidDouble(radius));
+    }
 }

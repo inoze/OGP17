@@ -20,7 +20,7 @@ import be.kuleuven.cs.som.annotate.*;
  * @author Brent De Bleser & Jesse Geens
  * @version 2.92
  */
-public abstract class Entity {
+public class Entity {
 	
 	/**
 	 * Cnstant containing the speed of light.
@@ -70,7 +70,7 @@ public abstract class Entity {
             //Set velocity of the entity (setter itself is total).
             this.setVelocity(xVelocity, yVelocity);
             //Set radius of entity.
-            this.radius = radius;
+            this.startRadius = radius;
             //Set the typeName of the entity.
             this.typeName = typeName;
             //Set the mass of the entity.
@@ -85,6 +85,26 @@ public abstract class Entity {
    @Basic
    public double[] getPosition(){
        return this.position;
+   }
+   
+   /**
+    * Moves the entity to a new position during a timespan of dt.
+    *
+    * @param   dt
+    *          The time over which the ship is moving.
+    * @throws  IllegalArgumentException
+    *          Throws an IllegalArgumentException if dt is infinity or is smaller then zero.
+    *         |  ((dt < 0.0) && ( Double.isInfinite(dt)))
+    * @effect  Sets the entity position with the current position and velocity times dt.
+    *         | this.setPosition(this.position[0] + (this.velocity[0] * dt), this.position[1] + (this.velocity[1] * dt))
+    */
+   public void move(double dt) throws IllegalArgumentException{
+       if (dt < 0.0) {
+           throw new IllegalArgumentException("Invalid time");
+       }
+       else{
+           this.setPosition(this.getPosition()[0] + (this.getVelocity()[0] * dt), this.getPosition()[1] + (this.getVelocity()[1] * dt));          
+           }    
    }
    
    /**
@@ -214,14 +234,14 @@ public abstract class Entity {
      */
     @Basic
     public double getRadius(){
-        return this.radius;
+        return this.startRadius;
     }
     
     /**
      * Variable containing the radius of the entity.
      */
     
-    private final double radius;
+    private final double startRadius;
     
 	/**
 	 * Return the world of the entity.
@@ -345,81 +365,22 @@ public abstract class Entity {
 	   */
 	   private final String typeName;
 
-
-    
-
-
-    
-   
-
-    //Defensive
-    
-   
-    //Total
-   
-    
-    /**
-     * Set the mass of a entity to a given mass.
-     * 
-     * @param mass
-     *        The new mass of the entity.
-     * @post  If the mass is a valid mass and the entity is an instance of ship
-     *        the new mass of the ship will be mass.
-     *        | If 	isValidMass(mass) && this instanceof Ship
-     *        | 	then new.mass = mass
-     * @post  If the mass isn't valid and the entity is an instance of ship the new 
-     *        mass of the ship will be the mass according to it's radius.
-     *        | If !(isValidMass(mass) && this instanceof Ship) 
-     *        | 	then 	this.mass = (4/3)*Math.PI*Math.pow(radius, 3)*SHIP_DENSITY
-     * @post  If the entity isn't an instance of ship the method does nothing.
-     */
-   /** protected void setMass(double mass){
-    	if(isValidMass(mass) && (this instanceof Ship))		 this.mass = mass;
-    	else if  (this instanceof Ship) 	 this.mass = (4/3)*Math.PI*Math.pow(radius, 3)*SHIP_DENSITY;
-    }*/
-    
-    //Defensive
-    
-    
-    
-	
-	//defensive
-    /**
-     * Moves the ship to a new position during a timespan of dt.
-     *
-     * @param   dt
-     *          The time over which the ship is moving.
-     * @throws  IllegalArgumentException
-     *          Throws an IllegalArgumentException if dt is infinity or is smaller then zero.
-     *         |  ((dt < 0.0) && ( Double.isInfinite(dt)))
-     * @effect  Sets the ship position with the current position and velocity times dt.
-     *         | this.setShipPosition(this.position[0] + (this.velocity[0] * dt), this.position[1] + (this.velocity[1] * dt))
-     */
-    public void move(double dt) throws IllegalArgumentException{
-        if (dt < 0.0) {
-        	Helper.log(Double.toString(dt));
-            throw new IllegalArgumentException("Invalid time klote " + dt);
-        }
-        else{
-            try {
-                   this.setPosition(this.getPosition()[0] + (this.getVelocity()[0] * dt), this.getPosition()[1] + (this.getVelocity()[1] * dt));
-                   if(this instanceof Ship){
-                	   Ship ship = (Ship) this;
-                	   ship.setVelocity(ship.getVelocity()[0] + ship.getAcceleration() * Math.cos(ship.getDirection()) * dt, ship.getVelocity()[1] + ship.getAcceleration() * Math.sin(ship.getDirection())* dt);
-                   }
-            }
-            catch (IllegalArgumentException ex){
-                throw new IllegalArgumentException(ex.getMessage());
-                }
-            }    
-    }
-    
-    
-    //TODO comments
-    public void collide(Entity entity) throws IllegalArgumentException{
-    	if (this.getSuperWorld() != entity.getSuperWorld())	return;
-    	World world = this.getSuperWorld();
+	   
+	   public void collide(Entity entity) throws IllegalArgumentException{
+	 
+    	if (this instanceof Ship && entity instanceof Ship);
+    	if (this instanceof MinorPlanet && entity instanceof MinorPlanet);
+    	if ((entity instanceof Bullet) ||  (this instanceof Bullet)){Bullet bullet = (Bullet) this; bullet.bulletCollide(entity);}
+    	if ((this instanceof Ship && entity instanceof Asteroid) || (entity instanceof Ship && this instanceof Asteroid));
+    	if ((this instanceof Ship && entity instanceof Planetoid) || (entity instanceof Ship && this instanceof Planetoid));
     	
+		   
+		   
+		   
+		   
+		   
+		   
+		   
     	
     	if (this instanceof Bullet){
     		Bullet bullet = (Bullet) this;
@@ -433,6 +394,7 @@ public abstract class Entity {
     		else{
     			world.removeEntityFromWorld(bullet);
     			bullet.terminate();
+    			this.terminate();
     			
     			if (entity instanceof Planetoid){
     				
@@ -555,15 +517,15 @@ public abstract class Entity {
 		double mX = 0;
 		
 		if (velocity[0] > 0){
-			edgeX = position[0] + radius;
+			edgeX = position[0] + startRadius;
 			mX = this.superWorld.getWorldWidth();
 		}
-		else edgeX = position[0] - radius;
+		else edgeX = position[0] - startRadius;
 		if (velocity[1] > 0){
-			edgeY = position[1] + radius;
+			edgeY = position[1] + startRadius;
 			mY = this.superWorld.getWorldHeight();
 		}
-		else edgeY = position[1] - radius;
+		else edgeY = position[1] - startRadius;
 		
 		double tX  = Double.POSITIVE_INFINITY;
 		double tY  = Double.POSITIVE_INFINITY;
