@@ -550,9 +550,6 @@ public class Ship extends Entity{
     private boolean isValidMass(double mass){
     	return (mass >= 4.0*Math.PI*Math.pow(getRadius(), 3)*SHIP_DENSITY / 3.0 && Helper.isValidDouble(mass));
     }
-<<<<<<< HEAD
-=======
-
     
     public void shipCollide(Ship ship){
 		double deltaPosX = this.getPosition()[0] - ship.getPosition()[0];
@@ -579,7 +576,5 @@ public class Ship extends Entity{
 		this.setVelocity(newVelocityX2, newVelocityY2);
 		
 	}
-	
->>>>>>> 29e2a72cb7476d530c4ff4e11a6003b632ca7d1a
 }
 
