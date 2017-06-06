@@ -21,6 +21,7 @@ public class FireStatement extends Statement{
 
 	@Override
 	public void execute() throws Exception{
+		if(getProgram() == null) throw new NullPointerException("(fs): program is null");
 		try{
 			setConsumesTime(true);
 			getProgram().setSourceLocation(getSourceLocation());

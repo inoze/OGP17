@@ -26,8 +26,8 @@ public class PlanetoidExpression extends Element implements Expression<Entity> {
 	@Override
 	public Planetoid calculate() {
 		Ship ship = getProgram().getShip();
-		if (ship.getWorld() == null) return null;
-		planetoids = ship.getWorld().getEntitiesOfTheClass("Planetoid");
+		if (ship.getSuperWorld() == null) return null;
+		planetoids = ship.getSuperWorld().getEntitiesOfTheClass("Planetoid");
 		Optional<? extends Entity> closestPlanetoid = planetoids.stream().reduce((p1, p2) -> (ship.getDistanceBetweenCenter(p1) < ship.getDistanceBetweenCenter(p2) ? p1 : p2));
 		if (closestPlanetoid.isPresent()) return (Planetoid)closestPlanetoid.get();
 		return null;

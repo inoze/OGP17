@@ -1,7 +1,10 @@
 package asteroids.model.program;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.HashMap;
+import java.util.HashSet;
 
 import asteroids.model.Program;
 import asteroids.model.program.expression.DoubleLiteralExpression;
@@ -16,6 +19,7 @@ public class Function {
 	private HashMap<String, Expression<?>> parameters=new HashMap<>();
 	private Object returnValue;
 	private boolean returnReached;
+	private boolean hasBreak;
     
     public  Function (String functionName, Statement body, SourceLocation sourceLocation) {
       setFunctionName(functionName);
@@ -80,6 +84,33 @@ public class Function {
 		return parameters;
 	}
 	
+	public boolean hasBreak() {
+		return hasBreak;
+	}
+	public void setHasBreak(boolean hasBreak) {
+		this.hasBreak = hasBreak;
+	}
+	
+	public Object calculate(Object[] arguments){//
+		setHasBreak(false);
+		Set<Variable> locals = new HashSet<Variable>();
+		try{
+			Optional result = body.execute(arguments, locals);
+			if(body.hasBreak()){
+				setHasBreak(true);
+				return null;
+			}
+			else setHasBreak(false);
+			return result.get();
+		} 
+		
+		catch(Exception ex){
+			throw new IllegalArgumentException();
+		}
+	}
+}
+	
+	/*
 	public Object execute(List<Expression<?>> actualArgs) throws Exception {
         for(int i = 1; i <= actualArgs.size(); i++){
         	Expression<?> arg = (Expression<?>)actualArgs.toArray()[i-1];
@@ -104,7 +135,7 @@ public class Function {
         return this.getReturnValue();
 	}
 }
-
+*/
 /*package asteroids.model.program;
 import java.util.HashSet;
 import java.util.List;

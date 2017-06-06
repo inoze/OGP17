@@ -550,25 +550,5 @@ public class Ship extends Entity{
     private boolean isValidMass(double mass){
     	return (mass >= 4.0*Math.PI*Math.pow(getRadius(), 3)*SHIP_DENSITY / 3.0 && Helper.isValidDouble(mass));
     }
-
-    
-    public void collide(Entity entity){
-    	if (entity instanceof Bullet){
-    		Bullet bullet = (Bullet) entity;
-    		
-    		if (this == bullet.getBulletSource()){
-    			Set<Bullet> bullets = new HashSet<Bullet>();
-    			bullets.add(bullet);
-    			this.loadBulletsOnShip(bullets);
-    		}
-    		else{
-    			getSuperWorld().removeEntityFromWorld(bullet);
-    			bullet.terminate();
-    			getSuperWorld().removeEntityFromWorld(this);
-    			}
-    	}
-    	else if(entity instanceof )
-    	}
-    }
 }
 
