@@ -35,32 +35,21 @@ public class AssignmentStatement extends Statement{
 
 	@Override
 	public void execute() throws Exception{
-		try{
 		setHasBreak(false);
-		//Situation 1: Look up for functions, if name of the variable already exists as a function, nothing will happen.
 		try{
 			getProgram().getFunction(this.variableName);
 			throw new IllegalArgumentException("Already declared as function");
-		} catch (Exception ex){
-			//If not like that, go further
-		}
+		} catch (Exception ex){}
 		
-		//Situation 2: Find the first variable with that name and assign
 		try{
 			Set<Variable> programVariables = getProgram().getVariables();
 			Optional<Variable> assign = programVariables.stream().filter(variable -> variable.getName().equals(variableName)).findFirst();
 			if(assign.isPresent()){
 				assign.get().setValue(value.calculate());
-			}
-			//Situation 3: If variable doesn't exist yet, make a new one with the provided name and value
-			else getProgram().addVariable(new Variable(variableName, value.calculate()));
-			//Set break if needed
+			} else getProgram().addVariable(new Variable(variableName, value.calculate()));
 			if (value instanceof Function && ((Function)value).hasBreak()) setHasBreak(true);
 		}catch(Exception ex){
 			throw new Exception("Error on assignmentStatemen: " + ex.getMessage());
-		}
-		}catch(Exception ex){
-			throw new Exception("assignmentStatement cant execute");
 		}
 	}
 

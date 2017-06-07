@@ -45,8 +45,8 @@ public class FunctionCallExpression extends Element implements Expression{
 	@Override
 	public Object calculate() throws IllegalArgumentException {
 		Function function =  getProgram().getFunction(name);
-		Object[] calculatedarguments = arguments.stream().map(arg -> arg.calculate()).toArray();
-		Object result = function.calculate(calculatedarguments);
+		Object[] args = getArguments().stream().map(arg -> arg.calculate()).toArray();
+		Object result = function.calculate(args);
 		if (function.hasBreak()) setBreakDiscovered(true);
 		else setBreakDiscovered(false);
 		return result;

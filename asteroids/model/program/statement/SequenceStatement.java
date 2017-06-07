@@ -41,6 +41,7 @@ public class SequenceStatement extends Statement{
 	}
 
 	public void setStatements(List<Statement> statements) {
+		if(statements.size() == 0) throw new IllegalArgumentException("empty list given");
 		this.statements = statements;
 	}
 
@@ -50,7 +51,7 @@ public class SequenceStatement extends Statement{
 		setConsumesTime(false);
 		setHasBreak(false);
 		SourceLocation curLocation = getProgram().getSourceLocation();
-		for(int i = 0; i < statements.size(); i++) {
+		for(int i = 0; i < getStatements().size(); i++) {
 			Statement statement = statements.get(i);
 			SourceLocation nextLocation = null;
 			if (i == statements.size()-1){
@@ -72,7 +73,7 @@ public class SequenceStatement extends Statement{
 		}
 		
 	}catch(Exception ex){
-		throw new Exception("sequenceStatement doesnt work");
+		throw new Exception("(s): " + ex.getMessage());
 	}
 	}
 }

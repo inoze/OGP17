@@ -738,14 +738,22 @@ public class Facade implements IFacade {
 	 * Return the program loaded on the given ship.
 	 */
 	public Program getShipProgram(Ship ship) throws ModelException{
-		return ship.getProgram();
+		try{
+			return ship.getProgram();
+		}catch(Exception ex){
+			throw new ModelException("getShipProgram: " + ex.getMessage());
+		}
 	}
 
 	/**
 	 * Load the given program on the given ship.
 	 */
 	public void loadProgramOnShip(Ship ship, Program program) throws ModelException{
-		ship.setProgram(program);	
+		try{
+			ship.setProgram(program);
+		}catch(Exception ex){
+			throw new ModelException("loadProgramOnShip: " + ex.getMessage());
+		}
 	}
 
 	/**
@@ -756,7 +764,6 @@ public class Facade implements IFacade {
 	 */
 	public List<Object> executeProgram(Ship ship, double dt) throws ModelException{
 		try{
-			
 			ship.getProgram().execute(dt);
 		}catch(Exception ex){
 			throw new ModelException("r: (execute) " + ex.getMessage());

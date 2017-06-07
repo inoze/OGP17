@@ -1,8 +1,8 @@
 package asteroids.model.program.statement;
 
-import asteroids.model.program.Element;
 import asteroids.model.program.Expression;
 import asteroids.model.program.Statement;
+import asteroids.model.program.expression.DoubleLiteralExpression;
 import asteroids.part3.programs.SourceLocation;
 
 public class PrintStatement extends Statement{
@@ -24,11 +24,15 @@ public class PrintStatement extends Statement{
 
 	@Override
 	public void execute() throws Exception{
+		if(getExpression() == null) throw new Exception("(p) expression is null");
+		/*if(getExpression() instanceof DoubleLiteralExpression){
+			throw new
+		}*/
 		try{
 			Object eval = getExpression().calculate();
 			getProgram().addResult(eval);
 		}catch(Exception ex){
-			throw new Exception("print cant execute");
+			throw new Exception("(p) cant calculate expression: " + getExpression().getClass().getName() + ", error: " + ex.getMessage());
 		}
 	}
 }

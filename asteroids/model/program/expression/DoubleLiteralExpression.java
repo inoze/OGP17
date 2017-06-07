@@ -1,6 +1,5 @@
 package asteroids.model.program.expression;
 
-import java.util.List;
 import java.util.Set;
 
 import asteroids.model.program.*;
@@ -15,7 +14,7 @@ public class DoubleLiteralExpression extends Element implements Expression<Doubl
 		this.setValue(value);
 	}
 	
-	private double getValue(){
+	public double getValue(){
 		return this.value;
 	}
 	
@@ -25,7 +24,11 @@ public class DoubleLiteralExpression extends Element implements Expression<Doubl
 
 	@Override
 	public Double calculate() throws IllegalArgumentException {
-		return this.getValue();
+		//try{
+			return this.getValue();
+		/*}catch(Exception ex){
+			throw new IllegalArgumentException("(dle) " + ex.getMessage());
+		}*/
 	}
 
 	@Override
