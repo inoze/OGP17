@@ -40,7 +40,7 @@ public class Planetoid extends MinorPlanet{
 		super(x, y, xVelocity, yVelocity, radius, "Planetoid");
 		
 		this.setTotalDistanceTraveled(totalDistanceTraveled);
-		if (!isValidRadius(this.getRadius())) throw new IllegalArgumentException("Not a valid radius @Planetoid");
+		if (!isValidRadius(this.getRadius())) this.terminate();
 		setMass(4.0*Math.PI*Math.pow(getRadius(), 3)*PLANETOID_DENSITY / 3.0);
 		
 	}
@@ -59,10 +59,11 @@ public class Planetoid extends MinorPlanet{
 	 * 
 	 * @param 	distance
 	 * 			The distance to set as the new total distance traveled.
-	 * @post 	The new total distance traveled is set to the given distance if 
-	 * 			and only if the given distance is a valid double.
-	 * 			| if (Helper.isValidDouble(distance)
-	 * 			|	then new..totalDistanceTraveled = distance
+	 * @post 	The new total distance traveled is set to the given distance.
+	 * 			| new..totalDistanceTraveled = distance
+	 * @throws	IllegalArgumentException
+	 * 			Throws an IllegalArgumentException if the given distance isn't a valid double.
+	 * 			| !Helper.isValidDouble(distance)
 	 */
 	@Raw
 	private void setTotalDistanceTraveled(double distance){

@@ -255,7 +255,8 @@ public class Ship extends Entity{
 	@Raw
 	public void loadBulletsOnShip(Collection<Bullet> bulletsCol) throws IllegalArgumentException {
 		for(Bullet bullet : bulletsCol){
-			if(bullet.getBulletSource() == this || canLoadBullet(bullet)){
+			if (bullet == null) throw new IllegalArgumentException("Can't load bullet because bullet == null");
+			if ( bullet.getBulletSource() == this || canLoadBullet(bullet)){
 				bullets.add(bullet);
 				if (bullet.getSuperWorld() != null){ bullet.getSuperWorld().removeEntityFromWorld(bullet);}
 				bullet.setSource(this);
@@ -321,7 +322,7 @@ public class Ship extends Entity{
      */
 	@Model @Raw
     private boolean canHaveAsBullet(Bullet bullet){
-    	return !(bullet.isTerminated() || bullet.getSuperWorld() != null);
+    	return !(bullet.isTerminated() || bullet.getSuperWorld() != null || bullet == null);
     }
 	
 	
