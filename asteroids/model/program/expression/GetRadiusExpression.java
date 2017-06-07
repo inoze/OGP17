@@ -19,14 +19,13 @@ public class GetRadiusExpression extends EntityExpression{
 	@Override
 	public Double calculate() throws Exception {
 		if(getEntity() == null) throw new IllegalArgumentException("(gre) entity is null");
-		//Helper.log("Entity class: " + getEntity().getClass().getName());
-		//if(!(getEntity() instanceof Entity)) throw new IllegalArgumentException("given entity is not an entity");
-		//throw new IllegalArgumentException("(gre): entity" + getEntity().getClass().getName());
+		getEntity().setProgram(this.getProgram());
 		return this.getEntity().calculate().getRadius();
 	}
 
 	@Override
 	public Double calculate(Object[] actualArgs, Set<Variable> localVars) throws Exception {
+		getEntity().setProgram(this.getProgram());
 		return this.getEntity().calculate(actualArgs, localVars).getRadius();
 	}
 

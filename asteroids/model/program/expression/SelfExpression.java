@@ -22,7 +22,7 @@ public class SelfExpression extends Element implements Expression<Entity> {
 
 	@Override
 	public Entity calculate(Object[] actualArgs, Set<Variable> localVars) throws IllegalArgumentException {
-		return getProgram().getShip();
+		return this.calculate();
 	}
 
 }
