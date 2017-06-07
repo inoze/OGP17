@@ -1,5 +1,6 @@
 package asteroids.model.program.statement;
 
+import asteroids.model.Helper;
 //import asteroids.model.Ship;
 import asteroids.model.program.Expression;
 import asteroids.model.program.Statement;
@@ -24,10 +25,9 @@ public class PrintStatement extends Statement{
 
 	@Override
 	public void execute() throws Exception{
-		//Ship ship =this.getProgram().getShip();
 		if(getExpression() == null) throw new Exception("(p) expression is null");
 		if(this.getProgram() == null) throw new Exception("(p) statement has no program");
-		//if(getExpression().getProgram() == null) throw new Exception("(p) expression has no program");
+		getExpression().setProgram(this.getProgram());
 		try{
 			getExpression().setProgram(this.getProgram());
 			Object eval = getExpression().calculate();

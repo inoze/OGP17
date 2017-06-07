@@ -94,7 +94,7 @@ public class IfStatement extends Statement{
 		}
 
 		if(hasIf()){
-			try{ifBody.execute();}catch(Exception ex){throw new Exception("ifBody cant execute: " + ex.getMessage());}
+			try{ifBody.setProgram(this.getProgram());ifBody.execute();}catch(Exception ex){throw new Exception("ifBody cant execute: " + ex.getMessage());}
 			if(!ifBody.consumesTime()){
 				setConsumesTime(false);
 				return;
@@ -108,7 +108,7 @@ public class IfStatement extends Statement{
 		}
 				
 		if(hasElse()){
-			try{elseBody.execute();}catch(Exception ex){throw new Exception("elseBody cant execute: " + ex.getMessage());}
+			try{elseBody.setProgram(this.getProgram());elseBody.execute();}catch(Exception ex){throw new Exception("elseBody cant execute: " + ex.getMessage());}
 			if (!elseBody.consumesTime()){
 			setConsumesTime(false);	
 			return;

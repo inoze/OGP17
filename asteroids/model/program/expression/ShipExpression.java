@@ -39,8 +39,7 @@ public class ShipExpression extends Element implements Expression<Entity> {
 
 	@Override
 	public Entity calculate(Object[] actualArgs, Set<Variable> localVars) throws Exception {
-		//try{return this.calculate();}catch(Exception ex){throw new IllegalArgumentException(ex.getMessage());}
-		throw new Exception("Kanker wordt uitgevoerd met argumenten");
+		return this.calculate();
 	}
 
 }

@@ -1,6 +1,7 @@
 package asteroids.model.program.expression;
 
 import asteroids.model.Entity;
+import asteroids.model.Helper;
 import asteroids.model.program.Element;
 import asteroids.model.program.Expression;
 import asteroids.part3.programs.SourceLocation;

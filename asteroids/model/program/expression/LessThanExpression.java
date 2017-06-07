@@ -1,6 +1,5 @@
 package asteroids.model.program.expression;
 
-import java.util.List;
 import java.util.Set;
 
 import asteroids.model.Program;

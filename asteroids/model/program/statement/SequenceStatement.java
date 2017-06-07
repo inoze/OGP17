@@ -56,6 +56,7 @@ public class SequenceStatement extends Statement{
 			else nextLocation = statements.get(i+1).getSourceLocation();
 			if(i == statements.size()-1 || nextLocation.getLine() > curLocation.getLine()||
 					(nextLocation.getLine() == curLocation.getLine() && nextLocation.getColumn() > curLocation.getColumn())){
+				statement.setProgram(this.getProgram());
 				statement.execute();
 				if(statement.consumesTime()){
 					setConsumesTime(true);
