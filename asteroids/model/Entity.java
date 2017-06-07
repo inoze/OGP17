@@ -22,7 +22,7 @@ import be.kuleuven.cs.som.annotate.*;
  * @author Brent De Bleser & Jesse Geens
  * @version 2.92
  */
-public class Entity {
+public abstract class Entity {
 	
 	/**
 	 * Cnstant containing the speed of light.

@@ -1,5 +1,14 @@
 package asteroids.model;
 
+
+/**
+ * A class which deals with asteroids.
+ * 	Asteroid is a subclass of MinorPlanet.
+ *
+ * @version	2.0
+ * @author 	Brent De Bleser & Jesse Geens
+ *
+ */
 public class Asteroid extends MinorPlanet{
 	
 	/**
@@ -8,15 +17,31 @@ public class Asteroid extends MinorPlanet{
 	private final double ASTEROID_DENSITY = 2.65E12;
 	
 	/**
-	 * Create a new non-null asteroid with the given position, velocity and
-	 * radius.
+	 * Method to create a asteroid.
 	 * 
-	 * The asteroid is not located in a world.
+	 * @param 	x
+	 * 			The x position of the asteroid.
+	 * @param 	y
+	 * 			The y position of the asteroid.
+	 * @param 	xVelocity
+	 * 			The y component of the total velocity of the asteroid.
+	 * @param 	yVelocity
+	 * 			The y component of the total velocity of the asteroid.
+	 * @param 	radius
+	 * 			The radius of the asteroid.
+	 * 
+	 * @effect	The super constructor is called with the corresponding arguments.
+	 * 			| super(x, y, xVelocity, yVelocity, radius, "Asteroid");
+	 * @effect	The mass is set to four thirds of the radius cubed times the asteroid density.
+	 * 			| setMass(4.0*Math.PI*Math.pow(getRadius(), 3)*ASTEROID_DENSITY / 3.0)
+	 * @throws	IllegalArgumentException
+	 * 			Throws an illegalargumentexception if the radius isn't valid.
+	 * 			| !isValidRadius(getRadius())
 	 */
 	public Asteroid(double x, double y, double xVelocity, double yVelocity, double radius){
 		super(x, y, xVelocity, yVelocity, radius, "Asteroid");
 		
-		if (!isValidRadius(getRadius())) throw new IllegalArgumentException("Invalid radius @ bullet");
+		if (!isValidRadius(getRadius())) throw new IllegalArgumentException("Invalid radius @ Asteroid");
 		setMass(4.0*Math.PI*Math.pow(getRadius(), 3)*ASTEROID_DENSITY / 3.0);
 	}
 	

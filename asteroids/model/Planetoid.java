@@ -2,6 +2,20 @@ package asteroids.model;
 
 import be.kuleuven.cs.som.annotate.*;
 
+
+
+
+/**
+ * A class which deals with the behavoiur of a Planetoid.
+ * 	Planetoids are a subclass of MinorPlanet.
+ * 
+ * @invar	The total distance traveled may not be to beg so that the effective radius of the
+ * 			planetoid be smaller then the minimal radius of a planetoid.
+ * 			| TotalDistancetraveled <= (MINIMAL_MINORPLANET_RAD - super.getRadius())/-0.000001 
+ * 			
+ * @version 2.0
+ * @author 	Brent De Bleser & Jesse Geens
+ */
 public class Planetoid extends MinorPlanet{
 	
 	/**
@@ -50,6 +64,7 @@ public class Planetoid extends MinorPlanet{
 	/**
 	 * This method returns the total distance traveled by a planetoid.
 	 */
+	@Basic @Raw
 	public double getTotalDistanceTraveled() {
 		return this.totalDistanceTraveled;
 	}
@@ -87,7 +102,7 @@ public class Planetoid extends MinorPlanet{
 	 * @effect	The planetoid is terminated on the level of it's superclass.
 	 * 		 	|     super.terminate()
 	 */
- 	@Override
+ 	@Override 
  	public void terminate() {
  		if (getRadius() >= 30 && getSuperWorld() != null) {
  			spawnAsteroids(getSuperWorld());
@@ -108,8 +123,14 @@ public class Planetoid extends MinorPlanet{
      * 			| setTotalDistanceTraveled(getTotalDistanceTraveled() + getTotalVelocity()*dt);
      * @effect 	The super move method is called.
      * 			| super.move(dt)
+     * @effecr	If the effective radius isn't a valid radius for a minor planet after the move and the
+     * 			new total distance travel is set, the planetoid will be terminated.
+     * 			| After	super.move(dt)
+     *       	|		setTotalDistanceTraveled(getTotalDistanceTraveled() + getTotalVelocity()*dt)
+     *       	| if !this.isValidRadius(getRadius())
+     *       	|		then	this.terminate()
      */
-    @Override
+    @Override @Raw
     public void move(double dt) throws IllegalArgumentException{
         if (dt < 0.0) {
             throw new IllegalArgumentException("Invalid time");
@@ -118,7 +139,7 @@ public class Planetoid extends MinorPlanet{
             try {
             	super.move(dt);
             	setTotalDistanceTraveled(getTotalDistanceTraveled() + getTotalVelocity()*dt);
-            	if (getRadius() <= 5) this.terminate();
+            	if (!this.isValidRadius(getRadius())) this.terminate();
                 }
             catch (IllegalArgumentException ex){
                 throw new IllegalArgumentException(ex.getMessage());
@@ -132,13 +153,46 @@ public class Planetoid extends MinorPlanet{
      * @return 	returs the start radius of the planetoid minus the radius difference.
      * 			| result == super.getRadius() - 0.000001*getTotalDistanceTraveled()
      */
-    @Override
+    @Override @Raw
     public double getRadius(){
     	return (super.getRadius() - 0.000001*getTotalDistanceTraveled());
     }
     
     
-    
+    /**
+     * A method which calculates the arguments for the constructors of the two asteroids which could spawn from a dead planetoid. And spawns them in the proper world.
+     * 
+     * @param 	world
+     * 			The world in which the newly created asteroids must spawn.
+     * @post	Two new asteroids are created with half the radius of the original planetoid.
+     * 			The direction of the velocity of the first asteroid is determined at random. The other asteroid moves
+	 *			in the opposite direction. The speed of their velocities is 1.5 times the speed
+	 *			of the planetoid. Finally, both asteroids are placed at a distance r/2 (where
+	 *			r is the radius of the planetoid) from the center of the planetoid. The
+	 *			centres of the planetoid and of both asteroids should lie on a single line.
+	 *			| double asteroidDirection = 2 * Math.PI * Math.random() 
+	 *			|
+	 *			| double speed = 1.5 *  Math.sqrt(Helper.square(this.getVelocity()[0]) + Helper.square(this.getVelocity()[1]))
+	 *			|
+	 *			| double XVelocityAs1 = speed * Math.cos(asteroidDirection)
+	 *			| double YVelocityAs1 = speed * Math.sin(asteroidDirection)
+	 *			| double XVelocityAs2 = -speed * Math.cos(asteroidDirection)
+	 *			| double YVelocityAs2 = -speed * Math.sin(asteroidDirection)
+	 *			|
+	 *			| double asteroidRadius = getRadius()/2
+	 *			|
+	 *			| double newXChild1 = this.getPosition()[0] + Math.cos(asteroidDirection) * asteroidRadius
+	 *			| double newYChild1 = this.getPosition()[1] + Math.sin(asteroidDirection) * asteroidRadius
+	 *	        | double newXChild2 = this.getPosition()[0] - Math.cos(asteroidDirection) * asteroidRadius
+	 *			| double newYChild2 = this.getPosition()[1] - Math.sin(asteroidDirection) * asteroidRadius
+	 *			|
+	 *			|
+	 *			| Asteroid asteroid1 = new Asteroid(newXChild1, newYChild1, XVelocityAs1, YVelocityAs1, asteroidRadius)
+	 *			| Asteroid asteroid2 = new Asteroid(newXChild2, newYChild2, XVelocityAs2, YVelocityAs2, asteroidRadius)
+	 * @effect	The asteroids are spawned in world.
+	 * 			| world.addEntityToWorld(asteroid1)
+	 * 			| world.addEntityToWorld(asteroid2)
+     */	
     private void spawnAsteroids(World world){
     	
 		double asteroidDirection = 2 * Math.PI * Math.random(); 
