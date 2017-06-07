@@ -9,18 +9,48 @@ import asteroids.model.program.Expression;
 import asteroids.model.program.Variable;
 import asteroids.part3.programs.SourceLocation;
 
-public class EqualityExpression extends ComparisonExpression{
-	public EqualityExpression(SourceLocation sourceLocation, Expression<Double> e1, Expression<Double> e2) {
-		super(sourceLocation, e1, e2);
+public class EqualityExpression extends Element implements Expression<Boolean>{
+	private Expression<?> leftExpression;
+	private Expression<?> rightExpression;
+	
+	public EqualityExpression(SourceLocation sourceLocation, Expression<?> e1, Expression<?> e2) {
+		super(sourceLocation);
+		this.setLeftExpression(e1);
+		this.setRightExpression(e2);
 	}
 
+	protected Expression<?> getLeftExpression(){
+		return this.leftExpression;
+	}
+
+	protected Expression<?> getRightExpression(){
+		return this.rightExpression;
+	}
+
+	private void setLeftExpression(Expression<?> expression){
+		this.leftExpression = expression;
+	}
+	
+	private void setRightExpression(Expression<?> expression){
+		this.rightExpression = expression;
+	}
+	
 	@Override
-	public Boolean calculate() throws IllegalArgumentException {
+	public void setProgram(Program program){
+		super.setProgram(program);
+		this.getLeftExpression().setProgram(program);
+		this.getRightExpression().setProgram(program);
+	}
+	
+	@Override
+	public Boolean calculate() throws Exception {
+		if(!(this.getLeftExpression().getClass().equals(this.getRightExpression().getClass()))) return false;
 		return this.getLeftExpression().calculate().equals(this.getRightExpression().calculate());
 	}
-
+	
 	@Override
-	public Boolean calculate(Object[] actualArgs, Set<Variable> localVars) throws IllegalArgumentException {
+	public Boolean calculate(Object[] actualArgs, Set localVars) throws Exception {
+		if(!(this.getLeftExpression().getClass().equals(this.getRightExpression().getClass()))) return false;
 		return this.getLeftExpression().calculate(actualArgs, localVars).equals(this.getRightExpression().calculate(actualArgs, localVars));
 	}
 

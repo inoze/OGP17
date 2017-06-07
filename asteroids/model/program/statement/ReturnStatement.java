@@ -1,26 +1,23 @@
 package asteroids.model.program.statement;
 
-import asteroids.model.Ship;
-import asteroids.model.program.Element;
 import asteroids.model.program.Expression;
-import asteroids.model.program.Function;
 import asteroids.model.program.Statement;
 import asteroids.part3.programs.SourceLocation;
 
 public class ReturnStatement extends Statement{
 
-	private Expression expression;
+	private Expression<?> expression;
 	
-	public ReturnStatement(SourceLocation sourceLocation, Expression expression) {
+	public ReturnStatement(SourceLocation sourceLocation, Expression<?> expression) {
 		super(sourceLocation);
 		setExpression(expression);
 	}
 
-	public Expression getExpression() {
+	public Expression<?> getExpression() {
 		return expression;
 	}
 
-	public void setExpression(Expression expression) {
+	public void setExpression(Expression<?> expression) {
 		this.expression = expression;
 	}
 

@@ -43,7 +43,7 @@ public class FunctionCallExpression extends Element implements Expression{
 	}
 
 	@Override
-	public Object calculate() throws IllegalArgumentException {
+	public Object calculate() throws Exception {
 		Function function =  getProgram().getFunction(name);
 		Object[] args = getArguments().stream().map(arg -> arg.calculate()).toArray();
 		Object result = function.calculate(args);

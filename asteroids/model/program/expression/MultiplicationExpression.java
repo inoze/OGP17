@@ -14,12 +14,12 @@ public class MultiplicationExpression extends MathematicalExpression{
 	}
 	
 	@Override
-	public Double calculate() throws IllegalArgumentException {
+	public Double calculate() throws Exception {
 		return this.getLeftExpression().calculate() * this.getRightExpression().calculate();
 	}
 
 	@Override
-	public Double calculate(Object[] actualArgs, Set<Variable> localVars) throws IllegalArgumentException {
+	public Double calculate(Object[] actualArgs, Set<Variable> localVars) throws Exception {
 		return this.getLeftExpression().calculate(actualArgs, localVars) * this.getRightExpression().calculate(actualArgs, localVars);
 	}
 

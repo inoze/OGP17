@@ -18,14 +18,12 @@ public class Program {
 	private int recursion =0;
 	
 	public Program(List<Function> functions, Statement main) {
-		//if(main == null) throw new NullPointerException("(pro) main statement is null");
 		try{
 			this.functions = functions;
-			if(main != null) main.setProgram(this);
 			setBody(main);
+			if(getBody() != null) getBody().setProgram(this);
 			for(Function function: functions){ 
 				if(function != null) function.setProgram(this);
-				//else throw new NullPointerException("(pro) Null function in function list");
 			}
 			timeRemaining = 0;
 		}catch(Exception ex){
@@ -46,6 +44,10 @@ public class Program {
 	}
 	public Ship getShip() {
 		return this.ship;
+	}
+	
+	private Statement getBody(){
+		return this.body;
 	}
 
 	public List<Object> getResults() {
@@ -116,13 +118,17 @@ public class Program {
 	
 	public List<Object> execute(double dt) throws IllegalArgumentException {
 		timeRemaining += dt;
-		//Helper.log("body: " + body.getClass().getName());
-		try{body.execute();}catch(Exception ex){throw new IllegalArgumentException("(b): " + ex.getMessage());}
-		//if(hasSkip()) return null;
+		try{body.execute();}catch(Exception ex){
+			Helper.log("---------------------------");
+			Helper.log("body: " + body.getClass().getName());
+			Helper.log("(b): " + ex.getMessage());
+			Helper.log("---------------------------\n");
+			throw new IllegalArgumentException("(b): " + ex.getMessage());}
+		if(hasSkip()) return null;
 		if (body.consumesTime()) {
 			if(body.hasBreak()) throw new IllegalArgumentException("Break statements cannot occur outside function bodies");
 			location = new SourceLocation(0, 0);
-			if(results == null){throw new IllegalArgumentException("results is null");}
+		//	if(results == null){throw new IllegalArgumentException("results is null");}
 			List<Object> resultsToThrow = results; 
 			results = null;
 			return resultsToThrow;

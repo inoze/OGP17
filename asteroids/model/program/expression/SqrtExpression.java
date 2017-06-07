@@ -1,13 +1,12 @@
 package asteroids.model.program.expression;
 
-import java.util.List;
 import java.util.Set;
 
 import asteroids.model.program.Element;
 import asteroids.model.program.Expression;
 import asteroids.part3.programs.SourceLocation;
 
-public class SqrtExpression extends Element implements Expression{
+public class SqrtExpression extends Element implements Expression<Double>{
 
 	private Expression<Double> expression;
 	
@@ -25,12 +24,12 @@ public class SqrtExpression extends Element implements Expression{
 	}
 
 	@Override
-	public Double calculate() throws IllegalArgumentException {
+	public Double calculate() throws Exception {
 		return Math.sqrt(this.getExpression().calculate());
 	}
 
 	@Override
-	public Object calculate(Object[] actualArgs, Set localVars) throws IllegalArgumentException {
+	public Double calculate(Object[] actualArgs, Set localVars) throws Exception {
 		return Math.sqrt(this.getExpression().calculate(actualArgs, localVars));
 	}
 

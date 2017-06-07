@@ -6,15 +6,15 @@ import asteroids.part3.programs.SourceLocation;
 
 public class TurnStatement extends Statement {
 	
-	private Expression angle;
+	private Expression<Double> angle;
 	private boolean consumesTime;
 
-	public TurnStatement(SourceLocation sourceLocation, Expression angle) {
+	public TurnStatement(SourceLocation sourceLocation, Expression<Double> angle) {
 		super(sourceLocation);
 		this.setAngle(angle);
 	}
 
-	public Expression getAngle() {
+	public Expression<Double> getAngle() {
 		return angle;
 	}
 
@@ -27,12 +27,12 @@ public class TurnStatement extends Statement {
 		this.consumesTime = consumesTime;
 	}
 
-	public void setAngle(Expression angle) {
+	public void setAngle(Expression<Double> angle) {
 		this.angle = angle;
 	}
 
 	@Override
-	public void execute() {
+	public void execute() throws Exception{
 		setConsumesTime(true);
 		getProgram().setSourceLocation(getSourceLocation());
 		if (getProgram().getTime() < 0.2) {

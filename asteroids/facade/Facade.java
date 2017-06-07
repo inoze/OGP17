@@ -750,7 +750,9 @@ public class Facade implements IFacade {
 	 */
 	public void loadProgramOnShip(Ship ship, Program program) throws ModelException{
 		try{
+			if(program == null) throw new ModelException("lpos: program is null");
 			ship.setProgram(program);
+			program.setShip(ship);
 		}catch(Exception ex){
 			throw new ModelException("loadProgramOnShip: " + ex.getMessage());
 		}

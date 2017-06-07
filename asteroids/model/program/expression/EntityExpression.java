@@ -19,6 +19,7 @@ public abstract class EntityExpression extends Element implements Expression<Dou
 	}
 
 	public void setEntity(Expression<Entity> entity) {
+		if(!(entity instanceof Entity)) this.entity = null;//throw new IllegalArgumentException("entity not a subclass of Entity");
 		this.entity = entity;
 	}
 

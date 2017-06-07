@@ -12,11 +12,15 @@ public class AdditionExpression extends MathematicalExpression {
 	
 	@Override
 	public Double calculate() throws IllegalArgumentException {
-		return this.getLeftExpression().calculate() + this.getRightExpression().calculate();
+		try {
+			return this.getLeftExpression().calculate() + this.getRightExpression().calculate();
+		} catch (Exception e) {
+			throw new IllegalArgumentException(e.getMessage());
+		}
 	}
 
 	@Override
-	public Double calculate(Object[] actualArgs, Set<Variable> localVars) throws IllegalArgumentException {
+	public Double calculate(Object[] actualArgs, Set<Variable> localVars) throws Exception {
 		return this.getLeftExpression().calculate(actualArgs, localVars) + this.getRightExpression().calculate(actualArgs, localVars);
 	}
 
