@@ -370,8 +370,10 @@ public class World {
 	private boolean isTerminated = false;
 	
 	
-	
-	public void evolve(double dt, CollisionListener collisionListener){
+	/**
+	 * The method which evolves the state of the game.
+	 */
+	public void evolve(double dt, CollisionListener collisionListener) throws IllegalArgumentException{
 		
 		if(dt < 0 || !(Helper.isValidDouble(dt)))
 			throw new IllegalArgumentException("Time given at evolve is invalid");

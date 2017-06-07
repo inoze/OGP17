@@ -10,12 +10,37 @@ public class Planetoid extends MinorPlanet{
 	private final double PLANETOID_DENSITY = 0.917E12;
 	
 	
-	
+	/**
+	 * Method to create a planetoid.
+	 * 
+	 * @param 	x
+	 * 			The x position of the planetoid.
+	 * @param 	y
+	 * 			The y position of the planetoid.
+	 * @param 	xVelocity
+	 * 			The x component of the total velocity.
+	 * @param 	yVelocity
+	 * 			The y component of the total velocity.
+	 * @param 	radius
+	 * 			The start radius of the planetoid.
+	 * @param 	totalDistanceTraveled
+	 * 			The distance traveled by the planetoid before it is created.
+	 * 
+	 * @effect	The super constructor of planetoid is called with the necessary arguments.
+	 * 			| super(x, y, xVelocity, yVelocity, radius, "Planetoid")
+	 * @effect  The total distance traveled is set to totalDistanceTraveled.
+	 * 			| setTotalDistanceTraveled(totalDistanceTraveled)
+	 * @effect	The mass is set to fout thirds of the radius cubed times the the planetoid density.
+	 * 			| setMass(4.0*Math.PI*Math.pow(getRadius(), 3)*PLANETOID_DENSITY / 3.0)
+	 * @throws	IllegalArgumentException
+	 * 			Throws an IllegalArgumentExceptionif the radius isn't a valid radius for a minor planet.
+	 * 			| !isValidRadius(this.getRadius())
+	 */
 	public Planetoid(double x, double y, double xVelocity, double yVelocity, double radius, double totalDistanceTraveled){
 		super(x, y, xVelocity, yVelocity, radius, "Planetoid");
 		
 		this.setTotalDistanceTraveled(totalDistanceTraveled);
-		if (!isValidRadius(this.getRadius())) this.terminate();
+		if (!isValidRadius(this.getRadius())) throw new IllegalArgumentException("Not a valid radius @Planetoid");
 		setMass(4.0*Math.PI*Math.pow(getRadius(), 3)*PLANETOID_DENSITY / 3.0);
 		
 	}
@@ -41,8 +66,8 @@ public class Planetoid extends MinorPlanet{
 	 */
 	@Raw
 	private void setTotalDistanceTraveled(double distance){
-		if(Helper.isValidDouble(distance))
-			this.totalDistanceTraveled = distance;
+		if(!Helper.isValidDouble(distance)) throw new IllegalArgumentException("Total distance traveled isn't a valid double @ setTotalDistanceTraveled)");
+		this.totalDistanceTraveled = distance;
 	}
 	
 	/**
@@ -70,17 +95,16 @@ public class Planetoid extends MinorPlanet{
  	}
 	
  	/**
-     * Moves the ship to a new position and set a neww velocity  during a timespan of dt.
+     * Moves the planetoid to a new position and remembers the distance traveled during a timespan of dt.
      *
      * @param   dt
      *          The time over which the ship is moving.
      * @throws  IllegalArgumentException
      *          Throws an IllegalArgumentException if dt is infinity or is smaller then zero.
      *         	|  ((dt < 0.0) && ( Double.isInfinite(dt)))
-     * @effect  The x and y velocity is set to propet velocity for the acceleration over the time.
-     * 			| this.setVelocity(
-     * 			|	this.getVelocity()[0] + this.getAcceleration() * Math.cos(this.getDirection()) * dt,
-     * 			|		 this.getVelocity()[1] + this.getAcceleration() * Math.sin(this.getDirection())* dt)
+     * @effect 	The total distance traveled is set to the previous total distance traveled add
+     * 			with the totalvelocity at this moment times dt.
+     * 			| setTotalDistanceTraveled(getTotalDistanceTraveled() + getTotalVelocity()*dt);
      * @effect 	The super move method is called.
      * 			| super.move(dt)
      */
@@ -91,11 +115,9 @@ public class Planetoid extends MinorPlanet{
         }
         else{
             try {
-            	double[] prevPos = this.getPosition();
             	super.move(dt);
-            	double[] currentPos = this.getPosition();
-            	double difference = Math.abs(Math.sqrt(Helper.square(prevPos[0]) + Helper.square(prevPos[1])) - Math.sqrt(Helper.square(currentPos[0]) + Helper.square(currentPos[1])));
-                setTotalDistanceTraveled(getTotalDistanceTraveled() + difference);
+            	setTotalDistanceTraveled(getTotalDistanceTraveled() + getTotalVelocity()*dt);
+            	if (getRadius() <= 5) this.terminate();
                 }
             catch (IllegalArgumentException ex){
                 throw new IllegalArgumentException(ex.getMessage());
@@ -117,7 +139,6 @@ public class Planetoid extends MinorPlanet{
     
     
     private void spawnAsteroids(World world){
-    	
     	
 		double asteroidDirection = 2 * Math.PI * Math.random(); 
 		

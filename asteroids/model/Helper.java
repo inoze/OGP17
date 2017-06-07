@@ -1,7 +1,7 @@
 package asteroids.model;
 
 /**
- * A class wiyh the sole purpose of containing often used aid-functions.
+ * A class with the sole purpose of containing often used aid-functions.
  *
  * @version 3.0
  * @author Brent De Bleser & Jesse Geens

@@ -215,25 +215,23 @@ public class Bullet extends Entity{
     
     
     
-    public void bulletCollide(Entity skr){
-    	if (skr == this.getBulletSource()){
-			Ship ship = (Ship) skr;
+    public void bulletCollideOwnShip(Ship skr){
 			Set<Bullet> bullets = new HashSet<Bullet>();
 			bullets.add(this);
-			ship.loadBulletsOnShip(bullets);
+			skr.loadBulletsOnShip(bullets);
 		}
-		else{
-			System.out.print(skr.getSuperWorld());
-			this.getSuperWorld().removeEntityFromWorld(this);
-			this.terminate();
-			System.out.print(skr.getSuperWorld());
-			skr.getSuperWorld().removeEntityFromWorld(skr);
+    
+    public void bulletCollideSomethingElse(Entity skr){
+    	System.out.print(skr.getSuperWorld());
+		this.getSuperWorld().removeEntityFromWorld(this);
+		this.terminate();
+		System.out.print(skr.getSuperWorld());
+		skr.getSuperWorld().removeEntityFromWorld(skr);
 
-			if (skr instanceof Planetoid) {Planetoid planetoid = (Planetoid) skr; planetoid.terminate();}
-			if (skr instanceof Ship) {Ship ship = (Ship) skr; ship.terminate();}
-			if (skr instanceof Bullet) {Bullet bullet = (Bullet) skr; bullet.terminate();}
-			else {skr.terminate();}
-			}
-		}
+		if (skr instanceof Planetoid) {Planetoid planetoid = (Planetoid) skr; planetoid.terminate();}
+		if (skr instanceof Ship) {Ship ship = (Ship) skr; ship.terminate();}
+		if (skr instanceof Bullet) {Bullet bullet = (Bullet) skr; bullet.terminate();}
+		else {skr.terminate();}
+    }
 
 }

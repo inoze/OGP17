@@ -167,6 +167,23 @@ public class Entity {
     }
     
     /**
+     * Method to return the total velocity of the entity.
+     * 
+     * @return 	Returns the total velocity of an entity if it isn't higher then the speed of light.
+     * 			Else the result is the speed of light
+     * 			| velocity = Math.sqrt(Helper.square(this.getVelocity()[0])+ Helper.square(this.getVelocity()[1]))
+     * 			| if (velocity <= SPEED_OF_LIGHT)
+     * 			|	result == velocity
+     * 			| else
+     * 			|	result == SPEED_OF_LIGHT
+     */
+    public double getTotalVelocity(){
+    	double velocity = Math.sqrt(Helper.square(this.getVelocity()[0])+ Helper.square(this.getVelocity()[1]));
+		if (velocity > SPEED_OF_LIGHT) velocity = SPEED_OF_LIGHT;
+		return velocity;
+    }
+    
+    /**
      * Set the velocity on the X-axis to xVelocity and
      * set the velocity on the Y_axis to yVelocity.
      *
@@ -370,12 +387,21 @@ public class Entity {
 	   
 	   public void collide(Entity entity) throws IllegalArgumentException{
 	 
-    	if (this instanceof Ship && entity instanceof Ship) {Ship ship1 = (Ship) this; Ship ship2 = (Ship) entity; ship1.shipCollide(ship2);}
-    	if (this instanceof MinorPlanet && entity instanceof MinorPlanet) {MinorPlanet minorPlanet1 = (MinorPlanet) this; MinorPlanet minorPlanet2 = (MinorPlanet) entity; minorPlanet1.minorPlanetCollide(minorPlanet2);}
-    	if (entity instanceof Bullet) {Bullet bullet = (Bullet) entity; bullet.bulletCollide(entity);}
-    	if (this instanceof Bullet) {Bullet bullet = (Bullet) this; bullet.bulletCollide(entity);}
+    	if (this instanceof Ship && entity instanceof Ship) this.defaultCollide(entity);
+    	else if (this instanceof MinorPlanet && entity instanceof MinorPlanet) this.defaultCollide(entity);
+    	else if (entity instanceof Bullet) {
+    		Bullet bullet = (Bullet) entity;
+    		if (bullet.getBulletSource() == this) bullet.bulletCollideOwnShip((Ship) this);
+    		else bullet.bulletCollideSomethingElse(this);
+    		}
     	
-    	if ((this instanceof Ship && entity instanceof Asteroid) || (entity instanceof Ship && this instanceof Asteroid)){
+    	else if (this instanceof Bullet) {
+    		Bullet bullet = (Bullet) this;
+    		if (bullet.getBulletSource() == entity) bullet.bulletCollideOwnShip((Ship) entity);
+    		else bullet.bulletCollideSomethingElse(entity);
+    		}
+    	
+    	else if ((this instanceof Ship && entity instanceof Asteroid) || (entity instanceof Ship && this instanceof Asteroid)){
     		Ship ship = null;
     		if (this instanceof Ship){
     			ship = (Ship) this;
@@ -386,7 +412,7 @@ public class Entity {
     		ship.terminate();
     	}
     	
-    	if ((this instanceof Ship && entity instanceof Planetoid) || (entity instanceof Ship && this instanceof Planetoid)){
+    	else if ((this instanceof Ship && entity instanceof Planetoid) || (entity instanceof Ship && this instanceof Planetoid)){
     		Ship ship = null;
     		if (this instanceof Ship){
     			ship = (Ship) this;
@@ -400,47 +426,6 @@ public class Entity {
     	}
 	    	
     	
-    }
-    
-    //Total
-   /**
-    * Method that deals with collisions between entities and boundaries.
-    * 
-    * @post   If the entity collides with the vertical boundries the x velocity is multiplied by minus one.
-    * 		  | if	 (position[0] + radius == this.superWorld.getWorldSize()[0]) || (position[0] - radius == 0)
-    * 		  |		then 	new.velocity[0] = old.velocity[0] * -1
-    * @post   If the entity collides with the horizontal boundries the y velocity is multiplied by minus one.
-    * 		  | if	 (position[1] + radius == this.superWorld.getWorldSize()[1]) || (position[1] - radius == 0)
-    * 		  |		then 	this.velocity[1] = old.velocity[1] * -1
-    * @effect If the entity on which this method is invoced is a bullet and the entity collides with a boundary
-    *         the method bouncesCounter is invoced on the entity.
-    *         | if 	((position[0] + radius == this.superWorld.getWorldSize()[0]) || (position[0] - radius == 0) || 
-    *         |     (position[1] + radius == this.superWorld.getWorldSize()[1]) || (position[1] - radius == 0)) &&
-    *         |		(this instanceof Bullet)
-    *         |		then    	Bullet bullet = (Bullet) this
-    *		  |					bullet.bouncesCounter()	 
-    */
-    public void collideBoundary(){
-    	int bulletBouncer = 0;
-    	if ((this.getPosition()[0]-(this.getRadius()) <= 0.0 || (this.getPosition()[0]+(this.getRadius()) >= this.superWorld.getWorldWidth()))){
-    		if (this instanceof Bullet){
-        			bulletBouncer++;
-        	}
-    		this.velocity[0] = this.velocity[0] * -1;
-    	}
-    	if ((this.getPosition()[1]-(this.getRadius()) <= 0.0 || (this.getPosition()[1]+(this.getRadius()) >= this.superWorld.getWorldHeight()))){
-    		if (this instanceof Bullet){
-        		bulletBouncer++;
-        	}
-    		this.velocity[1] = this.velocity[1] * -1;
-    	} 	
-    	if (this instanceof Bullet){
-    	Bullet bullet = (Bullet) this;
-    	for (int i = 0; i < bulletBouncer; i++){
-    		if (!bullet.isTerminated())
-    		bullet.bouncesCounter();
-    	}
-    	}
     }
     
     //Total
@@ -516,9 +501,10 @@ public class Entity {
 	}
 
 	/**
-	 * TODO comments
 	 * Return the first position at which the given entity will collide with the
 	 * boundaries of its world.
+	 * 
+	 * @return
 	 */
 	public double[] getPositionCollisionBoundary(){
 		if (!Helper.isValidDouble(this.getTimeCollisionBoundary()) || this.superWorld == null) return null;
@@ -534,6 +520,46 @@ public class Entity {
 		
 		return pos;
 	}
+	
+	/**
+	    * Method that deals with collisions between entities and boundaries.
+	    * 
+	    * @post   If the entity collides with the vertical boundries the x velocity is multiplied by minus one.
+	    * 		  | if	 (position[0] + radius == this.superWorld.getWorldSize()[0]) || (position[0] - radius == 0)
+	    * 		  |		then 	new.velocity[0] = this.velocity[0] * -1
+	    * @post   If the entity collides with the horizontal boundries the y velocity is multiplied by minus one.
+	    * 		  | if	 (position[1] + radius == this.superWorld.getWorldSize()[1]) || (position[1] - radius == 0)
+	    * 		  |		then 	new.velocity[1] = this.velocity[1] * -1
+	    * @effect If the entity on which this method is invoced is a bullet and the entity collides with a boundary
+	    *         the method bouncesCounter is invoced on the entity.
+	    *         | if 	((position[0] + radius == this.superWorld.getWorldSize()[0]) || (position[0] - radius == 0) || 
+	    *         |     (position[1] + radius == this.superWorld.getWorldSize()[1]) || (position[1] - radius == 0)) &&
+	    *         |		(this instanceof Bullet)
+	    *         |		then    	Bullet bullet = (Bullet) this
+	    *		  |					bullet.bouncesCounter()	 
+	    */
+	    public void collideBoundary(){
+	    	int bulletBouncer = 0;
+	    	if ((this.getPosition()[0]-(this.getRadius()) <= 0.0 || (this.getPosition()[0]+(this.getRadius()) >= this.superWorld.getWorldWidth()))){
+	    		if (this instanceof Bullet){
+	        			bulletBouncer++;
+	        	}
+	    		this.velocity[0] = this.velocity[0] * -1;
+	    	}
+	    	if ((this.getPosition()[1]-(this.getRadius()) <= 0.0 || (this.getPosition()[1]+(this.getRadius()) >= this.superWorld.getWorldHeight()))){
+	    		if (this instanceof Bullet){
+	        		bulletBouncer++;
+	        	}
+	    		this.velocity[1] = this.velocity[1] * -1;
+	    	} 	
+	    	if (this instanceof Bullet){
+	    	Bullet bullet = (Bullet) this;
+	    	for (int i = 0; i < bulletBouncer; i++){
+	    		if (!bullet.isTerminated())
+	    		bullet.bouncesCounter();
+	    	}
+	    	}
+	    }
 	
 	//Defensive
     /**
@@ -576,7 +602,7 @@ public class Entity {
      *         	| this == entity
      */
     public double getDistanceBetweenEdge(Entity entity)  throws IllegalArgumentException{
-    	if(this == entity) throw new IllegalArgumentException("this == entity");
+    	if(this == entity) throw new IllegalArgumentException("this == entity @ getDistanceBetweenEdge");
     	return getDistanceBetweenCenter(entity) - this.getRadius() - entity.getRadius();
     	
     }
@@ -591,8 +617,8 @@ public class Entity {
      *          the same entity as entity.
      *          | if(this == entity)
      *          |    then result == true
-     * @return  Returns whether the entitiies overlap.
-     *          | return (this.getDistanceBetween(entity)/(this.getRadius()+entity.getRadius()) <= -0.01)
+     * @return  Returns whether the entities overlap significantly.
+     *          | return (this.getDistancebetweenEdge(entity) <= -0.01)
      * @throws  IllegalArgumentException
      *          Throws an IllegalArgumentException if the argument entity is null.
      *          | entity == null
@@ -600,9 +626,10 @@ public class Entity {
      */
     public boolean overlap(Entity entity){
     	
-    	if (entity == null) throw new IllegalArgumentException("The second entity does not exist.");
+    	if (entity == null) throw new IllegalArgumentException("The second entity does not exist. @overlap");
 		if (this == entity) return true;
-    	return this.getDistanceBetweenCenter(entity) <= (0.99 * (this.getRadius() + entity.getRadius()));
+		return this.getDistanceBetweenEdge(entity) <= -0.01;
+    	//return this.getDistanceBetweenCenter(entity) <= (0.99 * (this.getRadius() + entity.getRadius()));
     	
     }
    
@@ -637,6 +664,7 @@ public class Entity {
      *         | this.overlap(entity)
      */
     public double getTimeToCollision(Entity entity) throws IllegalArgumentException{
+    	if (this.getSuperWorld() != entity.getSuperWorld()) return Double.POSITIVE_INFINITY;
     	
         double a1 = entity.getVelocity()[0] - this.getVelocity()[0];
         double a2 = entity.getVelocity()[1] - this.getVelocity()[1];
@@ -800,5 +828,21 @@ public class Entity {
         pos[1] = this.getPosition()[1] + this.getVelocity()[1] * time;
         return pos;
     }
+    
+    public void defaultCollide(Entity ship){
+   	 if ((ship == null) || (ship.isTerminated() == true) || (this.getSuperWorld() == null )
+                || (ship.getSuperWorld() == null) || ((this.getSuperWorld() != ship.getSuperWorld()))) {
+            return;
+        }
+        double [] locationdifference = {ship.getPosition()[0] - this.getPosition()[0], ship.getPosition()[1] - this.getPosition()[1]};
+        double [] velocitydifference = {ship.getVelocity()[0] - this.getVelocity()[0],ship.getVelocity()[1] - this.getVelocity()[1]};
+        double velocitylocationdifference = (velocitydifference[0] * locationdifference[0]) + (velocitydifference[1] * locationdifference[1]);
+        double changetotal = (2 * this.getMass() * ship.getMass() * velocitylocationdifference) / ((this.getRadius() + ship.getRadius()) * (this.getMass() + ship.getMass()));
+        double changex = changetotal * locationdifference[0] / (this.getRadius() + ship.getRadius());
+        double changey = changetotal * locationdifference[1] / (this.getRadius() + ship.getRadius());
+        this.setVelocity(this.getVelocity()[0] + changex / this.getMass(), this.getVelocity()[1] + changey / this.getMass());
+        ship.setVelocity(ship.getVelocity()[0] - changex / ship.getMass(), ship.getVelocity()[1] - changey / ship.getMass());
+		
+	}
 
 }

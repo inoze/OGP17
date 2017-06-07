@@ -255,7 +255,7 @@ public class Ship extends Entity{
 	@Raw
 	public void loadBulletsOnShip(Collection<Bullet> bulletsCol) throws IllegalArgumentException {
 		for(Bullet bullet : bulletsCol){
-			if(canLoadBullet(bullet)){
+			if(bullet.getBulletSource() == this || canLoadBullet(bullet)){
 				bullets.add(bullet);
 				if (bullet.getSuperWorld() != null){ bullet.getSuperWorld().removeEntityFromWorld(bullet);}
 				bullet.setSource(this);
@@ -555,22 +555,5 @@ public class Ship extends Entity{
     	return (mass >= 4.0*Math.PI*Math.pow(getRadius(), 3)*SHIP_DENSITY / 3.0 && Helper.isValidDouble(mass));
     }
     
-    public void shipCollide(Ship ship){
-    	 if ((ship == null) || (ship.isTerminated() == true) || (this.getSuperWorld() == null )
-                 || (ship.getSuperWorld() == null) || ((this.getSuperWorld() != ship.getSuperWorld()))) {
-             return;
-         }
-         double [] locationdifference = {ship.getPosition()[0] - this.getPosition()[0], ship.getPosition()[1] - this.getPosition()[1]};
-         double [] velocitydifference = {ship.getVelocity()[0] - this.getVelocity()[0],ship.getVelocity()[1] - this.getVelocity()[1]};
-         double velocitylocationdifference = (velocitydifference[0] * locationdifference[0]) + (velocitydifference[1] * locationdifference[1]);
-         double changetotal = (2 * this.getMass() * ship.getMass() * velocitylocationdifference) / ((this.getRadius() + ship.getRadius()) * (this.getMass() + ship.getMass()));
-         double changex = changetotal * locationdifference[0] / (this.getRadius() + ship.getRadius());
-         double changey = changetotal * locationdifference[1] / (this.getRadius() + ship.getRadius());
-         double [] velocity1 = {this.getVelocity()[0] + changex / this.getMass(), this.getVelocity()[1] + changey / this.getMass()};
-         double [] velocity2 = {ship.getVelocity()[0] - changex / ship.getMass(), ship.getVelocity()[1] - changey / ship.getMass()};
-         this.setVelocity(velocity1[0], velocity1[1]);
-         ship.setVelocity(velocity2[0], velocity2[1]);
-		
-	}
 }
 

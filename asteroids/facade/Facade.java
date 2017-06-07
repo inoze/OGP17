@@ -70,7 +70,7 @@ public class Facade implements IFacade {
 	 */
 	public double getDistanceBetween(Ship ship1, Ship ship2) throws ModelException{
 		try{
-			return ship1.getDistanceBetweenCenter(ship2);
+			return ship1.getDistanceBetweenEdge(ship2);
 		}
 		catch( IllegalArgumentException ex){
 			throw new ModelException(ex.getMessage());
