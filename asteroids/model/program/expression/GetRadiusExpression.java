@@ -17,6 +17,8 @@ public class GetRadiusExpression extends EntityExpression{
 
 	@Override
 	public Double calculate() throws IllegalArgumentException {
+		if(getEntity() == null) throw new IllegalArgumentException("(gre) entity is null");
+		//throw new IllegalArgumentException("(gre): entity" + getEntity().getClass().getName());
 		return this.getEntity().calculate().getRadius();
 	}
 

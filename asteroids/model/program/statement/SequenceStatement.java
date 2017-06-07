@@ -1,12 +1,8 @@
 package asteroids.model.program.statement;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 
-import asteroids.model.program.Element;
 import asteroids.model.program.Statement;
-import asteroids.model.program.Variable;
 import asteroids.part3.programs.SourceLocation;
 
 public class SequenceStatement extends Statement{

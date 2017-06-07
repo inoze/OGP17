@@ -1,6 +1,5 @@
 package asteroids.model.program.statement;
 
-import asteroids.model.program.Element;
 import asteroids.model.program.Statement;
 import asteroids.part3.programs.SourceLocation;
 

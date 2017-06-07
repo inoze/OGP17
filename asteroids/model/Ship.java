@@ -2,7 +2,6 @@ package asteroids.model;
  
 import java.util.*;
 
-import asteroids.util.ModelException;
 import be.kuleuven.cs.som.annotate.*;
  
 /**
