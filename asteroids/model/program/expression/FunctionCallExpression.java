@@ -1,6 +1,7 @@
 package asteroids.model.program.expression;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import asteroids.model.program.*;
@@ -44,12 +45,7 @@ public class FunctionCallExpression extends Element implements Expression{
 
 	@Override
 	public Object calculate() throws Exception {
-		Function function =  getProgram().getFunction(name);
-		Object[] args = getArguments().stream().map(arg -> arg.calculate()).toArray();
-		Object result = function.calculate(args);
-		if (function.hasBreak()) setBreakDiscovered(true);
-		else setBreakDiscovered(false);
-		return result;
+		return null;
 	}
 
 	@Override
