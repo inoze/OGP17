@@ -61,6 +61,7 @@ public class Function {
 	public void setProgram(Program program) {
 		this.program =program;
     	}
+	
 	public Program getProgram() {
 			return this.program;
 		}
@@ -94,14 +95,16 @@ public class Function {
 	public Object calculate(Object[] arguments){//
 		setHasBreak(false);
 		Set<Variable> locals = new HashSet<Variable>();
+		body.setProgram(this.getProgram());
 		try{
-			Optional result = body.execute(arguments, locals);
+			body.execute();
+			//Optional result = body.getRes
 			if(body.hasBreak()){
 				setHasBreak(true);
 				return null;
 			}
 			else setHasBreak(false);
-			return result.get();
+			return null;
 		} 
 		
 		catch(Exception ex){

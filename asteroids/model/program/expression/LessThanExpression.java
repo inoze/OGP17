@@ -43,12 +43,12 @@ public class LessThanExpression extends Element implements Expression<Boolean>{
 	}
 	
 	@Override
-	public Boolean calculate() throws IllegalArgumentException {
+	public Boolean calculate() throws Exception {
 		return this.getLeftExpression().calculate() < this.getRightExpression().calculate();
 	}
 
 	@Override
-	public Boolean calculate(Object[] actualArgs, Set<Variable> localVars) throws IllegalArgumentException {
+	public Boolean calculate(Object[] actualArgs, Set<Variable> localVars) throws Exception {
 		return this.getLeftExpression().calculate(actualArgs, localVars) < this.getRightExpression().calculate(actualArgs, localVars);
 	}
 

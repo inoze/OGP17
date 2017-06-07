@@ -15,12 +15,14 @@ public class GetXExpression extends EntityExpression{
 	}
 
 	@Override
-	public Double calculate() throws IllegalArgumentException {
+	public Double calculate() throws Exception {
+		if(getEntity() == null) throw new IllegalArgumentException("(gxe) entity is null");
 		return this.getEntity().calculate().getPosition()[0];
 	}
 
 	@Override
-	public Double calculate(Object[] actualArgs, Set<Variable> localVars) throws IllegalArgumentException {
+	public Double calculate(Object[] actualArgs, Set<Variable> localVars) throws Exception {
+		if(getEntity() == null) throw new IllegalArgumentException("(gxe) entity is null");
 		return this.getEntity().calculate(actualArgs, localVars).getPosition()[0];
 	}
 

@@ -14,12 +14,14 @@ public class GetVYExpression extends EntityExpression{
 	}
 
 	@Override
-	public Double calculate() throws IllegalArgumentException {
+	public Double calculate() throws Exception {
+		if(getEntity() == null) throw new IllegalArgumentException("(gvye) entity is null");
 		return this.getEntity().calculate().getVelocity()[1];
 	}
 
 	@Override
-	public Double calculate(Object[] actualArgs, Set<Variable> localVars) throws IllegalArgumentException {
+	public Double calculate(Object[] actualArgs, Set<Variable> localVars) throws Exception {
+		if(getEntity() == null) throw new IllegalArgumentException("(gvye) entity is null");
 		return this.getEntity().calculate(actualArgs, localVars).getVelocity()[1];
 	}
 }

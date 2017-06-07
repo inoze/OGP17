@@ -24,12 +24,12 @@ public class ChangeSignExpression extends Element implements Expression<Double>{
 	}
 
 	@Override
-	public Double calculate() throws IllegalArgumentException {
+	public Double calculate() throws Exception {
 		return -this.getExpression().calculate();
 	}
 
 	@Override
-	public Double calculate(Object[] actualArgs, Set<Variable> localVars) throws IllegalArgumentException {
+	public Double calculate(Object[] actualArgs, Set<Variable> localVars) throws Exception {
 		return -this.getExpression().calculate(actualArgs, localVars);
 	}
 }

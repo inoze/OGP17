@@ -26,12 +26,12 @@ public class NotExpression extends Element implements Expression<Boolean>{
 	}
 
 	@Override
-	public Boolean calculate() throws IllegalArgumentException {
+	public Boolean calculate() throws Exception {
 		return !expression.calculate();
 	}
 
 	@Override
-	public Boolean calculate(Object[] actualArgs, Set<Variable> localVars) throws IllegalArgumentException {
+	public Boolean calculate(Object[] actualArgs, Set<Variable> localVars) throws Exception {
 		return !expression.calculate(actualArgs, localVars);
 	}
 

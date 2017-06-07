@@ -15,12 +15,14 @@ public class GetVXExpression extends EntityExpression{
 	}
 
 	@Override
-	public Double calculate() throws IllegalArgumentException {
+	public Double calculate() throws Exception {
+		if(getEntity() == null) throw new IllegalArgumentException("(gvxe) entity is null");
 		return this.getEntity().calculate().getVelocity()[0];
 	}
 
 	@Override
-	public Double calculate(Object[] actualArgs, Set<Variable> localVars) throws IllegalArgumentException {
+	public Double calculate(Object[] actualArgs, Set<Variable> localVars) throws Exception {
+		if(getEntity() == null) throw new IllegalArgumentException("(gvxe) entity is null");
 		return this.getEntity().calculate(actualArgs, localVars).getVelocity()[0];
 	}
 }

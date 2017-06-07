@@ -24,12 +24,12 @@ public class SqrtExpression extends Element implements Expression<Double>{
 	}
 
 	@Override
-	public Double calculate() throws IllegalArgumentException {
+	public Double calculate() throws Exception {
 		return Math.sqrt(this.getExpression().calculate());
 	}
 
 	@Override
-	public Double calculate(Object[] actualArgs, Set localVars) throws IllegalArgumentException {
+	public Double calculate(Object[] actualArgs, Set localVars) throws Exception {
 		return Math.sqrt(this.getExpression().calculate(actualArgs, localVars));
 	}
 

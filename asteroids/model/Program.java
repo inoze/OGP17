@@ -118,7 +118,6 @@ public class Program {
 	
 	public List<Object> execute(double dt) throws IllegalArgumentException {
 		timeRemaining += dt;
-		//Helper.log("body: " + body.getClass().getName());
 		try{body.execute();}catch(Exception ex){
 			Helper.log("---------------------------");
 			Helper.log("body: " + body.getClass().getName());
