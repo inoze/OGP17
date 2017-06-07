@@ -204,7 +204,7 @@ public class Ship extends Entity{
 	 * 			| result ==
 	 * 			|	for each entity in 	entities :
 	 * 			|			(canHaveAsBullet(bullet)
-	 * 			|			&&	bullet.getWorld() == null))
+	 * 			|			&&	bullet.getSuperWorld() == null))
 	 * 			|			&&	!bullet.isTerminated()
 	 */
 	@Raw
@@ -257,9 +257,11 @@ public class Ship extends Entity{
 		for(Bullet bullet : bulletsCol){
 			if(canLoadBullet(bullet)){
 				bullets.add(bullet);
-				bullet.setSuperWorld(null);
+				if (bullet.getSuperWorld() != null){ bullet.getSuperWorld().removeEntityFromWorld(bullet);}
 				bullet.setSource(this);
 				bullet.bouncesReset();
+				bullet.setPosition(this.getPosition()[0], this.getPosition()[1]);
+				bullet.setVelocity(0, 0);
 				totalMass += bullet.getMass();
 			}
 			else throw new IllegalArgumentException("Can't load bullet.");
@@ -510,6 +512,7 @@ public class Ship extends Entity{
             try {
             	super.move(dt);
                 this.setVelocity(this.getVelocity()[0] + this.getAcceleration() * Math.cos(this.getDirection()) * dt, this.getVelocity()[1] + this.getAcceleration() * Math.sin(this.getDirection())* dt);
+                for( Bullet bullet : bullets) bullet.setPosition(this.getPosition()[0], this.getPosition()[1]);
                 }
             catch (IllegalArgumentException ex){
                 throw new IllegalArgumentException(ex.getMessage());
@@ -553,28 +556,20 @@ public class Ship extends Entity{
     }
     
     public void shipCollide(Ship ship){
-		double deltaPosX = this.getPosition()[0] - ship.getPosition()[0];
-		double deltaPosY = this.getPosition()[1] - ship.getPosition()[1];
-
-		double deltaVelX = this.getVelocity()[0] - ship.getVelocity()[0];
-		double deltaVelY = this.getVelocity()[1] - ship.getVelocity()[1];
-		
-		double deltaVR = (deltaVelX*deltaPosX)  + (deltaVelY*deltaPosY);
-		
-		double radiusSum = ship.getRadius() + this.getRadius();
-		double J = (2 * ship.getMass() * this.getMass() * deltaVR) / ((ship.getMass() + this.getMass()) * radiusSum);
-		
-		double Jx = (J*deltaPosX)/(radiusSum);	
-		double Jy = (J*deltaPosY)/(radiusSum);
-		
-		double newVelocityX1 = ship.getVelocity()[1] + (Jx/ship.getMass());
-		double newVelocityY1 = ship.getVelocity()[0] + (Jy/ship.getMass());
-		
-		double newVelocityX2 = this.getVelocity()[0] - (Jx/this.getMass());
-		double newVelocityY2 = this.getVelocity()[1] - (Jy/this.getMass());
-		
-		ship.setVelocity(newVelocityX1, newVelocityY1);
-		this.setVelocity(newVelocityX2, newVelocityY2);
+    	 if ((ship == null) || (ship.isTerminated() == true) || (this.getSuperWorld() == null )
+                 || (ship.getSuperWorld() == null) || ((this.getSuperWorld() != ship.getSuperWorld()))) {
+             return;
+         }
+         double [] locationdifference = {ship.getPosition()[0] - this.getPosition()[0], ship.getPosition()[1] - this.getPosition()[1]};
+         double [] velocitydifference = {ship.getVelocity()[0] - this.getVelocity()[0],ship.getVelocity()[1] - this.getVelocity()[1]};
+         double velocitylocationdifference = (velocitydifference[0] * locationdifference[0]) + (velocitydifference[1] * locationdifference[1]);
+         double changetotal = (2 * this.getMass() * ship.getMass() * velocitylocationdifference) / ((this.getRadius() + ship.getRadius()) * (this.getMass() + ship.getMass()));
+         double changex = changetotal * locationdifference[0] / (this.getRadius() + ship.getRadius());
+         double changey = changetotal * locationdifference[1] / (this.getRadius() + ship.getRadius());
+         double [] velocity1 = {this.getVelocity()[0] + changex / this.getMass(), this.getVelocity()[1] + changey / this.getMass()};
+         double [] velocity2 = {ship.getVelocity()[0] - changex / ship.getMass(), ship.getVelocity()[1] - changey / ship.getMass()};
+         this.setVelocity(velocity1[0], velocity1[1]);
+         ship.setVelocity(velocity2[0], velocity2[1]);
 		
 	}
 }
