@@ -2,8 +2,8 @@ package asteroids.model;
  
 import java.util.*;
 
-import asteroids.util.ModelException;
 import be.kuleuven.cs.som.annotate.*;
+
  
 /**
  * A class for dealing with ships which are a special class of entity.
@@ -292,6 +292,7 @@ public class Ship extends Entity{
 
 				for (Entity entity : getSuperWorld().getEntities()){
 					if (bullet.overlap(entity))	{
+						
 						bullet.terminate();
 						entity.getSuperWorld().removeEntityFromWorld(entity);
 						entity.terminate();

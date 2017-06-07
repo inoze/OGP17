@@ -3,8 +3,9 @@ package asteroids.model;
 import java.util.*;
 
 
-import be.kuleuven.cs.som.annotate.*;
 import asteroids.part2.CollisionListener;
+import be.kuleuven.cs.som.annotate.*;
+
 
 /**
  * A class of worlds involving width, a height, a set of
@@ -390,7 +391,6 @@ public class World {
 			else {
 				if(collisionListener != null) collisionListener.objectCollision(entities[0], entities[1], pos[0], pos[1]);
 				entities[0].collide(entities[1]);
-				//Helper.log("Collision position: " + pos[0] + "; " + pos[1]);
 				
 			}
 			
