@@ -3,8 +3,9 @@ package asteroids.model;
 import java.util.*;
 
 
-import be.kuleuven.cs.som.annotate.*;
 import asteroids.part2.CollisionListener;
+import be.kuleuven.cs.som.annotate.*;
+
 
 /**
  * A class of worlds involving width, a height, a set of
@@ -390,7 +391,6 @@ public class World {
 			else {
 				if(collisionListener != null) collisionListener.objectCollision(entities[0], entities[1], pos[0], pos[1]);
 				entities[0].collide(entities[1]);
-				//Helper.log("Collision position: " + pos[0] + "; " + pos[1]);
 				
 			}
 			
@@ -417,8 +417,14 @@ public class World {
 			for (Entity entity2 : getEntities()){
 				if (entity1 != entity2) {
 					if (entity1.overlap(entity2)) return 0;
-					
-					time = Math.min(time, entity1.getTimeToCollision(entity2));
+					double currentdistance = (Math.hypot(entity2.getPosition()[0] - entity1.getPosition()[0], 
+                            entity2.getPosition()[1] - entity1.getPosition()[1]) - (entity1.getRadius() + entity2.getRadius()));
+                    double nextdistance = (Math.hypot((entity2.getPosition()[0] + (entity2.getVelocity()[0] * 0.00001)) - 
+                            (entity1.getPosition()[0] + (entity1.getVelocity()[0] * 0.00001)), 
+                            (entity2.getPosition()[1] + (entity2.getVelocity()[1] * 0.00001)) - (entity1.getPosition()[1] + (entity1.getVelocity()[1] * 0.00001)))
+                            - (entity1.getRadius() + entity2.getRadius()));
+                    if (currentdistance >= nextdistance) {
+					time = Math.min(time, entity1.getTimeToCollision(entity2));}
 				}
 			}
 		}

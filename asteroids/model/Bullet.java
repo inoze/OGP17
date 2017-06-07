@@ -2,7 +2,9 @@ package asteroids.model;
 import java.util.HashSet;
 import java.util.Set;
 
+
 import be.kuleuven.cs.som.annotate.*;
+
 //import asteroids.util.ModelException;
 
 /**
@@ -185,8 +187,8 @@ public class Bullet extends Entity{
 	public void terminate() {
 		
 		if(getSuperWorld() != null){
-			getSuperWorld().removeEntityFromWorld((Bullet) this);
-			setSuperWorld(null);
+			getSuperWorld().removeEntityFromWorld(this);
+			this.setSuperWorld(null);
 		}
 		else if (source != null){
 			source.removeBulletFromShip(this);
@@ -213,21 +215,24 @@ public class Bullet extends Entity{
     
     
     
-    public void bulletCollide(Entity entity){
-    	if (entity == this.getBulletSource()){
-			Ship ship = (Ship) entity;
+    public void bulletCollide(Entity skr){
+    	if (skr == this.getBulletSource()){
+			Ship ship = (Ship) skr;
 			Set<Bullet> bullets = new HashSet<Bullet>();
 			bullets.add(this);
 			ship.loadBulletsOnShip(bullets);
 		}
 		else{
-			getSuperWorld().removeEntityFromWorld(this);
+			System.out.print(skr.getSuperWorld());
+			this.getSuperWorld().removeEntityFromWorld(this);
 			this.terminate();
-			getSuperWorld().removeEntityFromWorld(entity);
-			if (entity instanceof Planetoid) {Planetoid planetoid = (Planetoid) entity; planetoid.terminate();}
-			if (entity instanceof Ship) {Ship ship = (Ship) entity; ship.terminate();}
-			if (entity instanceof Bullet) {Bullet bullet = (Bullet) entity; bullet.terminate();}
-			else {entity.terminate();}
+			System.out.print(skr.getSuperWorld());
+			skr.getSuperWorld().removeEntityFromWorld(skr);
+
+			if (skr instanceof Planetoid) {Planetoid planetoid = (Planetoid) skr; planetoid.terminate();}
+			if (skr instanceof Ship) {Ship ship = (Ship) skr; ship.terminate();}
+			if (skr instanceof Bullet) {Bullet bullet = (Bullet) skr; bullet.terminate();}
+			else {skr.terminate();}
 			}
 		}
 

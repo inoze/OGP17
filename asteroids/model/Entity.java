@@ -5,6 +5,8 @@ import java.util.Set;
 
 import be.kuleuven.cs.som.annotate.*;
 
+
+
 /**
  * 
  * @invar The velocity of each entity must be a valid velocity for a entity.
@@ -370,7 +372,8 @@ public class Entity {
 	 
     	if (this instanceof Ship && entity instanceof Ship) {Ship ship1 = (Ship) this; Ship ship2 = (Ship) entity; ship1.shipCollide(ship2);}
     	if (this instanceof MinorPlanet && entity instanceof MinorPlanet) {MinorPlanet minorPlanet1 = (MinorPlanet) this; MinorPlanet minorPlanet2 = (MinorPlanet) entity; minorPlanet1.minorPlanetCollide(minorPlanet2);}
-    	if ((entity instanceof Bullet) ||  (this instanceof Bullet)){Bullet bullet = (Bullet) this; bullet.bulletCollide(entity);}
+    	if (entity instanceof Bullet) {Bullet bullet = (Bullet) entity; bullet.bulletCollide(entity);}
+    	if (this instanceof Bullet) {Bullet bullet = (Bullet) this; bullet.bulletCollide(entity);}
     	
     	if ((this instanceof Ship && entity instanceof Asteroid) || (entity instanceof Ship && this instanceof Asteroid)){
     		Ship ship = null;
@@ -431,10 +434,12 @@ public class Entity {
         	}
     		this.velocity[1] = this.velocity[1] * -1;
     	} 	
+    	if (this instanceof Bullet){
     	Bullet bullet = (Bullet) this;
     	for (int i = 0; i < bulletBouncer; i++){
     		if (!bullet.isTerminated())
     		bullet.bouncesCounter();
+    	}
     	}
     }
     
@@ -673,7 +678,9 @@ public class Entity {
             	//return Double.POSITIVE_INFINITY;
             	return 0;
             }
-            return Math.min(dt1,dt2); 
+            double llo = Math.min(dt1,dt2);
+            if (llo >= 0) return llo;
+            else return Math.max(dt1,dt2);
         }
        
 }
