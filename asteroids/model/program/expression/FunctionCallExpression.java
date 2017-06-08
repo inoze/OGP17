@@ -8,11 +8,10 @@ import asteroids.model.Helper;
 import asteroids.model.program.*;
 import asteroids.part3.programs.SourceLocation;
 
-public class FunctionCallExpression extends Element implements Expression{
+public class FunctionCallExpression extends Element implements Expression<Object>{
 	
 	private String name;
 	private List<Expression> arguments;
-	private boolean breakDiscovered;
 
 	public FunctionCallExpression(SourceLocation sourceLocation, String name, List<Expression> arguments) {
 		super(sourceLocation);
@@ -28,16 +27,8 @@ public class FunctionCallExpression extends Element implements Expression{
 		return name;
 	}
 
-	private boolean isBreakDiscovered() {
-		return breakDiscovered;
-	}
-
 	private void setArguments(List<Expression> arguments) {
 		this.arguments = arguments;
-	}
-	
-	private void setBreakDiscovered(boolean breakDiscovered) {
-		this.breakDiscovered = breakDiscovered;
 	}
 
 	private void setName(String name) {
@@ -46,12 +37,8 @@ public class FunctionCallExpression extends Element implements Expression{
 
 	@Override
 	public Object calculate() throws Exception {
-		Helper.log("FunctionCallExpression: function: " + name);
-		Function function = this.getProgram().getFunction(name);
-		Helper.log("Function ID: " + function);
 		if(this.getProgram().getFunction(name) == null) throw new Exception("Function not defined");
 		try{
-			Helper.log("Executing function: " + this.getProgram().getFunction(name));
 			return this.getProgram().getFunction(getName()).calculate();
 		}catch(Exception ex){
 			throw new Exception("cant execute function: " + ex.getMessage());
@@ -60,14 +47,11 @@ public class FunctionCallExpression extends Element implements Expression{
 
 	@Override
 	public Object calculate(Object[] actualArgs, Set localVars) throws Exception {
-		Helper.log("FunctionCallExpression wa: function: " + name);
-		Function function = this.getProgram().getFunction(name);
-		Helper.log("Function ID: " + function);
 		if(this.getProgram().getFunction(name) == null) throw new Exception("Function not defined");
 		try{
-			Helper.log("Executing function: " + this.getProgram().getFunction(name));
 			return this.getProgram().getFunction(getName()).calculate();
-		}catch(Exception ex){
+		}
+		catch(Exception ex){
 			throw new Exception("cant execute function: " + ex.getMessage());
 		}
 	}

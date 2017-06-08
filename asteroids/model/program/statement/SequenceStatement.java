@@ -48,7 +48,6 @@ public class SequenceStatement extends Statement{
 		setConsumesTime(false);
 		setHasBreak(false);
 		SourceLocation curLocation = getProgram().getSourceLocation();
-		//Helper.log("\n>>>>SequenceStatement: size: " + getStatements().size() +"\n");
 		if(getStatements().size() == 0) throw new Exception("empty list given");
 		for(int i = 0; i < getStatements().size(); i++) {
 			Helper.log("** for loop works");
@@ -62,11 +61,8 @@ public class SequenceStatement extends Statement{
 					(nextLocation.getLine() == curLocation.getLine() && nextLocation.getColumn() > curLocation.getColumn())){
 				statement.setProgram(this.getProgram());
 				statement.setFunction(this.getFunction());
-				Helper.log("SQS: Function: " + this.getFunction() + "; size: " + statements.size() + "Program: " + this.getProgram());
 				try{
-					Helper.log("executing statement " + statement.getClass().getName());
 					statement.execute();
-					Helper.log("Time left: " + this.getProgram().getTime());
 					if(statement.consumesTime()){
 						setConsumesTime(true);
 					}
@@ -75,7 +71,6 @@ public class SequenceStatement extends Statement{
 						return;
 					}
 				}catch(Exception ex){
-					Helper.log("cant execute statement in sequence: " + ex.getMessage());
 					throw new Exception("(sqs) " + ex.getMessage());}
 			}
 		}

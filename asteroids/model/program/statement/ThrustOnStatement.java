@@ -9,7 +9,6 @@ public class ThrustOnStatement extends Statement {
 	
 	public ThrustOnStatement(SourceLocation sourceLocation) {
 		super(sourceLocation);
-		// TODO Auto-generated constructor stub
 	}
 
 	public boolean consumesTime() {

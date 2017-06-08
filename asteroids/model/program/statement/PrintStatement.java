@@ -30,11 +30,8 @@ public class PrintStatement extends Statement{
 		getExpression().setProgram(this.getProgram());
 		if(getProgram().getTime() < 0.2) return;
 		try{
-			//Helper.log(">>>starting print with expression: " + getExpression());
 			getExpression().setProgram(this.getProgram());
 			Object eval = getExpression().calculate();
-			//Helper.log("adding result: " + eval);
-			//Helper.log("calculated expression: " + getExpression());
 			getProgram().addResult(eval);
 			getProgram().advanceTime();
 		}catch(Exception ex){

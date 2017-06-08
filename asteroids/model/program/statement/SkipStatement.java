@@ -9,7 +9,6 @@ public class SkipStatement extends Statement {
 
 	public SkipStatement(SourceLocation sourceLocation) {
 		super(sourceLocation);
-		// TODO Auto-generated constructor stub
 	}
 	
 	public void setConsumesTime(boolean b){

@@ -83,10 +83,10 @@ public class WhileStatement extends Statement{
 				try{body.execute();
 					if (body.consumesTime()){
 						this.setConsumesTime(true);
-						return;
 					}
 				}catch(Exception ex){
 					Helper.log("error in while loop on statement: " + body.getClass().getName() + "; " + ex.getMessage());
+					return;
 				}
 			}
 		
