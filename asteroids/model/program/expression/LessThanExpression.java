@@ -10,35 +10,28 @@ import asteroids.model.program.Variable;
 import asteroids.part3.programs.SourceLocation;
 
 public class LessThanExpression extends Element implements Expression<Boolean>{
-	private Expression<Double> leftExpression;
-	private Expression<Double> rightExpression;
+	private Expression<?> leftExpression;
+	private Expression<?> rightExpression;
 	
 	public LessThanExpression(SourceLocation sourceLocation, Expression<?> e1, Expression<?> e2) {
 		super(sourceLocation);
-		Helper.log("e1: " + e1.getClass());
-		if(e1 instanceof DoubleLiteralExpression && e2 instanceof DoubleLiteralExpression){
-			this.setLeftExpression((Expression<Double>) e1);
-			this.setRightExpression((Expression<Double>) e2);
-		}
-		else{
-			this.setLeftExpression(null);
-			this.setRightExpression(null);
-		}
+		this.setLeftExpression(e1);
+		this.setRightExpression(e2);
 	}
 
-	protected Expression<Double> getLeftExpression(){
+	protected Expression<?> getLeftExpression(){
 		return this.leftExpression;
 	}
 
-	protected Expression<Double> getRightExpression(){
+	protected Expression<?> getRightExpression(){
 		return this.rightExpression;
 	}
 
-	private void setLeftExpression(Expression<Double> expression){
+	private void setLeftExpression(Expression<?> expression){
 		this.leftExpression = expression;
 	}
 	
-	private void setRightExpression(Expression<Double> expression){
+	private void setRightExpression(Expression<?> expression){
 		this.rightExpression = expression;
 	}
 	
@@ -51,14 +44,16 @@ public class LessThanExpression extends Element implements Expression<Boolean>{
 	
 	@Override
 	public Boolean calculate() throws Exception {
-		if(this.getLeftExpression() == null || this.getRightExpression() == null) throw new Exception("Invalid expression");
-		return this.getLeftExpression().calculate() < this.getRightExpression().calculate();
+		if(this.getLeftExpression() == null || this.getRightExpression() == null) throw new Exception("expression is null");
+		if(!(this.getLeftExpression().calculate() instanceof Double && this.getRightExpression().calculate() instanceof Double)) throw new Exception("invalid expression given");
+		return (Double)this.getLeftExpression().calculate() < (Double)this.getRightExpression().calculate();
 	}
 
 	@Override
 	public Boolean calculate(Object[] actualArgs, Set<Variable> localVars) throws Exception {
-		if(this.getLeftExpression() == null || this.getRightExpression() == null) throw new Exception("Invalid expression");
-		return this.getLeftExpression().calculate(actualArgs, localVars) < this.getRightExpression().calculate(actualArgs, localVars);
+		if(this.getLeftExpression() == null || this.getRightExpression() == null) throw new Exception("expression is null");
+		if(!(this.getLeftExpression().calculate() instanceof Double && this.getRightExpression().calculate() instanceof Double)) throw new Exception("invalid expression given");
+		return (Double)this.getLeftExpression().calculate(actualArgs, localVars) < (Double)this.getRightExpression().calculate(actualArgs, localVars);
 	}
 
 }

@@ -60,33 +60,38 @@ public class WhileStatement extends Statement{
 	public void execute() throws Exception {
 		this.getProgram().setHasWhile(true);
 		try{
-			Helper.log("starting whileloop");
-			Helper.log("While loop: executing body: " + getBody().getClass().getName());
+			this.getCondition().setProgram(this.getProgram());
 			this.setConsumesTime(false);
-			Helper.log("set time to false");
 			if(!(this.getCondition().calculate())){
 				Helper.log("condition not fulfilled, not running loop");
-				return;}
+				return;
+			}
 			
-			
+			Helper.log("body: " + this.getBody());
 			try{
-				Helper.log("Going to execute body...");
+				getBody().setProgram(this.getProgram());
 				getBody().execute();
 				if(getBody().consumesTime()) this.setConsumesTime(true);
 			}catch(Exception ex){
-				Helper.log("error in while loop on statement: " + body.getClass().getName() + "; " + ex.getMessage());}
-		/*
+				Helper.log("error in while loop on statement: " + body.getClass().getName() + "; " + ex.getMessage());
+				return;
+			}
+		
 			while(this.getCondition().calculate() && !body.hasBreak()){
 				getProgram().setSourceLocation(this.getSourceLocation());
+				getBody().setProgram(this.getProgram());
 				try{body.execute();
-				if (body.consumesTime()){
-					this.setConsumesTime(true);
-					return;
-				}}catch(Exception ex){Helper.log("error in while loop on statement: " + body.getClass().getName() + "; " + ex.getMessage());}
-		*/
+					if (body.consumesTime()){
+						this.setConsumesTime(true);
+						return;
+					}
+				}catch(Exception ex){
+					Helper.log("error in while loop on statement: " + body.getClass().getName() + "; " + ex.getMessage());
+				}
+			}
+		
 			this.setExecutingBody(false);
-		}catch(Exception ex){
-			throw new Exception("(w): " + ex.getMessage());
-		}
+		
+		}catch(Exception ex){Helper.log("w error: " + ex.getMessage());return;}
 	}
 }

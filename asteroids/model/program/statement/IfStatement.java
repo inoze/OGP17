@@ -97,7 +97,6 @@ public class IfStatement extends Statement{
 			try{ifBody.setProgram(this.getProgram());ifBody.execute();}catch(Exception ex){throw new Exception("ifBody cant execute: " + ex.getMessage());}
 			if(!ifBody.consumesTime()){
 				setConsumesTime(false);
-				return;
 			}
 			else{
 				if(ifBody.hasBreak()) setHasBreak(true);
@@ -111,7 +110,6 @@ public class IfStatement extends Statement{
 			try{elseBody.setProgram(this.getProgram());elseBody.execute();}catch(Exception ex){throw new Exception("elseBody cant execute: " + ex.getMessage());}
 			if (!elseBody.consumesTime()){
 			setConsumesTime(false);	
-			return;
 			}
 			else{
 				if(elseBody.hasBreak()) setHasBreak(true);

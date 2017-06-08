@@ -123,7 +123,6 @@ public class Program {
 	public void advanceTime() {
 		timeRemaining -= 0.2;
 	}
-
 	
 	public List<Object> execute(double dt) throws IllegalArgumentException {
 		timeRemaining += dt;
