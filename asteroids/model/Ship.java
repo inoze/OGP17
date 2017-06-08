@@ -410,7 +410,8 @@ public class Ship extends Entity{
 	 * 			| result == (canHaveAsBullet(bullet) && this.getDistanceBetweenEdge(bullet) <= 0)
 	 */
 	private boolean canLoadBullet(Bullet bullet){
-		return (canHaveAsBullet(bullet) && this.getDistanceBetweenEdge(bullet) <= 0);
+
+		return (canHaveAsBullet(bullet) && this.getDistanceBetweenCenter(bullet) <= this.getRadius() - bullet.getRadius());
 	}
 	
     /**

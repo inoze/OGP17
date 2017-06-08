@@ -442,10 +442,19 @@ public abstract class Entity {
     		} else {
     			ship = (Ship) entity;
     		}
+    		
     		World world = ship.getSuperWorld();
-    		double xnew = ship.getRadius() + (Math.random() * (world.getWorldHeight() - ship.getRadius() * 2));
-    		double ynew = ship.getRadius() + (Math.random() * (world.getWorldWidth() - ship.getRadius() * 2));
+    		//double xnew = ship.getRadius() + (Math.random() * (world.getWorldHeight() - ship.getRadius() * 2));
+    		//double ynew = ship.getRadius() + (Math.random() * (world.getWorldWidth() - ship.getRadius() * 2));
+    		double xnew =  Helper.randomInBetween(this.getRadius(), world.getWorldWidth());
+    		double ynew = Helper.randomInBetween(this.getRadius(), world.getWorldHeight());
     		ship.setPosition(xnew, ynew);
+    		
+    		while (! this.overlapAnyEntity()){
+    			xnew =  Helper.randomInBetween(this.getRadius(), world.getWorldWidth());
+    			ynew = Helper.randomInBetween(this.getRadius(), world.getWorldHeight());
+    			ship.setPosition(xnew, ynew);
+    			}
     	}
 	    	
     	
@@ -492,21 +501,24 @@ public abstract class Entity {
 		if (this.superWorld == null)	return Double.POSITIVE_INFINITY;
 		if (this.velocity[0] == 0 && this.velocity[1] == 0)		return Double.POSITIVE_INFINITY;
 		
+		double radius = this.getRadius();
+		if (this instanceof Planetoid) { Planetoid planetoid = (Planetoid) this; radius = planetoid.getRadius();}
+		
 		double edgeY;
 		double edgeX;
 		double mY = 0;
 		double mX = 0;
 		
 		if (velocity[0] > 0){
-			edgeX = position[0] + startRadius;
+			edgeX = position[0] + radius;
 			mX = this.superWorld.getWorldWidth();
 		}
-		else edgeX = position[0] - startRadius;
+		else edgeX = position[0] - radius;
 		if (velocity[1] > 0){
-			edgeY = position[1] + startRadius;
+			edgeY = position[1] + radius;
 			mY = this.superWorld.getWorldHeight();
 		}
-		else edgeY = position[1] - startRadius;
+		else edgeY = position[1] - radius;
 		
 		double tX  = Double.POSITIVE_INFINITY;
 		double tY  = Double.POSITIVE_INFINITY;
@@ -652,8 +664,10 @@ public abstract class Entity {
     	if (entity == null) throw new IllegalArgumentException("The second entity does not exist. @overlap");
 		if (this == entity) return true;
 		return this.getDistanceBetweenEdge(entity) <= -0.01;
-    	//return this.getDistanceBetweenCenter(entity) <= (0.99 * (this.getRadius() + entity.getRadius()));
-    	
+    }
+    
+    public boolean overlapAnyEntity(){
+    	return this.getSuperWorld().getEntities().stream().anyMatch(T ->this.overlap(T));
     }
    
     //Defensive

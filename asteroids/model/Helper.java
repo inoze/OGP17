@@ -112,4 +112,20 @@ public class Helper {
         return Math.pow(x, 2);
     }
    
+    /**
+     * A method which calculates a random double within the given min and max value.
+     * 
+     * @param 	min
+     * 			The lower bound of the calculation.
+     * @param 	max
+     * 			The upper bound of the calculation.
+     * @return	Returns a random number between min and max.
+     * 			|  double range = (max - min) + 1    
+     *  		| result == (double)(Math.random() * range) + min
+     */
+    public static double randomInBetween(double min, double max)
+    {
+       double range = (max - min) + 1;     
+       return (double)(Math.random() * range) + min;
+    }
 }
