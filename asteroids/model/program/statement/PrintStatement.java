@@ -1,10 +1,7 @@
 package asteroids.model.program.statement;
 
-import asteroids.model.Helper;
-//import asteroids.model.Ship;
 import asteroids.model.program.Expression;
 import asteroids.model.program.Statement;
-import asteroids.model.program.expression.LessThanExpression;
 import asteroids.part3.programs.SourceLocation;
 
 public class PrintStatement extends Statement{
@@ -33,11 +30,11 @@ public class PrintStatement extends Statement{
 		getExpression().setProgram(this.getProgram());
 		if(getProgram().getTime() < 0.2) return;
 		try{
-			Helper.log(">>>starting print with expression: " + getExpression());
+			//Helper.log(">>>starting print with expression: " + getExpression());
 			getExpression().setProgram(this.getProgram());
 			Object eval = getExpression().calculate();
-			Helper.log("adding result: " + eval);
-			Helper.log("calculated expression: " + getExpression());
+			//Helper.log("adding result: " + eval);
+			//Helper.log("calculated expression: " + getExpression());
 			getProgram().addResult(eval);
 			getProgram().advanceTime();
 		}catch(Exception ex){

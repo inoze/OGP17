@@ -56,8 +56,8 @@ public class AssignmentStatement extends Statement{
 			} 
 			else{ 
 				Helper.log("assign is not present, value: " + value);
-				getProgram().addVariable(new Variable(variableName, value.calculate()));}
-				Helper.log("added variable");
+				getProgram().addVariable(new Variable(getVariableName(), getValue().calculate()));}
+				Helper.log("added variable: " + getVariableName() + "; " + getValue().calculate());
 			if (value instanceof Function && ((Function)value).hasBreak()) setHasBreak(true);
 		}catch(Exception ex){
 			throw new Exception("Error on assignmentStatement: " + ex.getMessage());
