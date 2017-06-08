@@ -26,7 +26,6 @@ public class ThrustOffStatement extends Statement {
 		if (this.getProgram().getTime() < 0.2) {
 			this.setConsumesTime(false);
 			return;
-			
 		}
 		if(this.getFunction() == null){
 			this.getProgram().getShip().thrustOff();
