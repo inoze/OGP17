@@ -31,6 +31,7 @@ public class PrintStatement extends Statement{
 		if(this.getProgram() == null) throw new Exception("(p) statement has no program");
 		getExpression().setProgram(this.getProgram());
 		try{
+			Helper.log("Executing type: " + getExpression().getClass().getName());
 			getExpression().setProgram(this.getProgram());
 			Object eval = getExpression().calculate();
 			getProgram().addResult(eval);

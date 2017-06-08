@@ -59,15 +59,20 @@ public class SequenceStatement extends Statement{
 			if(i == statements.size()-1 || nextLocation.getLine() > curLocation.getLine()||
 					(nextLocation.getLine() == curLocation.getLine() && nextLocation.getColumn() > curLocation.getColumn())){
 				statement.setProgram(this.getProgram());
-				try{statement.execute();}catch(Exception ex){Helper.log("cant execute statement in sequence: " + ex.getMessage());}
-				if(statement.consumesTime()){
-					setConsumesTime(true);
-					return;
-				}
-				if(statement.hasBreak()) {
-					 setHasBreak(true);
-					return;
-				}
+				statement.setFunction(this.getFunction());
+				Helper.log("SQS: Function: " + this.getFunction());
+				try{
+					statement.execute();
+					if(statement.consumesTime()){
+						setConsumesTime(true);
+						return;
+					}
+					if(statement.hasBreak()) {
+						 setHasBreak(true);
+						return;
+					}
+				}catch(Exception ex){
+					Helper.log("cant execute statement in sequence: " + ex.getMessage());}
 			}
 		}
 		

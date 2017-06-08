@@ -137,7 +137,6 @@ public class Program {
 		if (body.consumesTime()) {
 			if(body.hasBreak()) throw new IllegalArgumentException("Break statements cannot occur outside function bodies");
 			location = new SourceLocation(0, 0);
-		//	if(results == null){throw new IllegalArgumentException("results is null");}
 			List<Object> resultsToReturn = results; 
 			if(resultsToReturn.size() == 0) return null;
 			results = null;

@@ -25,6 +25,7 @@ public class Function {
       setFunctionName(functionName);
       SetBody(body);
       setSourceLocation(sourceLocation);
+      if(body != null) body.setFunction(this);
     }
     public Object getReturnValue() {
         return returnValue;
