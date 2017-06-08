@@ -405,7 +405,7 @@ public class World {
 		for(Entity entity: getEntities()){ 
 			if(dt > 0){
 				if (entity instanceof Planetoid) {Planetoid planetoid = (Planetoid) entity; planetoid.move(dt);}
-				if (entity instanceof Ship) {Ship ship = (Ship) entity; ship.move(dt);}	
+				else if (entity instanceof Ship) {Ship ship = (Ship) entity; ship.move(dt);}	
 				else entity.move(dt);
 			}
 		}

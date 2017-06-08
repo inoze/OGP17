@@ -47,12 +47,16 @@ public class Planetoid extends MinorPlanet{
 	 * 			| setTotalDistanceTraveled(totalDistanceTraveled)
 	 * @effect	The mass is set to four thirds of the radius cubed times the the planetoid density.
 	 * 			| setMass(4.0*Math.PI*Math.pow(getRadius(), 3)*PLANETOID_DENSITY / 3.0)
+	 * @effect 	If the effective radius is to small the Planetoid is terminated.
+	 * 			| if !isValidRadius(getRadius())
+	 * 			|	then 	 this.terminate()
 	 */
 	@Raw
 	public Planetoid(double x, double y, double xVelocity, double yVelocity, double radius, double totalDistanceTraveled){
 		super(x, y, xVelocity, yVelocity, radius, "Planetoid");
 		
 		this.setTotalDistanceTraveled(totalDistanceTraveled);
+		if (!isValidRadius(getRadius())) this.terminate();
 		setMass(4.0*Math.PI*Math.pow(getRadius(), 3)*PLANETOID_DENSITY / 3.0);
 		
 	}
@@ -120,7 +124,7 @@ public class Planetoid extends MinorPlanet{
      * 			| setTotalDistanceTraveled(getTotalDistanceTraveled() + getTotalVelocity()*dt);
      * @effect 	The super move method is called.
      * 			| super.move(dt)
-     * @effecr	If the effective radius isn't a valid radius for a minor planet after the move and the
+     * @effect	If the effective radius isn't a valid radius for a minor planet after the move and the
      * 			new total distance travel is set, the planetoid will be terminated.
      * 			| After	super.move(dt)
      *       	|		setTotalDistanceTraveled(getTotalDistanceTraveled() + getTotalVelocity()*dt)
