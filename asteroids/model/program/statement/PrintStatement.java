@@ -4,6 +4,7 @@ import asteroids.model.Helper;
 //import asteroids.model.Ship;
 import asteroids.model.program.Expression;
 import asteroids.model.program.Statement;
+import asteroids.model.program.expression.LessThanExpression;
 import asteroids.part3.programs.SourceLocation;
 
 public class PrintStatement extends Statement{
@@ -25,6 +26,7 @@ public class PrintStatement extends Statement{
 
 	@Override
 	public void execute() throws Exception{
+		if(this.getFunction() != null) throw new Exception("(p) print statement in function body");
 		if(getExpression() == null) throw new Exception("(p) expression is null");
 		if(this.getProgram() == null) throw new Exception("(p) statement has no program");
 		getExpression().setProgram(this.getProgram());

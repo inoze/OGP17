@@ -1,5 +1,6 @@
 package asteroids.model.program.statement;
 
+import asteroids.model.Helper;
 import asteroids.model.program.Expression;
 import asteroids.model.program.Statement;
 import asteroids.part3.programs.SourceLocation;
@@ -33,13 +34,16 @@ public class TurnStatement extends Statement {
 
 	@Override
 	public void execute() throws Exception{
+		if(this.getFunction() != null) throw new Exception("ActionStatements cannot be executed within function bodies");
 		setConsumesTime(true);
 		getProgram().setSourceLocation(getSourceLocation());
 		if (getProgram().getTime() < 0.2) {
 			setConsumesTime(true);
 			return;
 		}
-		getProgram().getShip().turn((Double)angle.calculate());
+		if(Helper.isValidDouble(angle.calculate()) && angle.calculate() >= 0 && angle.calculate() <= 2*Math.PI){
+			getProgram().getShip().turn((Double)angle.calculate());
+		}else{throw new IllegalArgumentException("Given angle is not valid");}
 		getProgram().advanceTime();		
 	}
 
