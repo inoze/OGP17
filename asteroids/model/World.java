@@ -25,7 +25,7 @@ import be.kuleuven.cs.som.annotate.*;
 public class World {
 
 	/**
-	 * A constant which conatins the maximum possible value for a dimension.
+	 * A constant which contains the maximum possible value for a dimension.
 	 */
 	private final static Double UPPER_BOUND_WORLD = Double.MAX_VALUE;
 
@@ -303,9 +303,9 @@ public class World {
 	 * A method which controls whether or not an entity is overlapping with a boundry.
 	 * 
 	 * @param 	entity
-	 * 			The entity to be controled.
+	 * 			The entity to be controlled.
 	 * @return 	Returns true if and only if the x or y position minus 99% of the radius of the entity is smaller then the 0
-	 * 			or if the x and y position of the entity added with 99% of the radius exceed the worldWidth or worldHeight respectivaly.
+	 * 			or if the x and y position of the entity added with 99% of the radius exceed the worldWidth or worldHeight respectively.
 	 * 			| result == 
 	 * 			| 	entity.getPosition()[0]-(entity.getRadius()/100)*99) <= 0.0 
 	 * 			|		|| (entity.getPosition()[1]-(entity.getRadius()/100)*99) <= 0.0
@@ -334,7 +334,7 @@ public class World {
 	}
 	
 	/**
-	 * HashSet conatining all entities in the world.
+	 * HashSet containing all entities in the world.
 	 */
 	private Set<Entity> entities = new HashSet<Entity>();
 	
@@ -371,7 +371,19 @@ public class World {
 	
 	
 	/**
-	 * The method which evolves the state of the game.
+	 * The method which evolves the state of the game
+	 * 
+	 * @param	dt 
+	 * 			The time over which the world is evolved.
+	 * @param	collisionListener
+	 * 
+	 * 			A object that listens if there are any collisions while evolving.
+	 * @post	Every entity in the world will be moved for the given time dt according to it's specifics.	
+	 * 			| @ implementation
+	 * @post	If there are any collisions detected while evolving the entities will collide.
+	 * 			| @ implementation
+	 * @post 	If there are any collisions collisionListener will hear them.
+	 * 			| @ implementation 	I
 	 */
 	public void evolve(double dt, CollisionListener collisionListener) throws IllegalArgumentException{
 
@@ -411,6 +423,16 @@ public class World {
 		}
 	}
 
+	/**
+	 * A method which caclutates the time to the next collision.
+	 * 
+	 * @return	This method's result is the time to the next collision whether this is a boundary collision or a entity collision.
+	 * 			If two entities seem too collide but they move away from each other the method recognizes this
+	 * 			and will not consider this time as a future collision.
+	 * 			| @ implementation
+	 * @return	If there aren't any collisions in the futere the time to the next collision is infinity.
+	 * 			| @ implementation
+	 */
 	public double getTimeToNextCollision(){
 		
 		double time = Double.POSITIVE_INFINITY;
@@ -435,6 +457,25 @@ public class World {
 		return time;
 	}
 	
+	/**
+	 * A method which finds the position of the next collision.
+	 * 
+	 * @return	If there will be no collisions ever the position returned is an array
+	 * 			containing two infinities.
+	 * 			| Entity[] nextCollidingEntities = getNextCollidingEntities()
+	 *			|	if(nextCollidingEntities[0] == null)
+	 *			|		then result == new double[]{Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY}
+	 * @effect 	If the next collision is a boundary collision the result will be the value of the method getPositionCollisionBoundary()
+	 * 			invoked on the colliding entity.
+	 * 			| Entity[] nextCollidingEntities = getNextCollidingEntities()
+	 * 			| if  nextCollidingEntities[1] == null
+	 * 			|	then	result == nextCollidingEntities[0].getPositionCollisionBoundary()
+	 * @effect  If the next collision is a collision between two entities the result will be the value of the method
+	 * 			getCollisionPosition() which is invoked on of the colliding entities and with argument the other colliding entity
+	 * 			| Entity[] nextCollidingEntities = getNextCollidingEntities()
+	 * 			| if (nextCollidingEntities[1] == null)
+	 * 			|	then result == nextCollidingEntities[0].getCollisionPosition(nextCollidingEntities[1])
+	 */
 	public double[] getNextCollisionPos(){
 		Entity[] nextCollidingEntities = getNextCollidingEntities();
 		if(nextCollidingEntities[0] == null) {
@@ -447,16 +488,27 @@ public class World {
 			return nextCollidingEntities[0].getCollisionPosition(nextCollidingEntities[1]);	
 	}
 	
+	
+	/**
+	 * A method that finds the entities which will collide the earliest.
+	 * 
+	 * @return	The method returns an array of size two which contains the two entities which 
+	 * 			will collide earliest. If this is a boundary collision the entity at index 0 will 
+	 * 			be the colliding entity and the entity at index 1 will be null. 
+	 * 			If there aren't any collisions in the future the array will contain two nulls.
+	 * 			| @ implementation
+	 */
 	public Entity[] getNextCollidingEntities(){
 		
 		Entity[] entities = new Entity[]{null,null};
 		double timeNextCollision = Double.POSITIVE_INFINITY;
-		for (Entity entity1 : getEntities()){
+		
+		for (Entity entity1 : this.getEntities()){
 			if (timeNextCollision > entity1.getTimeCollisionBoundary()){
 				timeNextCollision = entity1.getTimeCollisionBoundary();
 				entities = new Entity[]{entity1,null};
 			}
-			for (Entity entity2 : getEntities()){
+			for (Entity entity2 : this.getEntities()){
 				if (entity1 != entity2) {
 					if (entity1.overlap(entity2)) return new Entity[]{entity1,entity2};
 					if (timeNextCollision > entity1.getTimeToCollision(entity2)){
@@ -469,5 +521,4 @@ public class World {
 		}
 		return entities;
 	}
-	public int sik = 0;
 }
