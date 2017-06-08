@@ -15,7 +15,7 @@ public class AdditionExpression extends MathematicalExpression {
 		try {
 			return this.getLeftExpression().calculate() + this.getRightExpression().calculate();
 		} catch (Exception e) {
-			throw new IllegalArgumentException(e.getMessage());
+			throw new IllegalArgumentException("(ae) " + e.getMessage());
 		}
 	}
 

@@ -20,7 +20,7 @@ public class ThrustOnStatement extends Statement {
 	}
 
 	@Override
-	public void execute() {
+	public void execute() throws Exception{
 		this.setConsumesTime(true);
 		this.getProgram().setSourceLocation(getSourceLocation());
 		if (this.getProgram().getTime() < 0.2) {
@@ -28,7 +28,9 @@ public class ThrustOnStatement extends Statement {
 			return;
 			
 		}
-		this.getProgram().getShip().thrustOn();
+		if(this.getFunction() == null){
+			this.getProgram().getShip().thrustOn();
+		}else throw new Exception("Cant execute ActionStatement within function body");
 		this.getProgram().advanceTime();		
 	}
 }

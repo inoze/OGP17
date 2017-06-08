@@ -15,6 +15,7 @@ public class Program {
 	private SourceLocation location = new SourceLocation(0, 0);
 	private Ship ship;
 	private boolean skip;
+	private boolean hasWhile;
 	private int recursion =0;
 	
 	public Program(List<Function> functions, Statement main) {
@@ -78,6 +79,14 @@ public class Program {
 		return this.timeRemaining >= 0.2;
 	}
 	
+	public boolean hasWhile() {
+		return hasWhile;
+	}
+
+	public void setHasWhile(boolean hasWhile) {
+		this.hasWhile = hasWhile;
+	}
+
 	public void setSourceLocation(SourceLocation location) {
 		this.location = location;
 	}
@@ -128,10 +137,10 @@ public class Program {
 		if (body.consumesTime()) {
 			if(body.hasBreak()) throw new IllegalArgumentException("Break statements cannot occur outside function bodies");
 			location = new SourceLocation(0, 0);
-		//	if(results == null){throw new IllegalArgumentException("results is null");}
-			List<Object> resultsToThrow = results; 
+			List<Object> resultsToReturn = results; 
+			if(resultsToReturn.size() == 0) return null;
 			results = null;
-			return resultsToThrow;
+			return resultsToReturn;
 		}
 		//throw new IllegalArgumentException("body doesnt consume time");
 		

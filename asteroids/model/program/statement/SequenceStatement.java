@@ -2,6 +2,7 @@ package asteroids.model.program.statement;
 
 import java.util.List;
 
+import asteroids.model.Helper;
 import asteroids.model.program.Statement;
 import asteroids.part3.programs.SourceLocation;
 
@@ -47,6 +48,7 @@ public class SequenceStatement extends Statement{
 		setConsumesTime(false);
 		setHasBreak(false);
 		SourceLocation curLocation = getProgram().getSourceLocation();
+		if(getStatements().size() == 0) throw new Exception("empty list given");
 		for(int i = 0; i < getStatements().size(); i++) {
 			Statement statement = statements.get(i);
 			SourceLocation nextLocation = null;
@@ -57,15 +59,22 @@ public class SequenceStatement extends Statement{
 			if(i == statements.size()-1 || nextLocation.getLine() > curLocation.getLine()||
 					(nextLocation.getLine() == curLocation.getLine() && nextLocation.getColumn() > curLocation.getColumn())){
 				statement.setProgram(this.getProgram());
-				statement.execute();
-				if(statement.consumesTime()){
-					setConsumesTime(true);
-					return;
-				}
-				if(statement.hasBreak()) {
-					 setHasBreak(true);
-					return;
-				}
+				statement.setFunction(this.getFunction());
+				Helper.log("SQS: Function: " + this.getFunction());
+				try{
+					statement.execute();
+					Helper.log("Time left: " + this.getProgram().getTime());
+					if(statement.consumesTime()){
+						setConsumesTime(true);
+						return;
+					}
+					if(statement.hasBreak()) {
+						 setHasBreak(true);
+						return;
+					}
+				}catch(Exception ex){
+					Helper.log("cant execute statement in sequence: " + ex.getMessage());
+					throw new Exception("(sqs) " + ex.getMessage());}
 			}
 		}
 		

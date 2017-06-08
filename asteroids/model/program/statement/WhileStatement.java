@@ -57,6 +57,7 @@ public class WhileStatement extends Statement{
 	
 	@Override
 	public void execute() throws Exception {
+		this.getProgram().setHasWhile(true);
 		try{
 			this.setConsumesTime(false);
 			//Look if condition is true to start running the body, if not, do nothing

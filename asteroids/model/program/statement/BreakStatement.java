@@ -20,7 +20,8 @@ public class BreakStatement extends Statement{
 	}
 	
 	@Override
-	public void execute() {
+	public void execute() throws Exception{
+		if(!(getProgram().hasWhile())) throw new Exception("Break can only occur in while statement");
 		return;	
 	}
 }
