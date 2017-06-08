@@ -408,6 +408,67 @@ public abstract class Entity {
 	   private final String typeName;
 
 	   
+	   /**
+	    * A Method which resolves and directs collisions to its respective proper collison methods.
+	    * 
+	    * @param 	entity
+	    * 			The entity to collide with.
+	    * @effect	If both this and entity are ships the default collide method is called.
+	    * 			| if 	this instanceof Ship && entity instanceof Ship
+	    * 			|	then	this.defaultCollide(entity)
+	    * @effect	If both this and the entity are minor planets the default collide method is called.
+	    * 			| if	this instanceof MinorPlanet && entity instanceof MinorPlanet
+	    * 			|	then	 this.defaultCollide(entity)
+	    * @effect   If this or entity is a bullet and entity or this (respectively) is the source of the bullet 
+	    * 			the method calls the bulletCollideOwnShip() method otherwise if this or entity is bullet the 
+	    * 			bulletCollideSomethingElse() method is called.
+	    * 			| if (entity instanceof Bullet)
+	    * 			|	then Bullet bullet = (Bullet) entity
+    	*			|		if (bullet.getBulletSource() == this)
+    	*			|			then  bullet.bulletCollideOwnShip((Ship) this)
+    	*			|		else  bullet.bulletCollideSomethingElse(this)
+    	*			|
+    	*			| else if (this instanceof Bullet)
+    	*			|	then Bullet bullet = (Bullet) this
+    	*			|		if (bullet.getBulletSource() == entity)
+    	*			|			then bullet.bulletCollideOwnShip((Ship) entity)
+    	*			|		else bullet.bulletCollideSomethingElse(entity)
+    	*
+    	* @post		If either this is a ship and entity is an asteroid or this is an asteroid and entity is a ship
+    	* 			the ship will be terminated.
+    	* 			| if ((this instanceof Ship && entity instanceof Asteroid) 
+    	* 			|	|| (entity instanceof Ship && this instanceof Asteroid))
+    	* 			| 		then Ship ship = null;
+    	*			|			if (this instanceof Ship)
+    	*			|				then ship = (Ship) this
+    	*			|			else 
+    	*			|				then  ship = (Ship) entity
+    	*			|	ship.terminate()
+    	*
+	    * @post		If either this is a ship and entity is a planetoid or this is a planetoid and entity is a ship
+	    * 			the ship will be teleported to a random position within the world it is currently in.
+	    * 			This location is chosen so that the ship doesn't overlap with any other entity after teleportation.
+	    * 			| if ((this instanceof Ship && entity instanceof Planetoid) 
+	    * 			|	|| (entity instanceof Ship && this instanceof Planetoid))
+    	*			|		then	Ship ship = null
+    	*			|			if (this instanceof Ship)
+    	*			|				then ship = (Ship) this
+    	*			|			else 
+    	*			|				then  ship = (Ship) entity
+    	*			|
+    	*			|	World world = ship.getSuperWorld()
+    	*			|	double xnew =  Helper.randomInBetween(this.getRadius(), world.getWorldWidth())
+    	*			|	double ynew = Helper.randomInBetween(this.getRadius(), world.getWorldHeight())
+    	*			|	ship.setPosition(xnew, ynew)
+    	*			|	
+    	*			|	while (! this.overlapAnyEntity())
+    	*			| 		xnew =  Helper.randomInBetween(this.getRadius(), world.getWorldWidth())
+    	*			|		ynew = Helper.randomInBetween(this.getRadius(), world.getWorldHeight())
+    	*			|		ship.setPosition(xnew, ynew)
+	    * 
+	    * 
+	    * @throws IllegalArgumentException
+	    */
 	   public void collide(Entity entity) throws IllegalArgumentException{
 	 
     	if (this instanceof Ship && entity instanceof Ship) this.defaultCollide(entity);
@@ -431,7 +492,6 @@ public abstract class Entity {
     		} else {
     			ship = (Ship) entity;
     		}
-    		ship.getSuperWorld().removeEntityFromWorld(ship);
     		ship.terminate();
     	}
     	
@@ -444,8 +504,6 @@ public abstract class Entity {
     		}
     		
     		World world = ship.getSuperWorld();
-    		//double xnew = ship.getRadius() + (Math.random() * (world.getWorldHeight() - ship.getRadius() * 2));
-    		//double ynew = ship.getRadius() + (Math.random() * (world.getWorldWidth() - ship.getRadius() * 2));
     		double xnew =  Helper.randomInBetween(this.getRadius(), world.getWorldWidth());
     		double ynew = Helper.randomInBetween(this.getRadius(), world.getWorldHeight());
     		ship.setPosition(xnew, ynew);
@@ -460,7 +518,6 @@ public abstract class Entity {
     	
     }
     
-    //Total
     /**
 	 * Return the shortest time in which the given entity will collide with the
 	 * boundaries of its world.
@@ -539,7 +596,28 @@ public abstract class Entity {
 	 * Return the first position at which the given entity will collide with the
 	 * boundaries of its world.
 	 * 
-	 * @return
+	 * @return	The result is an array of size two which has at index 0 the x value and at index 1 the y value
+	 * 			of the position where the boundary and the entity collide.
+	 * 			| double[] pos = new double[2]
+	 *  		| pos[0] = this.getPosition()[0] + (this.getVelocity()[0] * this.getTimeCollisionBoundary())
+	 *			| pos[1] = this.getPosition()[1] + (this.getVelocity()[1] * this.getTimeCollisionBoundary())
+	 *			|	
+	 *			| if (pos[0] + this.getRadius() >= this.superWorld.getWorldHeight())
+	 *			|	then pos[0]+= this.getRadius()
+	 *			|
+	 *			| 		else if (pos[0] - this.getRadius() >= this.superWorld.getWorldHeight())
+	 *			|			then	 pos[0]-= this.getRadius()
+	 *			|
+	 *			| 				else if (pos[1] + this.getRadius() >= this.superWorld.getWorldHeight())
+	 *			|					then pos[1]+= this.getRadius()
+	 *			|
+	 *			| 						else	pos[1] -= this.getRadius()
+	 * 			|
+	 * 			|	result == pos
+	 * @return 	If the superWorld of the entity is null or the getTimeCollisionBoundary() is not a valid double 
+	 * 			there isn't any position to go to so the method returns null.
+	 * 			| if (!Helper.isValidDouble(this.getTimeCollisionBoundary()) || this.superWorld == null)
+	 * 			|		then 	result == null
 	 */
 	public double[] getPositionCollisionBoundary(){
 		if (!Helper.isValidDouble(this.getTimeCollisionBoundary()) || this.superWorld == null) return null;
@@ -559,14 +637,14 @@ public abstract class Entity {
 	/**
 	    * Method that deals with collisions between entities and boundaries.
 	    * 
-	    * @post   If the entity collides with the vertical boundries the x velocity is multiplied by minus one.
+	    * @post   If the entity collides with the vertical boundaries the x velocity is multiplied by minus one.
 	    * 		  | if	 (position[0] + radius == this.superWorld.getWorldSize()[0]) || (position[0] - radius == 0)
 	    * 		  |		then 	new.velocity[0] = this.velocity[0] * -1
-	    * @post   If the entity collides with the horizontal boundries the y velocity is multiplied by minus one.
+	    * @post   If the entity collides with the horizontal boundaries the y velocity is multiplied by minus one.
 	    * 		  | if	 (position[1] + radius == this.superWorld.getWorldSize()[1]) || (position[1] - radius == 0)
 	    * 		  |		then 	new.velocity[1] = this.velocity[1] * -1
-	    * @effect If the entity on which this method is invoced is a bullet and the entity collides with a boundary
-	    *         the method bouncesCounter is invoced on the entity.
+	    * @effect If the entity on which this method is invoiced is a bullet and the entity collides with a boundary
+	    *         the method bouncesCounter is invoiced on the entity.
 	    *         | if 	((position[0] + radius == this.superWorld.getWorldSize()[0]) || (position[0] - radius == 0) || 
 	    *         |     (position[1] + radius == this.superWorld.getWorldSize()[1]) || (position[1] - radius == 0)) &&
 	    *         |		(this instanceof Bullet)
@@ -610,7 +688,7 @@ public abstract class Entity {
      *         | result == diff
      * @throws IllegalArgumentException
      *         Throws an IllegalArgumentException if the given entity is the same entity
-     *         to which the method is invoced.
+     *         to which the method is invoked.
      *         | this == entity
      */
     public double getDistanceBetweenCenter(Entity entity) throws IllegalArgumentException{
@@ -666,21 +744,31 @@ public abstract class Entity {
 		return this.getDistanceBetweenEdge(entity) <= -0.01;
     }
     
+    /**
+     * A method that checks whether or not an entity overlaps with any other entity.
+     * 
+     * @return	This method returns true if and only if there is an entity in the super world
+     * 			of this (entity) which overlaps with this.
+     * 			| if 	for some entity in this.getSuperWorld().getEntities()
+     * 			|			this.overlap(entity)
+     * 			|	then	result == true
+     * 			| else 		result == false	
+     */
     public boolean overlapAnyEntity(){
     	return this.getSuperWorld().getEntities().stream().anyMatch(T ->this.overlap(T));
     }
    
-    //Defensive
     /**
-     * A method to get the time it wil take to get two entities colliding
-     * if they wil collide.
+     * A method to get the time it will take to get two entities colliding
+     * if they will collide.
+     * 
      * @param  entity
      *         The entity to get the time of collision from with itself and
-     *         the entity on which the method is invoced.
+     *         the entity on which the method is invoked.
      * @post   If the entities keep moving in the same way without an one of them getting changed
      *         in any way (velocity, position and radius must remain the same)
      *         The ships will collide with each other after the returned amount of time.
-     *         The entites won't collide before the given amount of time given if not changed in anyway
+     *         The entities won't collide before the given amount of time given if not changed in anyway
      *         (velocity, position and radius must remain the same)
      *         | this.overlap(entity) == true
      *         |    This is true after the following code:
@@ -697,7 +785,7 @@ public abstract class Entity {
      *         |        }
      * @throws IllegalArgumentException
      *         Throws an IllegalArgumentException if the given entity is already overlapping
-     *         with the entity to which the method is invoced.
+     *         with the entity to which the method is invoked.
      *         | this.overlap(entity)
      */
     public double getTimeToCollision(Entity entity) throws IllegalArgumentException{
@@ -750,7 +838,6 @@ public abstract class Entity {
        
 }
  
-    //Defensive
     /**
      *A method to get the position where two entities collide.
      *
@@ -784,40 +871,6 @@ public abstract class Entity {
      */
     public double[] getCollisionPosition(Entity entity) throws IllegalArgumentException{
          
-        /** if(this.overlap(entity)){
-            throw new IllegalArgumentException("Entities overlap");
-        }
-        else{
-            if(this.getTimeToCollision(entity) == Double.POSITIVE_INFINITY){
-                return null;
-            }
-            else{
-               
-                double[] pos = new double[2];
-                double[] cp1 = this.getDistanceTraveled(this.getTimeToCollision(entity));
-                double[] cp2 = entity.getDistanceTraveled(this.getTimeToCollision(entity));
-                double s = this.getRadius() + entity.getRadius();
-                double diffx = Math.abs(cp2[0] - cp1[0]);
-                double diffy = Math.abs(cp2[1] - cp1[1]);
-                double cosinus, sinus;
-               
-                if(diffx != 0){
-                    cosinus = (Helper.square(diffx) + Helper.square(s) - Helper.square(diffy))/(2*diffx*s);
-                    sinus = Math.sin(Math.acos(cosinus));
-                    Helper.log("sinus: " + sinus + "; cosinus: " + cosinus);
-                    pos[0] = cp1[0] + this.getRadius() * cosinus;
-                    pos[1] = cp1[1] + this.getRadius() * sinus;
-                }
-                else{
-                    Helper.log("diffx is 0");
-                    pos[0] = this.getDistanceTraveled(this.getTimeToCollision(entity))[0];
-                    pos[1] = this.getDistanceTraveled(this.getTimeToCollision(entity))[1] + this.getRadius();
-                }
-               
-                return pos;
-            }
-        }
-        }  */
     	if (entity == null) throw new IllegalArgumentException("getCollisionPosition called with a non-existing circular object!");
 		if (this.overlap(entity)) throw new IllegalArgumentException("These two circular objects overlap!");
 		double timeToCollision = getTimeToCollision(entity);
@@ -841,22 +894,19 @@ public abstract class Entity {
 		return new double[] {xPositionCollisionThisShip + Math.cos(slope) * this.getRadius(), yPositionCollisionThisShip + Math.sin(slope) * this.getRadius()};
 	}
 
- 
-   
-  //Nominal
     /**
-     * A helper method to get the centre of a entity when it traveled over a time.
+     * A helper method to get the center of a entity when it traveled over a time.
      *
      * @param  time
      *         The time over which the entity moves.
-     * @pre    time must be bigger then zero and musn't be infinty.
+     * @pre    time must be bigger then zero and musn't be infinity.
      *         | (time > 0) && Helper.isValidDouble(time)
      * @return Returns an array of length two, which contains the coordinates of the center of the ship when it
      *         has moved over time.
      *         | double pos[] = new double[2]
      *         |pos[0] = this.position[0] + this.velocity[0] * time
      *         |pos[1] = this.position[1] + this.velocity[1] * time
-     *         |return == pos
+     *         |result == pos
      */
     public double[] getDistanceTraveled(double time){
         assert ((time > 0) && Helper.isValidDouble(time));
@@ -866,6 +916,28 @@ public abstract class Entity {
         return pos;
     }
     
+    /**
+     * A method which deals with the default type of collisions.
+     * 
+     * @param 	ship
+     * 			The entity to collide with.
+     * @post	The method doesn't do anything if ship is null, if ship is terminated,if ship or this entity's super world is null
+     * 			or if the super worlds of both entities aren't the same.
+     * 			| if ((ship == null) || (ship.isTerminated() == true) || (this.getSuperWorld() == null )
+     *          |		 || (ship.getSuperWorld() == null) || ((this.getSuperWorld() != ship.getSuperWorld()))) 
+     *       	| 			does nothing
+     * @post	The two entity's are set so that they would bounce of each other.
+     * 			| 	double [] locationdifference = {ship.getPosition()[0] - this.getPosition()[0], ship.getPosition()[1] - this.getPosition()[1]}
+     *   		| 	double [] velocitydifference = {ship.getVelocity()[0] - this.getVelocity()[0],ship.getVelocity()[1] - this.getVelocity()[1]}
+     *   		| 	double velocitylocationdifference = (velocitydifference[0] * locationdifference[0]) + (velocitydifference[1] * locationdifference[1])
+     *   		|	double changetotal = (2 * this.getMass() * ship.getMass() * velocitylocationdifference) / ((this.getRadius() + ship.getRadius()) * (this.getMass() + ship.getMass()))
+     *   		|	double changex = changetotal * locationdifference[0] / (this.getRadius() + ship.getRadius())
+     *   		|	double changey = changetotal * locationdifference[1] / (this.getRadius() + ship.getRadius())
+     *   		|
+     *   		|		this.setVelocity(this.getVelocity()[0] + changex / this.getMass(), this.getVelocity()[1] + changey / this.getMass())
+     *   		| 		ship.setVelocity(ship.getVelocity()[0] - changex / ship.getMass(), ship.getVelocity()[1] - changey / ship.getMass())
+     * 			
+     */
     public void defaultCollide(Entity ship){
    	 if ((ship == null) || (ship.isTerminated() == true) || (this.getSuperWorld() == null )
                 || (ship.getSuperWorld() == null) || ((this.getSuperWorld() != ship.getSuperWorld()))) {
