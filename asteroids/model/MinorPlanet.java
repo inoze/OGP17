@@ -1,5 +1,6 @@
 package asteroids.model;
 
+import be.kuleuven.cs.som.annotate.Raw;
 
 /**
  * A class which deals with minor planets.

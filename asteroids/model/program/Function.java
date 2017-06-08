@@ -6,6 +6,7 @@ import java.util.Set;
 import java.util.HashMap;
 import java.util.HashSet;
 
+import asteroids.model.Helper;
 import asteroids.model.Program;
 import asteroids.model.program.expression.DoubleLiteralExpression;
 import asteroids.part3.programs.SourceLocation;
@@ -93,19 +94,20 @@ public class Function {
 		this.hasBreak = hasBreak;
 	}
 	
-	public Object calculate(Object[] arguments){//
+	public Object calculate(){
+		Helper.log("Calculating function: " + this.getFunctionName() + "; ID:" + this);
 		setHasBreak(false);
 		Set<Variable> locals = new HashSet<Variable>();
 		body.setProgram(this.getProgram());
 		try{
 			body.execute();
-			//Optional result = body.getRes
 			if(body.hasBreak()){
 				setHasBreak(true);
 				return null;
 			}
 			else setHasBreak(false);
-			return null;
+			Helper.log("calculating function, return: " + getReturnValue());
+			return getReturnValue();
 		} 
 		
 		catch(Exception ex){

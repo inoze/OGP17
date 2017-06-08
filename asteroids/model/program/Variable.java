@@ -12,7 +12,7 @@ public class Variable <T> {
 	}
 	
 	public void setValue(T value) {
-		if(!canHaveAsValue(value)) throw new IllegalArgumentException();
+		if(!canHaveAsValue(value)) throw new IllegalArgumentException("Invalid value given to variable");
 		this.value = value;
 	}
 	

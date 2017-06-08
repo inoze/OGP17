@@ -3,15 +3,17 @@ package asteroids.model.program.statement;
 import java.util.Optional;
 import java.util.Set;
 
+import asteroids.model.Helper;
 import asteroids.model.program.*;
 import asteroids.part3.programs.SourceLocation;
 
 public class AssignmentStatement extends Statement{
 
-	public AssignmentStatement(SourceLocation sourceLocation) {
+	public AssignmentStatement(SourceLocation sourceLocation, String variableName, Expression<?> value) {
 		super(sourceLocation);
+		setVariableName(variableName);
+		setValue(value);
 	}
-
 
 	private String variableName;
 	private Expression<?> value;
@@ -32,6 +34,10 @@ public class AssignmentStatement extends Statement{
 	public void setHasBreak(boolean b){
 		this.hasBreak = b;
 	}
+	
+	public void setValue(Expression<?> value){
+		this.value = value;
+	}
 
 	@Override
 	public void execute() throws Exception{
@@ -45,11 +51,16 @@ public class AssignmentStatement extends Statement{
 			Set<Variable> programVariables = getProgram().getVariables();
 			Optional<Variable> assign = programVariables.stream().filter(variable -> variable.getName().equals(variableName)).findFirst();
 			if(assign.isPresent()){
+				Helper.log("assign is present");
 				assign.get().setValue(value.calculate());
-			} else getProgram().addVariable(new Variable(variableName, value.calculate()));
+			} 
+			else{ 
+				Helper.log("assign is not present, value: " + value);
+				getProgram().addVariable(new Variable(variableName, value.calculate()));}
+				Helper.log("added variable");
 			if (value instanceof Function && ((Function)value).hasBreak()) setHasBreak(true);
 		}catch(Exception ex){
-			throw new Exception("Error on assignmentStatemen: " + ex.getMessage());
+			throw new Exception("Error on assignmentStatement: " + ex.getMessage());
 		}
 	}
 
