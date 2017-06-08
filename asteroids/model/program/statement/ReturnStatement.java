@@ -26,6 +26,7 @@ public class ReturnStatement extends Statement{
 	public void execute() throws Exception{
 		Helper.log("expression: " + getExpression());
 		getExpression().setProgram(this.getProgram());
+		if(this.getFunction() == null) throw new Exception("Return statement outside function");
 		try{
 			if (!this.getProgram().hasTimeLeft()) {
 	            return;

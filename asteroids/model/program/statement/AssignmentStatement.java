@@ -50,14 +50,9 @@ public class AssignmentStatement extends Statement{
 		try{
 			Set<Variable> programVariables = getProgram().getVariables();
 			Optional<Variable> assign = programVariables.stream().filter(variable -> variable.getName().equals(variableName)).findFirst();
-			if(assign.isPresent()){
-				Helper.log("assign is present");
-				assign.get().setValue(value.calculate());
-			} 
-			else{ 
-				Helper.log("assign is not present, value: " + value);
-				getProgram().addVariable(new Variable(getVariableName(), getValue().calculate()));}
-				Helper.log("added variable: " + getVariableName() + "; " + getValue().calculate());
+			if(assign.isPresent()){getProgram().getVariable(getVariableName()).setValue(getValue().calculate());}
+			else getProgram().addVariable(new Variable(getVariableName(), getValue().calculate()));
+			Helper.log("added variable: " + getVariableName() + "; " + getValue().calculate());
 			if (value instanceof Function && ((Function)value).hasBreak()) setHasBreak(true);
 		}catch(Exception ex){
 			throw new Exception("Error on assignmentStatement: " + ex.getMessage());
