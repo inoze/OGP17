@@ -59,6 +59,7 @@ public abstract class Entity {
 	 * @post    typeName is set to the given typeName.
 	 *          | new.typeName = typeName
 	 */
+	@Raw
 	protected Entity (double x, double y, double xVelocity, double yVelocity, double radius, String typeName) throws IllegalArgumentException {
 			// Set position of entity (setter itself is defensive.
             try{this.setPosition(x, y);} catch(IllegalArgumentException ex){throw new IllegalArgumentException(ex.getMessage());}
@@ -198,6 +199,7 @@ public abstract class Entity {
      *        |           new.getShipVelocity()[1] == 0
      *
      */
+    @Raw
     protected void setVelocity(double xVelocity, double yVelocity){
         if ( !isValidVelocity(xVelocity, yVelocity)){
             this.velocity[0] = 0;
@@ -248,6 +250,7 @@ public abstract class Entity {
      * 			| if !isValidMaxVelocity(max) 
      * 			|	then	this.maxVelocity = SPEED_OF_LIGHT
      */
+    @Raw
     private void setMaxVelocity(double max){
     	if (!isValidMaxVelocity(max)) this.maxVelocity = SPEED_OF_LIGHT;
     	else this.maxVelocity = max;
@@ -303,6 +306,7 @@ public abstract class Entity {
      *         An IllegalArgumentException is thrown if the world isn't a valid one.
      *         | !(isValidWorld(world))
      */
+    @Raw
     protected void setSuperWorld(World world) throws IllegalArgumentException{
     	if(world == null || isValidSuperWorld(world))		this.superWorld = world;
     	else throw new IllegalArgumentException("Isn't a valid world @setSuperWorld()");
@@ -347,6 +351,7 @@ public abstract class Entity {
 	 * 		   | if this.getSuperWorld() == null
 	 * 		   | 	then	this.superWorld.removeEntityFromWorld(this)
      */
+    @Raw
 	public void terminate(){
 		if (superWorld != null)
 		this.superWorld.removeEntityFromWorld(this);
@@ -616,7 +621,7 @@ public abstract class Entity {
      * 			| result == getDistanceBetweenCenter(entity) - this.getRadius() - entity.getRadius();
      * @throws 	IllegalArgumentException
      * 			Throws an IllegalArgumentException if the given entity is the same entity
-     *         	to which the method is invoced.
+     *         	to which the method is invoked.
      *         	| this == entity
      */
     public double getDistanceBetweenEdge(Entity entity)  throws IllegalArgumentException{

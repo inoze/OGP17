@@ -11,7 +11,7 @@ import be.kuleuven.cs.som.annotate.*;
  * 			planetoid be smaller then the minimal radius of a planetoid.
  * 			| TotalDistancetraveled <= (MINIMAL_MINORPLANET_RAD - super.getRadius())/-0.000001 
  * 
- * @invar 	The mass of a planetoid is always equal tofour thirds of the radius cubed times the the planetoid density.
+ * @invar 	The mass of a planetoid is always equal to four thirds of the radius cubed times the the planetoid density.
  * 			| this.getMass() == 4.0*Math.PI*Math.pow(getRadius(), 3)*PLANETOID_DENSITY / 3.0
  * 			
  * @version 2.0
@@ -48,6 +48,7 @@ public class Planetoid extends MinorPlanet{
 	 * @effect	The mass is set to four thirds of the radius cubed times the the planetoid density.
 	 * 			| setMass(4.0*Math.PI*Math.pow(getRadius(), 3)*PLANETOID_DENSITY / 3.0)
 	 */
+	@Raw
 	public Planetoid(double x, double y, double xVelocity, double yVelocity, double radius, double totalDistanceTraveled){
 		super(x, y, xVelocity, yVelocity, radius, "Planetoid");
 		

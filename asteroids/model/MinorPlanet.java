@@ -41,6 +41,7 @@ public abstract class MinorPlanet extends Entity{
 	 * 			Throws an IllegalArgumentException if the radius isn't valid.
 	 * 			| !isValidRadius(getRadius())
 	 */
+	@Raw
 	public MinorPlanet(double x, double y, double xVelocity, double yVelocity, double radius, String type){
 		super(x, y, xVelocity, yVelocity, radius, type);
 		

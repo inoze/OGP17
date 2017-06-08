@@ -1,17 +1,18 @@
 package asteroids.model;
 import java.util.HashSet;
 import java.util.Set;
-
-
 import be.kuleuven.cs.som.annotate.*;
 
-//import asteroids.util.ModelException;
 
 /**
  * A method which involves a bullet.
+ * 	Bullet is a subclass of Entity.
  * 
- * @invar Bounces can never be more than two.
- *        | Bouncs <= 2 
+ * @invar 	Bounces can never be more than two.
+ *        	| Bouncs <= 2 
+ *        
+ * @invar 	The mass of a bullet is always equal to four thirds of the radius cubed times the the bullet density.
+ * 			| this.getMass() == 4.0*Math.PI*Math.pow(getRadius(), 3)*BULLET_DENSITY / 3.0
  * 
  * @author Brent De Bleser & Jesse Geens
  * @version 1.0 
@@ -34,8 +35,15 @@ public class Bullet extends Entity{
 	 *          The velocity on the y axis when the bullet is created.
 	 * @param   radius
 	 *          The radius of the bullet.
+	 *          
 	 * @effect  Calls the constructor of the superclass with arguments x, y, xVelocity, yVelocity, radius and "Bullet".
 	 *          | super(x, y, xVelocity, yVelocity, radius, "Bullet")
+	 * @effect	The mass is set to four thirds of the radius cubed times the the bullet density.
+	 * 			| setMass(4.0*Math.PI*Math.pow(getRadius(), 3)*BULLET_DENSITY / 3.0)
+	 * 
+	 * @throws	IllegalArgumentException
+	 * 			Throws an IllegalArgumentException if the radius isn't valid.
+	 * 			| !isValidRadius(getRadius())
 	 */
 	public Bullet(double x, double y, double xVelocity, double yVelocity, double radius) throws IllegalArgumentException {
 		super(x, y, xVelocity, yVelocity, radius,"Bullet");
@@ -50,19 +58,10 @@ public class Bullet extends Entity{
 	private final double MINIMAL_BULLET_RAD = 1;
 	
 	/**
-	 * Returns the density of a bullet.
-	 */
-	@Immutable @Raw
-	public double getBulletDensity(){
-		return BULLET_DENSITY;
-	}
-	
-	/**
 	 * Constant containing the density of bullets.
 	 */
 	private final double BULLET_DENSITY = 7.8E12;
 	
-	//Total
 	/**
 	 * Return the ship that fired the bullet.
 	 * 
@@ -73,13 +72,16 @@ public class Bullet extends Entity{
 		return source;
 	}
 	
-	//Total
+	
 	/**
 	 * Return the ship in which bullet is positioned.
 	 * 
-	 * @return If the 
+	 * @return	If the super world of the bullet is null the result equals the source of the bullet,
+	 * 			else the result will be null.
+	 * 			| if 	this.getSuperWorld() == null
+	 * 			|	then	result == this.getBulletSource()
+	 * 			| else		result == null
 	 */
-	@Basic @Raw
 	public Ship getBulletShip() {
 		if(this.getSuperWorld() == null)
 			return this.getBulletSource();
@@ -96,7 +98,6 @@ public class Bullet extends Entity{
 	  * @post  The source of the bullet is set to the given source.
 	  *        | new.source == source
 	  */
-	@Raw
 	public void setSource(Ship source){
 			this.source = source;
 	}
@@ -113,7 +114,7 @@ public class Bullet extends Entity{
      * @effect 	The world of bullet is set to the given world.
      * 			| super.setSuperWorld(world)
      */
-    @Override @Raw
+    @Override 
     public void setSuperWorld(World world){
     	if (world == null)	setSource(null);
     	super.setSuperWorld(world);
@@ -137,13 +138,12 @@ public class Bullet extends Entity{
 	/**
 	 * A method which deals with bounces of a bullet.
 	 * 
-	 * @post   The amount of bounces in icremented.
+	 * @post   The amount of bounces in incremented.
 	 *         | new.bounces = old.bounces + 1
 	 * @effect If the bullet has three bounces or more it is terminated.
 	 *         | if	 	bounces >2
 	 *         |	then 	this.terminateBullet()
 	 */
-	@Raw
 	public void bouncesCounter(){
 		bounces++;
 		if (bounces > 2) this.terminate();
@@ -183,7 +183,7 @@ public class Bullet extends Entity{
 	 * 		   |	then 	source.removeBulletFromShip(this)
 	 * 
 	 */
-	@Override @Raw
+	@Override 
 	public void terminate() {
 		
 		if(getSuperWorld() != null){
@@ -199,39 +199,70 @@ public class Bullet extends Entity{
 		
 	}
 	
+ 
+    /**
+     * A method for dealing with the situation if a ship collides with one
+     * of its own bullets.
+     * 
+     * @param 	ship
+     * 			The ship to collide with.
+     * @effect	The bullet is loaded on to the ship.
+     * 			| Set<Bullet> bullets = new HashSet<Bullet>()
+	 *			| bullets.add(this)
+	 *		    | ship.loadBulletsOnShip(bullets)
+     */
+    public void bulletCollideOwnShip(Ship ship){
+			Set<Bullet> bullets = new HashSet<Bullet>();
+			bullets.add(this);
+			ship.loadBulletsOnShip(bullets);
+		}
+    
+    
+    /**
+     * A method to deal with the situation if a bullet collides with an entity that 
+     * isn't its source.
+     * 
+     * @param 	entity
+     * 			The entity to collide with
+     * @post	The bullet is removed form its  super world and is terminated.
+     * 			| this.getSuperWorld().removeEntityFromWorld(this)
+	 *			| this.terminate()
+	 * @post	The entity is removed from its world and is terminated according to its instance.
+	 * 			| entity.getSuperWorld().removeEntityFromWorld(entity)
+	 * 			| if entity instanceof Planetoid 
+	 * 			|		then	Planetoid planetoid = (Planetoid) entity	
+	 * 			|				planetoid.terminate()
+	 *			| if ship instanceof Ship) 
+	 *			|		then	Ship ship = (Ship) entity	
+	 *			|				 ship.terminate()
+	 *			| if entity instanceof Bullet 
+	 *			|		then	Bullet bullet = (Bullet) entity
+	 *			|		 		bullet.terminate()
+	 *			| else 	then	skr.terminate()
+     */
+    public void bulletCollideSomethingElse(Entity entity){
+
+		this.getSuperWorld().removeEntityFromWorld(this);
+		this.terminate();
+		entity.getSuperWorld().removeEntityFromWorld(entity);
+
+		if (entity instanceof Planetoid) {Planetoid planetoid = (Planetoid) entity; planetoid.terminate();}
+		if (entity instanceof Ship) {Ship ship = (Ship) entity; ship.terminate();}
+		if (entity instanceof Bullet) {Bullet bullet = (Bullet) entity; bullet.terminate();}
+		else {entity.terminate();}
+    }
 	
 	/**
      * Checks whether or not a radius is valid.
      * 
      * @param 	radius
      * 			The radius to check.
-     * @return	True if and only if radis is bigger than the minimal radius for a bullet and if radius is a valid double.
+     * @return	True if and only if radius is bigger than the minimal radius for a bullet and if radius is a valid double.
      * 			| result == (radius > MINIMAL_BULLET_RAD && Helper.isValidDouble(radius))
      */
-    @Model @Raw
+    @Model 
     private boolean isValidRadius(double radius){
     	return (radius > MINIMAL_BULLET_RAD && Helper.isValidDouble(radius));
     }
     
-    
-    
-    public void bulletCollideOwnShip(Ship skr){
-			Set<Bullet> bullets = new HashSet<Bullet>();
-			bullets.add(this);
-			skr.loadBulletsOnShip(bullets);
-		}
-    
-    public void bulletCollideSomethingElse(Entity skr){
-    	System.out.print(skr.getSuperWorld());
-		this.getSuperWorld().removeEntityFromWorld(this);
-		this.terminate();
-		System.out.print(skr.getSuperWorld());
-		skr.getSuperWorld().removeEntityFromWorld(skr);
-
-		if (skr instanceof Planetoid) {Planetoid planetoid = (Planetoid) skr; planetoid.terminate();}
-		if (skr instanceof Ship) {Ship ship = (Ship) skr; ship.terminate();}
-		if (skr instanceof Bullet) {Bullet bullet = (Bullet) skr; bullet.terminate();}
-		else {skr.terminate();}
-    }
-
 }
