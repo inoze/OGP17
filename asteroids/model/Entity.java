@@ -159,26 +159,10 @@ public abstract class Entity {
      */
     @Basic @Raw
     public double[] getVelocity(){
-    	 double[] result = {this.velocity[0], this.velocity[1]};
-  	   return result;
+  	   return this.velocity.getVelocity();
     }
     
-    /**
-     * Method to return the total velocity of the entity.
-     * 
-     * @return 	Returns the total velocity of an entity if it is a valid max velocity..
-     * 			Else the result is the speed of light
-     * 			| velocity = Math.hypot(this.getVelocity()[0] + this.getVelocity()[1])
-     * 			| if (velocity <= getMaxVelocity())
-     * 			|	result == velocity
-     * 			| else
-     * 			|	result == SPEED_OF_LIGHT
-     */
-    public double getTotalVelocity(){
-    	double velocity = Math.hypot(this.getVelocity()[0], this.getVelocity()[1]);
-		if (velocity > getMaxVelocity()) velocity = SPEED_OF_LIGHT;
-		return velocity;
-    }
+   
     
     /**
      * Set the velocity of the entity to the given values.
@@ -202,12 +186,10 @@ public abstract class Entity {
     @Raw
     protected void setVelocity(double xVelocity, double yVelocity){
         if ( !isValidVelocity(xVelocity, yVelocity)){
-            this.velocity[0] = 0;
-            this.velocity[1] = 0;
+            this.velocity.setVelocity(0.0, 0.0);
         }
         else {
-            this.velocity[0] = xVelocity;
-            this.velocity[1] = yVelocity;
+            this.velocity.setVelocity(xVelocity, yVelocity);
         }
     }
     
@@ -219,18 +201,18 @@ public abstract class Entity {
      *          The velocity on the X-axis to check.
      * @param	velocitY
      * 			The velocity on the Y-axis to check.
-     * @return  True if and only if the given velocities is a double isn't negative and the to be total velocity isn't faster then maxVelocity.
+     * @return  True if and only if the given velocities are valid velocities and the to be total velocity isn't faster then maxVelocity.
      *         	| result == ( (Math.hypot(velocityX, velocityY) <= maxVelocity && Helper.isValidDouble(velocityX) && Helper.isValidDouble(velocityY))
      */
     @Model
     private boolean isValidVelocity(double velocityX, double velocityY){
-        return (Math.hypot(velocityX, velocityY) <= maxVelocity && Helper.isValidDouble(velocityX) && Helper.isValidDouble(velocityY));
+        return (Math.hypot(velocityX, velocityY) <= maxVelocity && Velocity.isValidVelocity(velocityX, velocityY));
     }  
     
     /**
      * variable containing the velocity on the x and y axis as an array of length 2.
      */
-    private double[] velocity = new double[2];
+    protected Velocity velocity =  new Velocity(0,0);
     
     /**
      * Returns the maximum velocity of the entity.
@@ -522,13 +504,15 @@ public abstract class Entity {
 	 * Return the shortest time in which the given entity will collide with the
 	 * boundaries of its world.
 	 * 
-	 * @return If the entity isn't in a world the shortest time to a bondary collision is POSITIVE_INFINITY.
+	 * @return If the entity isn't in a world the shortest time to a boundary collision is POSITIVE_INFINITY.
 	 *         | if 	this.superWorld == null
 	 *         | 		then	result == Double.POSITIVE_INFINITY
 	 * @return If the entity has a x and y velocity of zero the time to a boundary collision is POSITIVE_INFINITY.
-	 *         | if 	this.velocity[0] == 0 && this.velocity[1] == 0
+	 * 		   | double[] velocity = this.velocity.getVelocity()
+	 *         | if 	velocity[0] == 0 && velocity[1] == 0
 	 *         |		then 	result == Double.POSITIVE_INFINITY
 	 * @return The method returns the shortest time to a boundary collision.
+	 * 		   | double[] velocity = this.velocity.getVelocity()
 	 *         | double edgeY
 	 *		   | double edgeX
 	 *	       | double mY = 0
@@ -554,9 +538,9 @@ public abstract class Entity {
 	 *	       | else 	result == tY
 	 */
 	public double getTimeCollisionBoundary() {
-		//Exceptions
+		double[] velocity = this.velocity.getVelocity();
 		if (this.superWorld == null)	return Double.POSITIVE_INFINITY;
-		if (this.velocity[0] == 0 && this.velocity[1] == 0)		return Double.POSITIVE_INFINITY;
+		if (velocity[0] == 0 && velocity[1] == 0)		return Double.POSITIVE_INFINITY;
 		
 		double radius = this.getRadius();
 		if (this instanceof Planetoid) { Planetoid planetoid = (Planetoid) this; radius = planetoid.getRadius();}
@@ -639,10 +623,10 @@ public abstract class Entity {
 	    * 
 	    * @post   If the entity collides with the vertical boundaries the x velocity is multiplied by minus one.
 	    * 		  | if	 (position[0] + radius == this.superWorld.getWorldSize()[0]) || (position[0] - radius == 0)
-	    * 		  |		then 	new.velocity[0] = this.velocity[0] * -1
+	    * 		  |		then 	new.velocity.setXYVelocity( this.velocity.getVelocity()[0] * -1)
 	    * @post   If the entity collides with the horizontal boundaries the y velocity is multiplied by minus one.
 	    * 		  | if	 (position[1] + radius == this.superWorld.getWorldSize()[1]) || (position[1] - radius == 0)
-	    * 		  |		then 	new.velocity[1] = this.velocity[1] * -1
+	    * 		  |		then 	new.velocity.setYVelocity(this.velocity.getVelocity()[1] * -1)
 	    * @effect If the entity on which this method is invoiced is a bullet and the entity collides with a boundary
 	    *         the method bouncesCounter is invoiced on the entity.
 	    *         | if 	((position[0] + radius == this.superWorld.getWorldSize()[0]) || (position[0] - radius == 0) || 
@@ -657,13 +641,13 @@ public abstract class Entity {
 	    		if (this instanceof Bullet){
 	        			bulletBouncer++;
 	        	}
-	    		this.velocity[0] = this.velocity[0] * -1;
+	    		this.velocity.setXYVelocity( this.velocity.getVelocity()[0] * -1);
 	    	}
 	    	if ((this.getPosition()[1]-(this.getRadius()) <= 0.0 || (this.getPosition()[1]+(this.getRadius()) >= this.superWorld.getWorldHeight()))){
 	    		if (this instanceof Bullet){
 	        		bulletBouncer++;
 	        	}
-	    		this.velocity[1] = this.velocity[1] * -1;
+	    		this.velocity.setYVelocity(this.velocity.getVelocity()[1] * -1);
 	    	} 	
 	    	if (this instanceof Bullet){
 	    	Bullet bullet = (Bullet) this;

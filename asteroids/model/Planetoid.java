@@ -139,7 +139,7 @@ public class Planetoid extends MinorPlanet{
         else{
             try {
             	super.move(dt);
-            	setTotalDistanceTraveled(getTotalDistanceTraveled() + getTotalVelocity()*dt);
+            	setTotalDistanceTraveled(getTotalDistanceTraveled() + this.velocity.getTotalVelocity()*dt);
             	if (!this.isValidRadius(getRadius())) this.terminate();
                 }
             catch (IllegalArgumentException ex){
