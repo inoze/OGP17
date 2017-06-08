@@ -5,6 +5,9 @@ package asteroids.model;
  * A class which deals with asteroids.
  * 	Asteroid is a subclass of MinorPlanet.
  *
+ * @invar 	The mass of an asteroid is always equal to four thirds of the radius cubed times the asteroid density.
+ * 			| this.getMass() == 4.0*Math.PI*Math.pow(getRadius(), 3)*ASTEROID_DENSITY / 3.0
+ *
  * @version	2.0
  * @author 	Brent De Bleser & Jesse Geens
  *
@@ -34,14 +37,11 @@ public class Asteroid extends MinorPlanet{
 	 * 			| super(x, y, xVelocity, yVelocity, radius, "Asteroid");
 	 * @effect	The mass is set to four thirds of the radius cubed times the asteroid density.
 	 * 			| setMass(4.0*Math.PI*Math.pow(getRadius(), 3)*ASTEROID_DENSITY / 3.0)
-	 * @throws	IllegalArgumentException
-	 * 			Throws an illegalargumentexception if the radius isn't valid.
-	 * 			| !isValidRadius(getRadius())
+	 * 
 	 */
 	public Asteroid(double x, double y, double xVelocity, double yVelocity, double radius){
 		super(x, y, xVelocity, yVelocity, radius, "Asteroid");
 		
-		if (!isValidRadius(getRadius())) throw new IllegalArgumentException("Invalid radius @ Asteroid");
 		setMass(4.0*Math.PI*Math.pow(getRadius(), 3)*ASTEROID_DENSITY / 3.0);
 	}
 	

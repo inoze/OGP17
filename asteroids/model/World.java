@@ -374,6 +374,7 @@ public class World {
 	 * The method which evolves the state of the game.
 	 */
 	public void evolve(double dt, CollisionListener collisionListener) throws IllegalArgumentException{
+
 		
 		if(dt < 0 || !(Helper.isValidDouble(dt)))
 			throw new IllegalArgumentException("Time given at evolve is invalid");
@@ -414,6 +415,7 @@ public class World {
 		
 		double time = Double.POSITIVE_INFINITY;
 		for (Entity entity1 : getEntities()){
+		
 			time = Math.min(time, entity1.getTimeCollisionBoundary());
 			
 			for (Entity entity2 : getEntities()){
@@ -467,5 +469,5 @@ public class World {
 		}
 		return entities;
 	}
-	
+	public int sik = 0;
 }

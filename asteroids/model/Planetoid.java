@@ -3,15 +3,16 @@ package asteroids.model;
 import be.kuleuven.cs.som.annotate.*;
 
 
-
-
 /**
- * A class which deals with the behavoiur of a Planetoid.
+ * A class which deals with the behavior of a Planetoid.
  * 	Planetoids are a subclass of MinorPlanet.
  * 
  * @invar	The total distance traveled may not be to beg so that the effective radius of the
  * 			planetoid be smaller then the minimal radius of a planetoid.
  * 			| TotalDistancetraveled <= (MINIMAL_MINORPLANET_RAD - super.getRadius())/-0.000001 
+ * 
+ * @invar 	The mass of a planetoid is always equal tofour thirds of the radius cubed times the the planetoid density.
+ * 			| this.getMass() == 4.0*Math.PI*Math.pow(getRadius(), 3)*PLANETOID_DENSITY / 3.0
  * 			
  * @version 2.0
  * @author 	Brent De Bleser & Jesse Geens
@@ -44,17 +45,13 @@ public class Planetoid extends MinorPlanet{
 	 * 			| super(x, y, xVelocity, yVelocity, radius, "Planetoid")
 	 * @effect  The total distance traveled is set to totalDistanceTraveled.
 	 * 			| setTotalDistanceTraveled(totalDistanceTraveled)
-	 * @effect	The mass is set to fout thirds of the radius cubed times the the planetoid density.
+	 * @effect	The mass is set to four thirds of the radius cubed times the the planetoid density.
 	 * 			| setMass(4.0*Math.PI*Math.pow(getRadius(), 3)*PLANETOID_DENSITY / 3.0)
-	 * @throws	IllegalArgumentException
-	 * 			Throws an IllegalArgumentExceptionif the radius isn't a valid radius for a minor planet.
-	 * 			| !isValidRadius(this.getRadius())
 	 */
 	public Planetoid(double x, double y, double xVelocity, double yVelocity, double radius, double totalDistanceTraveled){
 		super(x, y, xVelocity, yVelocity, radius, "Planetoid");
 		
 		this.setTotalDistanceTraveled(totalDistanceTraveled);
-		if (!isValidRadius(this.getRadius())) this.terminate();
 		setMass(4.0*Math.PI*Math.pow(getRadius(), 3)*PLANETOID_DENSITY / 3.0);
 		
 	}
@@ -75,19 +72,18 @@ public class Planetoid extends MinorPlanet{
 	 * @param 	distance
 	 * 			The distance to set as the new total distance traveled.
 	 * @post 	The new total distance traveled is set to the given distance.
-	 * 			| new..totalDistanceTraveled = distance
+	 * 			| new.totalDistanceTraveled = distance
 	 * @throws	IllegalArgumentException
 	 * 			Throws an IllegalArgumentException if the given distance isn't a valid double.
 	 * 			| !Helper.isValidDouble(distance)
 	 */
-	@Raw
 	private void setTotalDistanceTraveled(double distance){
 		if(!Helper.isValidDouble(distance)) throw new IllegalArgumentException("Total distance traveled isn't a valid double @ setTotalDistanceTraveled)");
 		this.totalDistanceTraveled = distance;
 	}
 	
 	/**
-	 * Variable containg the distance traveled of a planetoid.
+	 * Variable containing the distance traveled of a planetoid.
 	 */
 	private double totalDistanceTraveled = 0.0;
 	
@@ -150,7 +146,7 @@ public class Planetoid extends MinorPlanet{
     /**
      * returns the current radius of the planetoid.
      * 
-     * @return 	returs the start radius of the planetoid minus the radius difference.
+     * @return 	returns the start radius of the planetoid minus the radius difference.
      * 			| result == super.getRadius() - 0.000001*getTotalDistanceTraveled()
      */
     @Override @Raw
@@ -171,24 +167,21 @@ public class Planetoid extends MinorPlanet{
 	 *			r is the radius of the planetoid) from the center of the planetoid. The
 	 *			centres of the planetoid and of both asteroids should lie on a single line.
 	 *			| double asteroidDirection = 2 * Math.PI * Math.random() 
-	 *			|
-	 *			| double speed = 1.5 *  Math.sqrt(Helper.square(this.getVelocity()[0]) + Helper.square(this.getVelocity()[1]))
-	 *			|
-	 *			| double XVelocityAs1 = speed * Math.cos(asteroidDirection)
-	 *			| double YVelocityAs1 = speed * Math.sin(asteroidDirection)
-	 *			| double XVelocityAs2 = -speed * Math.cos(asteroidDirection)
-	 *			| double YVelocityAs2 = -speed * Math.sin(asteroidDirection)
-	 *			|
+	 *			| double totalVelocity = 1.5 *  Math.sqrt(Helper.square(this.getVelocity()[0]) + Helper.square(this.getVelocity()[1]))
 	 *			| double asteroidRadius = getRadius()/2
 	 *			|
-	 *			| double newXChild1 = this.getPosition()[0] + Math.cos(asteroidDirection) * asteroidRadius
-	 *			| double newYChild1 = this.getPosition()[1] + Math.sin(asteroidDirection) * asteroidRadius
-	 *	        | double newXChild2 = this.getPosition()[0] - Math.cos(asteroidDirection) * asteroidRadius
-	 *			| double newYChild2 = this.getPosition()[1] - Math.sin(asteroidDirection) * asteroidRadius
+	 *			| double XPositionAsteroid1 = this.getPosition()[0] + Math.cos(asteroidDirection) * asteroidRadius
+	 *			| double YPositionAsteroid1 = this.getPosition()[1] + Math.sin(asteroidDirection) * asteroidRadius
+	 *			| double XVelocityAsteroid1 = totalVelocity * Math.cos(asteroidDirection)
+	 *			| double YVelocityAsteroid1 = totalVelocity * Math.sin(asteroidDirection)
+	 *			|	
+	 *			| double XPositionAsteroid2 = this.getPosition()[0] - Math.cos(asteroidDirection) * asteroidRadius
+	 *			| double YPositionAsteroid2 = this.getPosition()[1] - Math.sin(asteroidDirection) * asteroidRadius
+	 *			| double XVelocityAsteroid2 = -totalVelocity * Math.cos(asteroidDirection)
+	 *  		| double YVelocityAsteroid2 = -totalVelocity * Math.sin(asteroidDirection)		
 	 *			|
-	 *			|
-	 *			| Asteroid asteroid1 = new Asteroid(newXChild1, newYChild1, XVelocityAs1, YVelocityAs1, asteroidRadius)
-	 *			| Asteroid asteroid2 = new Asteroid(newXChild2, newYChild2, XVelocityAs2, YVelocityAs2, asteroidRadius)
+	 *			| Asteroid asteroid1 = new Asteroid(XPositionAsteroid1, YPositionAsteroid1, XVelocityAsteroid1, YVelocityAsteroid1, asteroidRadius)
+	 *			| Asteroid asteroid2 = new Asteroid(XPositionAsteroid2, YPositionAsteroid2, XVelocityAsteroid2, YVelocityAsteroid2, asteroidRadius)
 	 * @effect	The asteroids are spawned in world.
 	 * 			| world.addEntityToWorld(asteroid1)
 	 * 			| world.addEntityToWorld(asteroid2)
@@ -196,26 +189,21 @@ public class Planetoid extends MinorPlanet{
     private void spawnAsteroids(World world){
     	
 		double asteroidDirection = 2 * Math.PI * Math.random(); 
-		
-		double speed = 1.5 *  Math.sqrt(Helper.square(this.getVelocity()[0]) + Helper.square(this.getVelocity()[1]));
-		
-		double XVelocityAs1 = speed * Math.cos(asteroidDirection);
-		double YVelocityAs1 = speed * Math.sin(asteroidDirection);
-		double XVelocityAs2 = -speed * Math.cos(asteroidDirection);
-		double YVelocityAs2 = -speed * Math.sin(asteroidDirection);
-		
-		
+		double totalVelocity = 1.5 *  Math.sqrt(Helper.square(this.getVelocity()[0]) + Helper.square(this.getVelocity()[1]));
 		double asteroidRadius = getRadius()/2;
 		
-		double newXChild1 = this.getPosition()[0] + Math.cos(asteroidDirection) * asteroidRadius;
-		double newYChild1 = this.getPosition()[1] + Math.sin(asteroidDirection) * asteroidRadius;
-		double newXChild2 = this.getPosition()[0] - Math.cos(asteroidDirection) * asteroidRadius;
-		double newYChild2 = this.getPosition()[1] - Math.sin(asteroidDirection) * asteroidRadius;
+		double XPositionAsteroid1 = this.getPosition()[0] + Math.cos(asteroidDirection) * asteroidRadius;
+		double YPositionAsteroid1 = this.getPosition()[1] + Math.sin(asteroidDirection) * asteroidRadius;
+		double XVelocityAsteroid1 = totalVelocity * Math.cos(asteroidDirection);
+		double YVelocityAsteroid1 = totalVelocity * Math.sin(asteroidDirection);
 		
+		double XPositionAsteroid2 = this.getPosition()[0] - Math.cos(asteroidDirection) * asteroidRadius;
+		double YPositionAsteroid2 = this.getPosition()[1] - Math.sin(asteroidDirection) * asteroidRadius;
+		double XVelocityAsteroid2 = -totalVelocity * Math.cos(asteroidDirection);
+		double YVelocityAsteroid2 = -totalVelocity * Math.sin(asteroidDirection);		
 		
-		
-		Asteroid asteroid1 = new Asteroid(newXChild1, newYChild1, XVelocityAs1, YVelocityAs1, asteroidRadius);
-		Asteroid asteroid2 = new Asteroid(newXChild2, newYChild2, XVelocityAs2, YVelocityAs2, asteroidRadius);
+		Asteroid asteroid1 = new Asteroid(XPositionAsteroid1, YPositionAsteroid1, XVelocityAsteroid1, YVelocityAsteroid1, asteroidRadius);
+		Asteroid asteroid2 = new Asteroid(XPositionAsteroid2, YPositionAsteroid2, XVelocityAsteroid2, YVelocityAsteroid2, asteroidRadius);
 		world.addEntityToWorld(asteroid1);
 		world.addEntityToWorld(asteroid2);
     	

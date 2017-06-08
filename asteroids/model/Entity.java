@@ -1,23 +1,28 @@
 package asteroids.model;
-
-import java.util.HashSet;
-import java.util.Set;
-
 import be.kuleuven.cs.som.annotate.*;
 
 
 
 /**
+ * A class which deals with the behavior of Entities in the this version of asteroids. 
  * 
- * @invar The velocity of each entity must be a valid velocity for a entity.
- *        | this.isValidVelocity(this.getVelocity()[0]) && this.isValidVelocity(this.getVelocity()[1])
+ * @invar  	The velocity of each entity must be a valid velocity for an entity.
+ *         	| this.isValidVelocity(this.getVelocity()[0]) && this.isValidVelocity(this.getVelocity()[1])
  *
- * @invar The position of each entity must be a valid position for a entity.
- *        | this.isValidPosition(this.getPosition()[0]) && this.isValidPosition(this.getPosition()[1])
+ * @invar  	The position of each entity must be a valid position for an entity.
+ *         	| this.isValidPosition(this.getPosition()[0]) && this.isValidPosition(this.getPosition()[1])
  *
- * @invar The radius of an entity must be a valid double.
- *        | Helper.isValidDouble(this.getRadius())
+ * @invar  	The radius of an entity must be a valid double.
+ *         	| Helper.isValidDouble(this.getRadius())
+ *        
+ * @invar  	The max velocity of an entity must be a valid max velocity for an entity.
+ * 		 	| this.isValidMaxVelocity(this.getMaxVelocity()) 
  *
+ * @invar 	The super world of entity must be a valid super world for an entity.
+ * 			| this.isvalidSuperWorld(this.getSuperWorld))
+ * 
+ * @invar	The mass of an entity must be bigger then 0 and musn't be infinity.
+ * 			| this.getMass() > 0 && this.getMass() != Double.POSITIVE_INFINITY
  *
  * @author Brent De Bleser & Jesse Geens
  * @version 2.92
@@ -25,9 +30,9 @@ import be.kuleuven.cs.som.annotate.*;
 public abstract class Entity {
 	
 	/**
-	 * Cnstant containing the speed of light.
+	 * Constant containing the speed of light.
 	 */
-	private final double SPEED_OF_LIGHT =  300000;
+	private final double SPEED_OF_LIGHT = 300000;
 	
 	/**
 	 * 
@@ -44,10 +49,6 @@ public abstract class Entity {
 	 * @param   typeName
 	 *          String  representation of the type of the entity.
 	 *          
-	 * @throws  IllegalArgumentException
-	 *          Throws an IllegalArgumentException if the radius is invalid.
-	 *          | !(isValidRadius(radius))
-	 *          
 	 * @effect  x and y are used to set the position of the entity.
 	 *          | this.setPosition(x, y)       
 	 * @effect  xVelocity and yVelocity are used to set the velocity of the entity.
@@ -55,18 +56,10 @@ public abstract class Entity {
 	 *          
 	 * @post    radius is set as the radius of the entity.
 	 *          | new.radius = radius
-	 * @post    If the Entity is an instance of Bullet the mass is calculated with BULLET_DENSITY.
-	 *          | if 	this instanceof Bullet
-	 *          |	then	new.mass = (4/3)*Math.PI*Math.pow(radius, 3)*BULLET_DENSITY
-	 * @post	If the Entity is an instance of Ship the mass is calculated with SHIP_DENSITY.
-	 *          | if 	this instanceof Ship
-	 *          |	then	new.mass = (4/3)*Math.PI*Math.pow(radius, 3)*SHIP_DENSITY
 	 * @post    typeName is set to the given typeName.
 	 *          | new.typeName = typeName
 	 */
 	protected Entity (double x, double y, double xVelocity, double yVelocity, double radius, String typeName) throws IllegalArgumentException {
-		//Control if the radius is valid.
-		
 			// Set position of entity (setter itself is defensive.
             try{this.setPosition(x, y);} catch(IllegalArgumentException ex){throw new IllegalArgumentException(ex.getMessage());}
             //Set velocity of the entity (setter itself is total).
@@ -75,43 +68,42 @@ public abstract class Entity {
             this.startRadius = radius;
             //Set the typeName of the entity.
             this.typeName = typeName;
-            //Set the mass of the entity.
-            //if(this instanceof Asteroid){this.mass = (4/3)*Math.PI*Math.pow(radius, 3)*ASTEROID_DENSITY;}
-            //if(this instanceof Planetoid){this.mass = (4/3)*Math.PI*Math.pow(radius, 3)*PLANETOID_DENSITY;}            
-        
 	}
+	
+	
 	
 	/**
     * Returns the position of the entity.
+    * 
+    * @note The x coordinate is at index 0 and the y coordinate at 1.
     */
-   @Basic
+   @Basic @Raw
    public double[] getPosition(){
-       return this.position;
+	   double[] result = {this.position[0], this.position[1]};
+	   return result;
    }
    
    /**
-    * Moves the entity to a new position during a timespan of dt.
+    * Moves the entity to a new position during a time span of dt.
     *
     * @param   dt
     *          The time over which the ship is moving.
     * @throws  IllegalArgumentException
-    *          Throws an IllegalArgumentException if dt is infinity or is smaller then zero.
-    *         |  ((dt < 0.0) && ( Double.isInfinite(dt)))
+    *          Throws an IllegalArgumentException if dt id smaller then zero.
+    *         |  ((dt < 0.0) 
     * @effect  Sets the entity position with the current position and velocity times dt.
     *         | this.setPosition(this.position[0] + (this.velocity[0] * dt), this.position[1] + (this.velocity[1] * dt))
     */
    public void move(double dt) throws IllegalArgumentException{
-       if (dt < 0.0) {
-           throw new IllegalArgumentException("Invalid time");
-       }
+	   
+       if (dt < 0.0) throw new IllegalArgumentException("Invalid time");
        else{
            this.setPosition(this.getPosition()[0] + (this.getVelocity()[0] * dt), this.getPosition()[1] + (this.getVelocity()[1] * dt));          
            }    
    }
    
    /**
-    * Set the position on the X-axis to xPosition.
-    * Set the position on the Y-axis to yPosition.
+    * Set the position of an entity to the given values.
     *
     * @param  xPosition
     *         The x coordinate of the new position.
@@ -148,6 +140,7 @@ public abstract class Entity {
     *          |		then 	!Double.isNaN(position)
     *          |	else		Helper.isValidDouble(position)
     */
+   	@Model
    private boolean isValidPosition(double position){
 	   if (this.superWorld == null) return (!Double.isNaN(position));
 	   else return Helper.isValidDouble(position);
@@ -160,43 +153,45 @@ public abstract class Entity {
     
     /**
      *Returns the velocity of the entity.
+     *
+     *@note The x component of the velocity is at index 0 and the y component is at index 1.
      */
-    @Basic
+    @Basic @Raw
     public double[] getVelocity(){
-        return this.velocity;
+    	 double[] result = {this.velocity[0], this.velocity[1]};
+  	   return result;
     }
     
     /**
      * Method to return the total velocity of the entity.
      * 
-     * @return 	Returns the total velocity of an entity if it isn't higher then the speed of light.
+     * @return 	Returns the total velocity of an entity if it is a valid max velocity..
      * 			Else the result is the speed of light
-     * 			| velocity = Math.sqrt(Helper.square(this.getVelocity()[0])+ Helper.square(this.getVelocity()[1]))
-     * 			| if (velocity <= SPEED_OF_LIGHT)
+     * 			| velocity = Math.hypot(this.getVelocity()[0] + this.getVelocity()[1])
+     * 			| if (velocity <= getMaxVelocity())
      * 			|	result == velocity
      * 			| else
      * 			|	result == SPEED_OF_LIGHT
      */
     public double getTotalVelocity(){
-    	double velocity = Math.sqrt(Helper.square(this.getVelocity()[0])+ Helper.square(this.getVelocity()[1]));
-		if (velocity > SPEED_OF_LIGHT) velocity = SPEED_OF_LIGHT;
+    	double velocity = Math.hypot(this.getVelocity()[0], this.getVelocity()[1]);
+		if (velocity > getMaxVelocity()) velocity = SPEED_OF_LIGHT;
 		return velocity;
     }
     
     /**
-     * Set the velocity on the X-axis to xVelocity and
-     * set the velocity on the Y_axis to yVelocity.
+     * Set the velocity of the entity to the given values.
      *
      * @param xVelocity
      *        The new velocity on the X-axis.
      * @param yVelocity
      *        The new velocity on the Y-axis.
-     * @post  If the given velocities for the X- and Y-axis are of type double and aren't infinite
+     * @post  If the given velocities for the X- and Y-axis are valid velocities
      *        the new velocities on the X- and Y-axis are equal the given ones.
      *        | if !isValidVelocity(xVelocity, yVelocity)
      *        |      then new.getShipVelocity()[0] == xVelocity
      *        |           new.getShipVelocity()[1] == yVelocity
-     * @post  If the given velocity on the X- or Y-axis isn't a double or is infinity
+     * @post  If the given velocity on the X- or Y-axis aren't valid velocities
      *        the new velocities on the X- and Y-axis will be equal to 0.
      *        | if isValidVelocity(xVelocity, yVelocity)
      *        |      then new.getShipvelocity()[0] == 0
@@ -218,15 +213,16 @@ public abstract class Entity {
      * Check whether the given velocities are a valid velocities for
      * a entity.
      *
-     * @param   	velocityX
-     *          	The velocity on the X-axis to check.
+     * @param   velocityX
+     *          The velocity on the X-axis to check.
      * @param	velocitY
      * 			The velocity on the Y-axis to check.
-     * @return  	True if and only if the given velocities is a double isn't negative and the total velocity isn't faster then maxVelocity.
-     *         	| result == ( ( Math.sqrt(Helper.square(velocityX) + Helper.square(velocityY)) <= maxVelocity && Helper.isValidDouble(velocityX) && Helper.isValidDouble(velocityY))
+     * @return  True if and only if the given velocities is a double isn't negative and the to be total velocity isn't faster then maxVelocity.
+     *         	| result == ( (Math.hypot(velocityX, velocityY) <= maxVelocity && Helper.isValidDouble(velocityX) && Helper.isValidDouble(velocityY))
      */
+    @Model
     private boolean isValidVelocity(double velocityX, double velocityY){
-        return ( Math.sqrt(Helper.square(velocityX) + Helper.square(velocityY)) <= maxVelocity && Helper.isValidDouble(velocityX) && Helper.isValidDouble(velocityY));
+        return (Math.hypot(velocityX, velocityY) <= maxVelocity && Helper.isValidDouble(velocityX) && Helper.isValidDouble(velocityY));
     }  
     
     /**
@@ -237,21 +233,47 @@ public abstract class Entity {
     /**
      * Returns the maximum velocity of the entity.
      */
-    @Basic
+    @Basic @Raw @Immutable
     public double getMaxVelocity(){
-        return this.maxVelocity;
+        return this.maxVelocity = SPEED_OF_LIGHT;
+    }
+    
+    /**
+     * A method which sets the value of the maximum (total) velocity of an entity.
+     * 
+     * @param 	max
+     * 			The value to be set as the max velocity.
+     * @post	If the given velocity isn't a valid max velocity it, the max velocity will be set
+     * 			to the speed of light.
+     * 			| if !isValidMaxVelocity(max) 
+     * 			|	then	this.maxVelocity = SPEED_OF_LIGHT
+     */
+    private void setMaxVelocity(double max){
+    	if (!isValidMaxVelocity(max)) this.maxVelocity = SPEED_OF_LIGHT;
+    	else this.maxVelocity = max;
+    }
+    /**
+     * A method which checks whether or a not a given velocity is a valid maxVelocity.
+     * 
+     * @param 	max
+     * 			The velocity to check.
+     * @return 	The result is true if and only if the speed isn't faster then the speed of light, isn't smaller then 0 and if it is a valid double.
+     * 			| result == !(max > SPEED_OF_LIGHT || !Helper.isValidDouble(max) || max < 0)
+     */
+    @Model
+    private boolean isValidMaxVelocity(double max){
+    	return !(max > SPEED_OF_LIGHT || !Helper.isValidDouble(max) || max < 0);
     }
     
     /**
      * Variable containing the maximum velocity of the entity in km/s.
      */
-    
     private double maxVelocity = SPEED_OF_LIGHT;
     
     /**
      * Returns the radius of entity.
      */
-    @Basic
+    @Basic @Raw @Immutable
     public double getRadius(){
         return this.startRadius;
     }
@@ -259,13 +281,12 @@ public abstract class Entity {
     /**
      * Variable containing the radius of the entity.
      */
-    
     private final double startRadius;
     
 	/**
 	 * Return the world of the entity.
 	 */
-    @Basic
+    @Basic @Raw
 	public World getSuperWorld() {
 		return this.superWorld;
 	}
@@ -275,16 +296,16 @@ public abstract class Entity {
      * 
      * @param  world
      *         The world to be set as the new superWorld.
-     * @post   If the world is a valid world the world will be set as the new superWorld.
-     *         | if 		isValidWorld(world)
+     * @post   If the world is a valid world or the world is null the world will be set as the new superWorld.
+     *         | if 		isValidWorld(world) || world == null
      *         | 	then 	new.superWorld = world
      * @throws IllegalArgumentException
-     *         An IllegalArgumentException is thown if the world isn't a valid one.
+     *         An IllegalArgumentException is thrown if the world isn't a valid one.
      *         | !(isValidWorld(world))
      */
     protected void setSuperWorld(World world) throws IllegalArgumentException{
     	if(world == null || isValidSuperWorld(world))		this.superWorld = world;
-    	else throw new IllegalArgumentException("Isn't a valid world");
+    	else throw new IllegalArgumentException("Isn't a valid world @setSuperWorld()");
     }
     
     /**
@@ -293,18 +314,18 @@ public abstract class Entity {
      * 
      * @param   world
      *          The world to be checked.
-     * @return  The method returns whether or not the world is terminated.
-     *          |  result ==  world.isTerminatedWorld()
+     * @return  Returns true if and only if the world isn't terminated or if it is null.
+     *          |  result ==  world == null || !world.isTerminatedWorld()
      */ 
+    @Model
     private boolean isValidSuperWorld(World world){
- 	   if (world == null) return true;
- 	   return !(world.isTerminatedWorld());
+ 	   return (world == null || !world.isTerminatedWorld());
     }
     
     /**
      * Variable containing the world in which the entity is positioned.
      * 
-     * @note If the entity isn't in a world superWorld conatins null.
+     * @note If the entity isn't in a world superWorld contains null.
      */
     private World superWorld = null;
     
@@ -317,22 +338,18 @@ public abstract class Entity {
     }
     
     /**
-     * Terminate entity.
+     * Method to terminate this entity.
      * 
-     * @post   The superWorld of the entity is set to null and is Terminayed is set to true.
+     * @post   The superWorld of the entity is set to null and isTerminated is set to true.
      *         | new.superWorld = null
 	 *	       | new.isTerminated = true
-	 * @effect If the entity is an instence of ship the ship is removed from it's superWorld.
-	 *         | this.superWorld.removeShipFromWorld((Ship) this)
-	 * @effect If the entity is an instance of bullet the bullet is removed from it's superWorld.
-	 *         | this.superWorld.removeBulletFromWorld((Bullet) this)
+	 * @effect If the entity's superWorld isn't null it will be removed from it's superWorld.
+	 * 		   | if this.getSuperWorld() == null
+	 * 		   | 	then	this.superWorld.removeEntityFromWorld(this)
      */
-	@Basic
 	public void terminate(){
-		if (this instanceof Ship){
-			if (superWorld != null)
-			this.superWorld.removeEntityFromWorld((Ship) this);
-		}
+		if (superWorld != null)
+		this.superWorld.removeEntityFromWorld(this);
 		
 		this.superWorld = null;
 		this.isTerminated = true;
@@ -346,7 +363,7 @@ public abstract class Entity {
     /**
      * returns the mass of the entity.
      */
-    @Basic
+    @Basic @Raw
     public double getMass(){
     	return this.mass;
     }
@@ -359,6 +376,7 @@ public abstract class Entity {
      * @post	The mass is set to the given mass.
      * 			| new.mass == mass
      */
+    @Raw
     protected void setMass(double mass){
     	this.mass = mass;
     }
@@ -462,7 +480,7 @@ public abstract class Entity {
 	 *	       |
 	 *	       | if 	(tX <= tY) 
 	 *         | 	then 	result == tX
-	 *	       | else 	resutl == tY
+	 *	       | else 	result == tY
 	 */
 	public double getTimeCollisionBoundary() {
 		//Exceptions
