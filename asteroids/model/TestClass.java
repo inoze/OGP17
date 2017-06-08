@@ -5,6 +5,8 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.util.Collection;
+
 import org.junit.Before;
 import org.junit.Test;
  
@@ -34,83 +36,64 @@ public class TestClass {
         assertTrue(facade.getWorldShips(world).isEmpty());
         assertTrue(facade.getWorldBullets(world).isEmpty());
     }
+   
+    @Test
+    public void checkTerminateShip() throws ModelException {
+        Ship ship = facade.createShip(60, 60, 30, 0, 50, Math.PI, 1.1E18);
+        assertFalse(ship.isTerminated());
+        ship.terminate();
+        assertTrue(ship.isTerminated());
+    }
+   
+   
+    @Test
+    public void checkShipAcceleration() throws ModelException {
+        Ship ship1 = facade.createShip(250, 120, 10, 0, 11, Math.PI, 1E20 * 2);
+        ship1.thrustOn();
+        Ship ship = facade.createShip(250, 120, 10, 0, 11, Math.PI, (1E20));
+        ship.thrustOn();
+        double a1 = ship1.getAcceleration();
+        double a2 = ship.getAcceleration();
+        assertEquals(a1, a2 / 2, EPSILON);
+    }
+   
+    
+    @Test
+    public void CheckEntityOutOfBoundSpawn() throws ModelException {
+        World world = facade.createWorld(1000, 800);
+        Ship ship1 = facade.createShip(1000, 800, 10, 0, 50, Math.PI, 1.1E18);
+        Ship ship2 = facade.createShip(951, 120, 10, 0, 50, Math.PI, 1.1E18);
+        Ship ship3 = facade.createShip(1300, 1220, 10, 0, 50, Math.PI, 1.1E18);
+        Ship ship4 = facade.createShip(50, 50, 10, 0, 50, Math.PI, 1.1E18);
+       try{
+	        facade.addShipToWorld(world, ship1);
+	        facade.addShipToWorld(world, ship2);
+	        facade.addShipToWorld(world, ship3);
+	        fail();
+       	}catch(ModelException ex){}
+    }
+   
+    @Test
+    public void checkEntityMultipleWorlds() throws ModelException {
+        Ship ship1 = facade.createShip(100, 420, 10, 0, 50, 0, 1.1E18);
+        World world = facade.createWorld(1000, 800);
+        World world2 = facade.createWorld(1000, 800);
+        world.addEntityToWorld(ship1);
+        try {
+        	world2.addEntityToWorld(ship1);
+        	fail();
+        }
+        catch (Exception e) {}
+        assertFalse(world2.getEntities().contains(ship1));
+    }
     
     @Test 
-    public void testCreateShipRadiusNan() throws ModelException {
+    public void testCreateShipInvalidRadius() throws ModelException {
       try {
     	  facade.createShip(100, 120, 10, 5, Double.NaN, 0, 1.0E20);
     	  fail();
       } 
       catch (ModelException exc) {
       }
-    }
- 
-   
-    @Test
-    public void controleTerminateShip() throws ModelException {
-        Ship ship = facade.createShip(100, 120, 10, 0, 50, Math.PI, 1.1E18);
-        assertFalse(ship.isTerminated());
-        ship.terminate(ship);
-        assertTrue(ship.isTerminated());
-    }
-   
-   
-    @Test
-    public void confirmShipAcceleration() throws ModelException {
-        Ship ship1 = facade.createShip(100, 120, 10, 0, 11, Math.PI, 1.1E18 * 2);
-        ship1.thrustOn();
-        Ship ship = facade.createShip(100, 120, 10, 0, 11, Math.PI, (1.1E18));
-        ship.thrustOn();
-        double acceleration1 = ship1.getAcceleration();
-        double acceleration2 = ship.getAcceleration();
-        assertEquals(acceleration1, acceleration2 / 2, EPSILON);
-    }
-   
-    
-    @Test
-    public void outOfBoundsControle() throws ModelException {
-        World world = facade.createWorld(1000, 800);
-        Ship ship1 = facade.createShip(1000, 800, 10, 0, 50, Math.PI, 1.1E18);
-        Ship ship2 = facade.createShip(951, 120, 10, 0, 50, Math.PI, 1.1E18);
-        Ship ship3 = facade.createShip(1300, 1220, 10, 0, 50, Math.PI, 1.1E18);
-        Ship ship4 = facade.createShip(50, 50, 10, 0, 50, Math.PI, 1.1E18);
-        ship1.addEntityToWorld(world);
-        ship2.addShipToWorld(world);
-        ship3.addShipToWorld(world);
-        assertEquals(0, world.allobjects.size());
-        ship4.addShipToWorld(world);
-        assertEquals(1, world.allobjects.size());
-    }
-   
-   
-    @Test
-    public void loadBulletFromWorld() throws ModelException {
-        Ship ship1 = facade.createShip(100, 420, 10, 0, 50, 0, 1.1E18);
-        World world = facade.createWorld(10000, 8000);
-        Bullet bullet1 = facade.createBullet(600, 620, 50, 5, 50);
-        world.addObjectToWorld(bullet1);
-        try {
-        	ship1.loadBulletOnShip(bullet1);
-        	fail();
-        }
-        catch (IllegalArgumentException e) {
-        }
-    }
-   
-   
-    @Test
-    public void multipleWorlds() throws ModelException {
-        Ship ship1 = facade.createShip(100, 420, 10, 0, 50, 0, 1.1E18);
-        World world = facade.createWorld(1000, 800);
-        World world2 = facade.createWorld(1000, 800);
-        world.addObjectToWorld(ship1);
-        try {
-        	world2.addObjectToWorld(ship1);
-        	fail();
-        }
-        catch (IllegalArgumentException e) {
-        }
-        
-        assertFalse(world2.allobjects.contains(ship1));
     }
 }

@@ -27,7 +27,13 @@ public class ReadVariableExpression extends Element implements Expression<Object
 
 	@Override
 	public Object calculate() throws IllegalArgumentException {
-		return getProgram().getVariable(getVariableName()).getValue();
+		try{
+			return getProgram().getVariable(getVariableName()).getValue();
+		}catch(Exception ex){
+			Helper.log("Program: " + getProgram());
+			Helper.log("RVE error (" + getVariableName() + "): " + ex.getMessage());
+			return null;
+		}
 	}
 
 	@Override
