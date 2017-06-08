@@ -60,14 +60,13 @@ public class SequenceStatement extends Statement{
 					(nextLocation.getLine() == curLocation.getLine() && nextLocation.getColumn() > curLocation.getColumn())){
 				statement.setProgram(this.getProgram());
 				statement.setFunction(this.getFunction());
-				Helper.log("SQS: Function: " + this.getFunction());
+				Helper.log("SQS: Function: " + this.getFunction() + "; size: " + statements.size());
 				try{
 					Helper.log("executing statement " + statement.getClass().getName());
 					statement.execute();
 					Helper.log("Time left: " + this.getProgram().getTime());
 					if(statement.consumesTime()){
 						setConsumesTime(true);
-						return;
 					}
 					if(statement.hasBreak()) {
 						 setHasBreak(true);

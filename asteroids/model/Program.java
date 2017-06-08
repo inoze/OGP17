@@ -135,15 +135,22 @@ public class Program {
 			throw new IllegalArgumentException("(b): " + ex.getMessage());}
 		if(hasSkip()) return null;
 		if (body.consumesTime()) {
+			Helper.log("body consumes time");
 			if(body.hasBreak()) throw new IllegalArgumentException("Break statements cannot occur outside function bodies");
 			location = new SourceLocation(0, 0);
-			List<Object> resultsToReturn = results; 
+			List<Object> resultsToReturn = getResults(); 
+			Helper.log("results size: " + resultsToReturn.size());
+			if(resultsToReturn.size() == 0) return null;
+			results = null;
+			return resultsToReturn;
+		}else {
+			Helper.log("body does not consume time");
+			List<Object> resultsToReturn = getResults(); 
+			Helper.log("results size: " + resultsToReturn.size());
 			if(resultsToReturn.size() == 0) return null;
 			results = null;
 			return resultsToReturn;
 		}
-		//throw new IllegalArgumentException("body doesnt consume time");
-		
-		return null;
+		//throw new IllegalArgumentException("body doesnt consume time")
 	}
 }

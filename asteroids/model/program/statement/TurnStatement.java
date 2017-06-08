@@ -38,7 +38,7 @@ public class TurnStatement extends Statement {
 		setConsumesTime(true);
 		getProgram().setSourceLocation(getSourceLocation());
 		if (getProgram().getTime() < 0.2) {
-			setConsumesTime(true);
+			setConsumesTime(false);
 			return;
 		}
 		if(Helper.isValidDouble(angle.calculate()) && angle.calculate() >= 0 && angle.calculate() <= 2*Math.PI && this.getFunction() == null){

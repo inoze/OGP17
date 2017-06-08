@@ -1,5 +1,6 @@
 package asteroids.model.program.statement;
 
+import asteroids.model.Helper;
 import asteroids.model.program.*;
 import asteroids.part3.programs.SourceLocation;
 
@@ -59,30 +60,33 @@ public class WhileStatement extends Statement{
 	public void execute() throws Exception {
 		this.getProgram().setHasWhile(true);
 		try{
+			Helper.log("starting whileloop");
+			Helper.log("While loop: executing body: " + getBody().getClass().getName());
 			this.setConsumesTime(false);
-			//Look if condition is true to start running the body, if not, do nothing
-			if(!this.isExecutingBody()){
-				if(this.getCondition().calculate()) this.setExecutingBody(true);
-				else return;
-			}
-			//Load body
-			body.execute();
-			if (body.consumesTime()){
-				this.setConsumesTime(true);
-				return;
-			}
-			//Check if we can run again
+			Helper.log("set time to false");
+			if(!(this.getCondition().calculate())){
+				Helper.log("condition not fulfilled, not running loop");
+				return;}
+			
+			
+			try{
+				Helper.log("Going to execute body...");
+				getBody().execute();
+				if(getBody().consumesTime()) this.setConsumesTime(true);
+			}catch(Exception ex){
+				Helper.log("error in while loop on statement: " + body.getClass().getName() + "; " + ex.getMessage());}
+		/*
 			while(this.getCondition().calculate() && !body.hasBreak()){
 				getProgram().setSourceLocation(this.getSourceLocation());
-				body.execute();
+				try{body.execute();
 				if (body.consumesTime()){
 					this.setConsumesTime(true);
 					return;
-				}
-			}
+				}}catch(Exception ex){Helper.log("error in while loop on statement: " + body.getClass().getName() + "; " + ex.getMessage());}
+		*/
 			this.setExecutingBody(false);
 		}catch(Exception ex){
-			throw new Exception("whileStatement doesnt work");
+			throw new Exception("(w): " + ex.getMessage());
 		}
 	}
 }
