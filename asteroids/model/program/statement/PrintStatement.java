@@ -29,7 +29,9 @@ public class PrintStatement extends Statement{
 		if(this.getFunction() != null) throw new Exception("(p) print statement in function body");
 		if(getExpression() == null) throw new Exception("(p) expression is null");
 		if(this.getProgram() == null) throw new Exception("(p) statement has no program");
+		if(this.getFunction() != null) throw new Exception("(p) Print statement cannot be executed within a function");
 		getExpression().setProgram(this.getProgram());
+		if(getProgram().getTime() < 0.2) return;
 		try{
 			Helper.log(">>>starting print with expression: " + getExpression());
 			getExpression().setProgram(this.getProgram());
@@ -37,6 +39,7 @@ public class PrintStatement extends Statement{
 			Helper.log("adding result: " + eval);
 			Helper.log("calculated expression: " + getExpression());
 			getProgram().addResult(eval);
+			getProgram().advanceTime();
 		}catch(Exception ex){
 			throw new Exception("(p) cant calculate expression: " + getExpression().getClass().getName() + ", error: " + ex.getMessage());
 		}

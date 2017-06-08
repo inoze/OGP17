@@ -1,5 +1,6 @@
 package asteroids.model.program.statement;
 
+import asteroids.model.Helper;
 import asteroids.model.program.Statement;
 import asteroids.part3.programs.SourceLocation;
 
@@ -23,14 +24,16 @@ public class ThrustOnStatement extends Statement {
 	public void execute() throws Exception{
 		this.setConsumesTime(true);
 		this.getProgram().setSourceLocation(getSourceLocation());
+		Helper.log("executing thrustOnStatement");
 		if (this.getProgram().getTime() < 0.2) {
+			Helper.log("Not enough time left");
 			this.setConsumesTime(false);
 			return;
-			
-		}
+		}else{
 		if(this.getFunction() == null){
+			this.getProgram().advanceTime();	
+			Helper.log("advanced time");
 			this.getProgram().getShip().thrustOn();
-		}else throw new Exception("Cant execute ActionStatement within function body");
-		this.getProgram().advanceTime();		
-	}
+		}else throw new Exception("Cant execute ActionStatement within function body");	
+	}}
 }

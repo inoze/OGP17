@@ -52,7 +52,6 @@ public class FunctionCallExpression extends Element implements Expression{
 		if(this.getProgram().getFunction(name) == null) throw new Exception("Function not defined");
 		try{
 			Helper.log("Executing function: " + this.getProgram().getFunction(name));
-			this.getProgram().getFunction(name).calculate();
 			return this.getProgram().getFunction(getName()).calculate();
 		}catch(Exception ex){
 			throw new Exception("cant execute function: " + ex.getMessage());
@@ -67,11 +66,10 @@ public class FunctionCallExpression extends Element implements Expression{
 		if(this.getProgram().getFunction(name) == null) throw new Exception("Function not defined");
 		try{
 			Helper.log("Executing function: " + this.getProgram().getFunction(name));
-			this.getProgram().getFunction(name).calculate();
+			return this.getProgram().getFunction(getName()).calculate();
 		}catch(Exception ex){
 			throw new Exception("cant execute function: " + ex.getMessage());
 		}
-		return null;
 	}
 
 
