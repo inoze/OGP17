@@ -28,7 +28,8 @@ public class FireStatement extends Statement{
 				setConsumesTime(false);
 				return;
 			}
-			getProgram().getShip().fireBullet();
+			if(this.getFunction() == null)getProgram().getShip().fireBullet();
+			else throw new Exception("Cant execute ActionStatement within function");
 			getProgram().advanceTime();
 		}catch(Exception ex){
 			throw new Exception("Firestatement cant execute");

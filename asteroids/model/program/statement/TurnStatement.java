@@ -41,9 +41,9 @@ public class TurnStatement extends Statement {
 			setConsumesTime(true);
 			return;
 		}
-		if(Helper.isValidDouble(angle.calculate()) && angle.calculate() >= 0 && angle.calculate() <= 2*Math.PI){
+		if(Helper.isValidDouble(angle.calculate()) && angle.calculate() >= 0 && angle.calculate() <= 2*Math.PI && this.getFunction() == null){
 			getProgram().getShip().turn((Double)angle.calculate());
-		}else{throw new IllegalArgumentException("Given angle is not valid");}
+		}else{throw new IllegalArgumentException("Given angle is not valid or executed within function body");}
 		getProgram().advanceTime();		
 	}
 

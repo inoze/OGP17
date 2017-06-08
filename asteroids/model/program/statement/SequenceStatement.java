@@ -63,6 +63,7 @@ public class SequenceStatement extends Statement{
 				Helper.log("SQS: Function: " + this.getFunction());
 				try{
 					statement.execute();
+					Helper.log("Time left: " + this.getProgram().getTime());
 					if(statement.consumesTime()){
 						setConsumesTime(true);
 						return;
@@ -72,7 +73,8 @@ public class SequenceStatement extends Statement{
 						return;
 					}
 				}catch(Exception ex){
-					Helper.log("cant execute statement in sequence: " + ex.getMessage());}
+					Helper.log("cant execute statement in sequence: " + ex.getMessage());
+					throw new Exception("(sqs) " + ex.getMessage());}
 			}
 		}
 		
