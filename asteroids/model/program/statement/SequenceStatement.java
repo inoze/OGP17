@@ -62,6 +62,7 @@ public class SequenceStatement extends Statement{
 				statement.setFunction(this.getFunction());
 				Helper.log("SQS: Function: " + this.getFunction());
 				try{
+					Helper.log("executing statement " + statement.getClass().getName());
 					statement.execute();
 					Helper.log("Time left: " + this.getProgram().getTime());
 					if(statement.consumesTime()){

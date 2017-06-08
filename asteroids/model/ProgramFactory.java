@@ -25,7 +25,7 @@ public class ProgramFactory implements IProgramFactory <Expression, Statement, F
 
 	@Override
 	public Statement createAssignmentStatement(String variableName, Expression value, SourceLocation sourceLocation) {
-		AssignmentStatement assignmentStatement = new AssignmentStatement(sourceLocation);
+		AssignmentStatement assignmentStatement = new AssignmentStatement(sourceLocation, variableName, value);
 		return assignmentStatement;
 	}
 

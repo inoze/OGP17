@@ -2,6 +2,7 @@ package asteroids.model.program.expression;
 
 import java.util.Set;
 
+import asteroids.model.Helper;
 import asteroids.model.program.Element;
 import asteroids.model.program.Expression;
 import asteroids.model.program.Variable;
@@ -26,7 +27,9 @@ public class ReadVariableExpression extends Element implements Expression<Object
 
 	@Override
 	public Object calculate() throws IllegalArgumentException {
-		return getProgram().getVariable(variableName).getValue();
+		Helper.log("Calculating variable: " + getVariableName());
+		Helper.log("var id: " + getProgram().getVariable(variableName));
+		return getProgram().getVariable(getVariableName()).getValue();
 	}
 
 	@Override
